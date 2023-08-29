@@ -31,8 +31,9 @@ class Coda():
         self.first_arrival_time = None
         self.last_arrival_time = None
         self.total_arrival_events = 0
-        self.time_interval = self.server_time * 3
+        self.time_interval = self.server_time * 10
         self.utilization_intervals = []
+        self.queue_length_intervals = []
         self.server_occupancy = [False] *int(num_servers)
         self.occupancy_lock = threading.Lock()  # Per garantire l'accesso sincronizzato
 
@@ -41,7 +42,7 @@ class Coda():
         self.subscriber = rospy.Subscriber(self.topic_queue, event, self.queue)
         # Create a publisher
         self.pub = rospy.Publisher(self.topic_pub, event, queue_size=10)
-        self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=10)
+        self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=20)
         self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
 
         time.sleep(5)
@@ -72,6 +73,8 @@ class Coda():
                 info_msg.attribute1 = "test info"
                 info_msg.value1 = self.get_general_utilization()
                 info_msg.value2 = self.get_interval_utilizations()
+                info_msg.value3 = self.time_interval
+                info_msg.value4 = self.queue_length_intervals
                 info_msg.flag2 = True
                 self.pub_info.publish(info_msg)
                 rospy.signal_shutdown('Chiusura del launcher_node')
@@ -106,8 +109,9 @@ class Coda():
         total_time = (self.last_arrival_time - self.first_arrival_time).to_sec()
         
 
-        utilization = (total_time/self.total_arrival_events) / (self.number_of_server * (1/self.server_time))
-        print_line = self.name+" "+str(self.total_arrival_events)+ " " +str(total_time) +  " " +str(self.number_of_server * self.server_time)+ " = " + str(utilization)
+        utilization = (self.total_arrival_events/total_time) / (self.number_of_server * (1/self.server_time))
+        print_line = self.name+" "+str(self.total_arrival_events)+ " " +str(total_time) +  " " +str(self.number_of_server * 1/self.server_time)+ " = " + str(utilization)
+        print(print_line)
         util = round(utilization,2)
         return util
     def get_interval_utilizations(self):
@@ -156,6 +160,7 @@ class Coda():
                 utilization = sum(server_occupied_counts) / (num_servers * cicle_max)
                 util =round(utilization,2)
                 self.utilization_intervals.append(util)
+                self.queue_length_intervals.append(self.queue_length)
                 cicle = 0
 
 

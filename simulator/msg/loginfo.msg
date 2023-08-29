@@ -3,7 +3,8 @@ string type
 string node_name
 float32 value1
 float32[] value2
-int32 value3
+float32 value3
+float32[] value4
 string attribute1
 string attribute2
 string attribute3

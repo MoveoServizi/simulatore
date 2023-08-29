@@ -6,6 +6,8 @@ from simulator.msg import event
 from simulator.msg import loginfo
 import time
 from datetime import datetime
+import matplotlib.pyplot as plt
+import numpy as np
 
 class EndNode:
 
@@ -19,7 +21,7 @@ class EndNode:
 
         self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
         self.event_sub = rospy.Subscriber(self.node_name, event, self.process_event)
-        self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=10)
+        self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=20)
         self.type_stats = {}
         self.data_by_type = {}
 
@@ -32,7 +34,9 @@ class EndNode:
             "node_name": msg.node_name,
             "value1": round(msg.value1,2),
             "value2": [round(number, 2) for number in msg.value2],
-            "attribute": msg.attribute1
+            "value3": msg.value3,
+            "attribute": msg.attribute1,
+            "queue_length": msg.value4
             }
             msg_type = msg.type
             if msg_type not in self.data_by_type:
@@ -71,16 +75,22 @@ class EndNode:
                 self.node_passing_stats[msg.type] = {node_id: 1}
         
         if self.arrived_msgs == self.num_expected_messages:
-            info_msg =loginfo()
+            self.print_result()
             
-            info_msg.type = "end_node"
-            info_msg.node_name = self.node_name
-            info_msg.flag1 = True
-            self.pub_info.publish(info_msg)
-            time.sleep(5)
-            self.print_statistics()
-            self.print_data_by_type()
 
+    
+    def print_result(self):
+        info_msg =loginfo()
+            
+        info_msg.type = "end_node"
+        info_msg.node_name = self.node_name
+        info_msg.flag1 = True
+        self.pub_info.publish(info_msg)
+        time.sleep(5)
+        self.print_statistics()
+        self.print_data_by_type()
+        
+    
     def get_unique_generator_ids(self):
         return set([generator_id for generator_id, _ in self.received_messages])
 
@@ -106,6 +116,8 @@ class EndNode:
                 print(f"utilizzazione: {data['value2']}")
                 print(f"attribute: {data['attribute']}")
                 print("\n")
+                
+                self.plot_temporal_data(data['queue_length'],data['value2'],data['value3'],data['node_name'])
 
 
     def print_statistics(self):
@@ -131,10 +143,37 @@ class EndNode:
             for node_id, passing_count in passing_stats.items():
                 passing_percentage = (passing_count / total_passing_events) * 100
                 print(f"Node {node_id}: {passing_percentage:.2f}%")
-            
+                
+    def plot_temporal_data(self,values1, values2, time_step, title):
+        time_steps = np.arange(0, len(values1) * time_step, time_step)
+        
+        # Creazione della griglia con 1 riga e 2 colonne per i subplot
+        plt.figure(figsize=(10, 5))  # Imposta le dimensioni della figura
+        plt.subplot(1, 2, 1)  # Primo subplot
+        plt.plot(time_steps, values1, marker='*')
+        plt.title('Lunghezza coda')
+        plt.xlabel('Tempo')
+        plt.ylabel('entità in coda')
+        plt.grid(True)
+        
+        plt.subplot(1, 2, 2)  # Secondo subplot
+        plt.plot(time_steps, values2, marker='*', color='m')
+        plt.title('Utilizzazione')
+        plt.xlabel('Tempo')
+        plt.ylabel('percentuale di utilizzazione')
+        plt.grid(True)
+        
+        plt.suptitle(title)  # Titolo dell'intera figura
+        plt.tight_layout()   # Ottimizza la disposizione dei subplot
+        plt.show()
+        plt.pause(0.001)
+        
+
 
 if __name__ == '__main__':
     node_name = "end_node"
+    plt.ion()
     rospy.init_node(node_name)
     end_node = EndNode(node_name)
     rospy.spin()
+    
