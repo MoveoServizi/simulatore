@@ -20,13 +20,15 @@ class SwitchNode:
 
     def switch_callback(self, msg):
         route_list = list(msg.route)
-        route_list.append(self.node_id)
-        msg.route = route_list
+        route_list.append(self.node_name)
+        #msg.route = route_list
 
         if self.modality == "split":
             self.split_message(msg)
-        elif self.modality == "attribute":
-            self.attribute_message(msg)
+        elif self.modality == "type":
+            self.type_message(msg)
+        elif self.modality == "attribute1_split":
+            self.attribute_split_message(msg,self.topic1_attribute)
 
     def split_message(self, msg):
         if self.split_rate <= 0.0:
@@ -40,11 +42,25 @@ class SwitchNode:
             else:
                 self.pub2.publish(msg)
 
-    def attribute_message(self, msg):
-        if hasattr(msg, self.topic1_attribute) and getattr(msg, self.topic1_attribute) == True:
+    def type_message(self, msg):
+        #if hasattr(msg, self.topic1_attribute) and getattr(msg, self.topic1_attribute) == True:
+        if msg.type == self.topic1_attribute:
             self.pub1.publish(msg)
         else:
             self.pub2.publish(msg)
+            
+    def attribute_split_message(self,msg, attribute):
+        #if hasattr(msg, attribute) and getattr(msg, attribute) == True:
+        if msg.attribute1 == self.topic1_attribute:
+            att_split_rate = msg.split1
+            p = random.random()  # Generate a random number between 0 and 1
+            if p < att_split_rate:
+                self.pub1.publish(msg)
+            else:
+                self.pub2.publish(msg)
+        else:
+            self.split_message(msg)
+        
 
 if __name__ == '__main__':
     rospy.init_node("switch2")

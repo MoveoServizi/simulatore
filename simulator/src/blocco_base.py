@@ -31,7 +31,7 @@ class Coda():
         self.first_arrival_time = None
         self.last_arrival_time = None
         self.total_arrival_events = 0
-        self.time_interval = self.server_time * 10
+        self.time_interval = 2 #self.server_time * 10
         self.utilization_intervals = []
         self.queue_length_intervals = []
         self.server_occupancy = [False] *int(num_servers)
@@ -82,7 +82,7 @@ class Coda():
 
     def queue(self, msg):
         route_list = list(msg.route)
-        route_list.append(self.node_id)
+        route_list.append(self.name)
         msg.route = route_list
 
         # Calcola l'utilizzazione generale al momento dell'arrivo di un evento
@@ -139,7 +139,7 @@ class Coda():
                 print(self.name, " server ", server_number, ": completed event ", current_event.ID, "  queue ", self.queue_length)
             
     def monitor_occupancy(self):
-        cicle_max = 6
+        cicle_max = max(1,round(self.time_interval/self.server_time/2))
         cicle = 0
         while not rospy.is_shutdown():
             # Dormi per mezzo self.server_time prima di registrare lo stato di occupazione

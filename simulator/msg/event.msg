@@ -5,11 +5,14 @@ time generation_date
 string gen_time
 time completed_date
 string compl_time
-int32[] route
-int32 value1
-int32 value2
-int32 value3
+string[] route
 string attribute1
+float32 split1
+
 string attribute2
+float32 value2
 string attribute3
+float32 value3
+
+
 bool last_event

@@ -9,13 +9,15 @@ import time
 from datetime import datetime
 
 class GeneratorNode:
-    def __init__(self, node_name, next_element, gen_freq, num_messages, event_type, node_id):
+    def __init__(self, node_name, next_element, gen_freq, num_messages, event_type, node_id,attribute1,value1):
         self.node_name = node_name
         self.next_element = "/" + next_element
         self.gen_freq = gen_freq
         self.num_messages = num_messages
         self.event_type = event_type
         self.event_id = 1
+        self.attribute1 = attribute1
+        self.value1 = value1
 
         self.pub = rospy.Publisher(self.next_element, event, queue_size=10)
         self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=10)
@@ -36,10 +38,15 @@ class GeneratorNode:
             event_msg.ID = self.event_id
             event_msg.generator_id = self.node_name
             event_msg.type = self.event_type
-            event_msg.route = [node_id]
+            event_msg.route = [self.node_name]
             event_msg.last_event = False
             event_msg.generation_date = rospy.Time.now()
             event_msg.gen_time = self.stamp_date()
+            
+            event_msg.attribute1 = self.attribute1
+            event_msg.split1 = self.value1
+            
+            
             if i == self.num_messages - 1:
                 event_msg.last_event = True
             self.pub.publish(event_msg)
@@ -67,6 +74,8 @@ if __name__ == '__main__':
     num_messages = rospy.get_param("~num_messages", 10)
     event_type = rospy.get_param("~event_type", "evento_semplice")
     node_id = rospy.get_param("~node_id", 1)
+    attribute1 = rospy.get_param("~attribute1", "-")
+    value1 = rospy.get_param("~value1", "0.0")
 
-    generator = GeneratorNode(node_name, next_element, gen_freq, num_messages, event_type, node_id)
+    generator = GeneratorNode(node_name, next_element, gen_freq, num_messages, event_type, node_id,attribute1,value1)
     generator.generate_messages()
