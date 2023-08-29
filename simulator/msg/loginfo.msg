@@ -1,8 +1,8 @@
 int32 ID_node
 string type
 string node_name
-int32 value1
-int32 value2
+float32 value1
+float32[] value2
 int32 value3
 string attribute1
 string attribute2

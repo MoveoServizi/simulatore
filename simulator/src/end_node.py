@@ -19,12 +19,26 @@ class EndNode:
 
         self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
         self.event_sub = rospy.Subscriber(self.node_name, event, self.process_event)
+        self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=10)
         self.type_stats = {}
+        self.data_by_type = {}
 
     def process_log_info(self, msg):
         rospy.loginfo(f"Received log info from node {msg.node_name}")
         if msg.type == "generator":
             self.num_expected_messages += msg.value1  # Assuming value1 stores the number of messages
+        if msg.flag2 == True:
+            data = {
+            "node_name": msg.node_name,
+            "value1": round(msg.value1,2),
+            "value2": [round(number, 2) for number in msg.value2],
+            "attribute": msg.attribute1
+            }
+            msg_type = msg.type
+            if msg_type not in self.data_by_type:
+                self.data_by_type[msg_type] = []
+
+            self.data_by_type[msg_type].append(data)
 
     
     def process_event(self, msg):
@@ -33,10 +47,8 @@ class EndNode:
         event_id = msg.ID
         msg.completed_date = rospy.Time.now()
         msg.compl_time = self.stamp_date()
-        #print(msg)
         self.received_messages.add((generator_id, event_id))
-        # if self.arrived_msgs == self.num_expected_messages:
-        #     self.print_statistics()
+
 
 
         # Update type statistics
@@ -59,7 +71,15 @@ class EndNode:
                 self.node_passing_stats[msg.type] = {node_id: 1}
         
         if self.arrived_msgs == self.num_expected_messages:
+            info_msg =loginfo()
+            
+            info_msg.type = "end_node"
+            info_msg.node_name = self.node_name
+            info_msg.flag1 = True
+            self.pub_info.publish(info_msg)
+            time.sleep(5)
             self.print_statistics()
+            self.print_data_by_type()
 
     def get_unique_generator_ids(self):
         return set([generator_id for generator_id, _ in self.received_messages])
@@ -76,20 +96,24 @@ class EndNode:
         seconds = seconds % 60
         return f"{hours} hours, {minutes} minutes, {seconds:.2f} seconds"
 
+
+    def print_data_by_type(self):
+        for msg_type, data_list in self.data_by_type.items():
+            print(f"Type {msg_type}:\n")
+            for data in data_list:
+                print(f"node_name: {data['node_name']}")
+                print(f"utilizzazione totale: {data['value1']}")
+                print(f"utilizzazione: {data['value2']}")
+                print(f"attribute: {data['attribute']}")
+                print("\n")
+
+
     def print_statistics(self):
         print("All messages received:")
         for generator_id in self.get_unique_generator_ids():
             count = sum([1 for gid, _ in self.received_messages if gid == generator_id])
             print(f"Generator {generator_id}: {count} messages")
-            # Calcola e stampa il tempo medio di attesa tra gli eventi
-            # if count > 1:
-            #     generator_msgs = [msg for gid, msg in self.received_messages if gid == generator_id]
-            #     first_msg = min(generator_msgs, key=lambda msg: msg.generation_date).generation_date
-            #     last_msg = max(generator_msgs, key=lambda msg: msg.generation_date).generation_date
-            #     avg_waiting_time = (last_msg - first_msg).to_sec() / (count - 1)
-            #     formatted_avg_waiting_time = self.format_time(avg_waiting_time)
-            #     print(f"Average waiting time between events: {formatted_avg_waiting_time}")
-        
+
             
         print("\nMessage type statistics:")
         for msg_type, stats in self.type_stats.items():
