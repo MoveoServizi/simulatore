@@ -1,0 +1,65 @@
+<!-- Launch the generator node -->
+<launch>
+    <node name="generator1" pkg="simulator" type="generator.py" output="screen">
+        <param name="node_id" value="11"/>
+        <param name="node_name" value="generator1"/>
+        <param name="next_element" value="coda1"/>
+        <param name="gen_freq" value="5.0"/>
+        <param name="num_messages" value="20"/>
+        
+    </node>
+
+    <node name="generator2" pkg="simulator" type="generator.py" output="screen">
+        <param name="node_id" value="12"/>
+        <param name="node_name" value="generator2"/>
+        <param name="next_element" value="coda1"/>
+        <param name="gen_freq" value="5.0"/>
+        <param name="num_messages" value="5"/>
+        <param name="num_messages" value="10"/>
+        <param name="event_type" value="new_type"/>
+        
+    </node>
+
+    <!-- Launch the coda1 node -->
+    <node name="coda1" pkg="simulator" type="blocco_base.py" output="screen">
+        <param name="node_id" value="21"/>
+        <param name="node_name" value="coda1"/>
+        <param name="next_element" value="switch"/>
+        <param name="num_servers" value="2"/>
+        <param name="server_time" value="0.1"/>
+    </node>
+
+    <!-- Launch the switch node -->
+    <node name="switch" pkg="simulator" type="switch2.py" output="screen">
+        <param name="node_id" value="101"/>
+        <param name="node_name" value="switch"/>
+        <param name="modality" value="split"/>
+        <param name="split_rate" value="0.7"/>
+        <param name="topic1" value="coda3"/>
+        <param name="topic2" value="coda4"/>
+    </node>
+
+    <!-- Launch the coda3 node -->
+    <node name="coda3" pkg="simulator" type="blocco_base.py" output="screen">
+        <param name="node_id" value="23"/>
+        <param name="node_name" value="coda3"/>
+        <param name="next_element" value="end_node"/>
+        <param name="num_servers" value="1"/>
+        <param name="server_time" value="0.1"/>
+    </node>
+
+    <!-- Launch the coda4 node -->
+    <node name="coda4" pkg="simulator" type="blocco_base.py" output="screen">
+        <param name="node_id" value="24"/>
+        <param name="node_name" value="coda4"/>
+        <param name="next_element" value="end_node"/>
+        <param name="num_servers" value="1"/>
+        <param name="server_time" value="0.1"/>
+    </node>
+
+    <node name="end_node" pkg="simulator" type="end_node.py" output="screen">
+        <param name="node_id" value="7"/>
+        <param name="node_name" value="end_node"/>
+    </node>
+
+</launch>

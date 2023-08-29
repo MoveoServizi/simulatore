@@ -1,0 +1,11 @@
+<launch>
+    <!-- Define parameters -->
+    <arg name="node_name" default="coda1"/>
+    <arg name="next_element" default="coda2"/>
+
+    <!-- Launch the node -->
+    <node name="$(arg node_name)" pkg="simulator" type="blocco_base.py">
+        <param name="node_name" value="$(arg node_name)"/>
+        <param name="next_element" value="$(arg next_element)"/>
+    </node>
+</launch>

@@ -1,0 +1,15 @@
+string generator_id
+int32 ID
+string type
+time generation_date
+string gen_time
+time completed_date
+string compl_time
+int32[] route
+int32 value1
+int32 value2
+int32 value3
+string attribute1
+string attribute2
+string attribute3
+bool last_event

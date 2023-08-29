@@ -1,0 +1,22 @@
+  <!-- Launch the node -->
+<launch>
+    <node name="generator_semplice" pkg="simulator" type="generator.py"  output="screen" >
+        <param name="node_name" value="generator_semplice"/>
+        <param name="next_element" value="coda1"/>
+        
+    </node>
+
+    <node name="coda1" pkg="simulator" type="blocco_base.py"  output="screen" >
+        <param name="node_name" value="coda1"/>
+        <param name="next_element" value="coda2"/>
+        <param name="num_servers" value="2"/>
+        <param name="server_time" value="20"/>
+    </node>
+
+    <node name="coda2" pkg="simulator" type="blocco_base.py"  output="screen">
+        <param name="node_name" value="coda2"/>
+        <param name="next_element" value="coda3"/>
+        <param name="server_time" value="8"/>
+    </node>
+
+</launch>
