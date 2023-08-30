@@ -11,6 +11,7 @@ from simulator.msg import loginfo
 import threading
 import time
 import logging
+import datetime
 
 class Coda():
     def __init__(self,node_name,next_element, num_servers, server_time, node_id):
@@ -31,9 +32,10 @@ class Coda():
         self.first_arrival_time = None
         self.last_arrival_time = None
         self.total_arrival_events = 0
-        self.time_interval = 2 #self.server_time * 10
+        self.time_interval = 10 #self.server_time * 10
         self.utilization_intervals = []
         self.queue_length_intervals = []
+        self.time_array = []
         self.server_occupancy = [False] *int(num_servers)
         self.occupancy_lock = threading.Lock()  # Per garantire l'accesso sincronizzato
 
@@ -65,19 +67,19 @@ class Coda():
 
     def process_log_info(self,msg):
         if msg.type == "end_node":
-            if msg.flag1 == True:
+            if msg.stop_esecution == True:
                 info_msg =loginfo()
-                info_msg.ID_node = node_id
+                info_msg.ID_node = self.node_id
                 info_msg.type = "coda"
-                info_msg.node_name = node_name
-                info_msg.attribute1 = "test info"
-                info_msg.value1 = self.get_general_utilization()
-                info_msg.value2 = self.get_interval_utilizations()
-                info_msg.value3 = self.time_interval
-                info_msg.value4 = self.queue_length_intervals
-                info_msg.flag2 = True
+                info_msg.node_name = self.name
+                info_msg.info = "test info"
+                info_msg.utiliz_tot = self.get_general_utilization()
+                info_msg.utiliz_array = self.get_interval_utilizations()
+                info_msg.time_array = self.time_array
+                info_msg.queue_array = self.queue_length_intervals
+                info_msg.statistic = True
                 self.pub_info.publish(info_msg)
-                rospy.signal_shutdown('Chiusura del launcher_node')
+                rospy.signal_shutdown('Chiusura della coda')
 
 
     def queue(self, msg):
@@ -105,15 +107,11 @@ class Coda():
     def get_general_utilization(self):
         if self.first_arrival_time is None or self.last_arrival_time is None:
             return 0.0
-        
         total_time = (self.last_arrival_time - self.first_arrival_time).to_sec()
-        
-
         utilization = (self.total_arrival_events/total_time) / (self.number_of_server * (1/self.server_time))
-        print_line = self.name+" "+str(self.total_arrival_events)+ " " +str(total_time) +  " " +str(self.number_of_server * 1/self.server_time)+ " = " + str(utilization)
-        print(print_line)
         util = round(utilization,2)
         return util
+    
     def get_interval_utilizations(self):
         return self.utilization_intervals
     
@@ -130,7 +128,6 @@ class Coda():
                 with self.occupancy_lock:
                     self.server_occupancy[server_number - 1] = True
                 
-                #print(self.name, " : computing on server", server_number, "...")
                 time.sleep(self.server_time)
                 
                 self.pub.publish(current_event)
@@ -141,6 +138,7 @@ class Coda():
     def monitor_occupancy(self):
         cicle_max = max(1,round(self.time_interval/self.server_time/2))
         cicle = 0
+        count = 0
         while not rospy.is_shutdown():
             # Dormi per mezzo self.server_time prima di registrare lo stato di occupazione
             time.sleep(self.server_time / 2)
@@ -161,7 +159,10 @@ class Coda():
                 util =round(utilization,2)
                 self.utilization_intervals.append(util)
                 self.queue_length_intervals.append(self.queue_length)
+                self.time_array.append(rospy.Time.now())
                 cicle = 0
+
+                
 
 
 if __name__ == '__main__':

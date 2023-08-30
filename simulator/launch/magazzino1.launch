@@ -5,7 +5,7 @@
         <param name="node_name" value="generator1"/>
         <param name="next_element" value="switch"/>
         <param name="gen_freq" value="1.0"/>
-        <param name="num_messages" value="10"/>
+        <param name="num_messages" value="20"/>
         <param name="event_type" value="corriere"/>
         <param name="attribute1" value="standard"/>
         <param name="value1" value="0.3"/>
@@ -17,7 +17,7 @@
         <param name="node_name" value="generator2"/>
         <param name="next_element" value="switch"/>
         <param name="gen_freq" value="1.0"/>
-        <param name="num_messages" value="20"/>
+        <param name="num_messages" value="30"/>
         <param name="event_type" value="multicollo"/>
         <param name="attribute1" value="standard"/>
         <param name="value1" value="0.2"/>
@@ -77,6 +77,9 @@
     <node name="end_node" pkg="simulator" type="end_node.py" output="screen">
         <param name="node_id" value="7"/>
         <param name="node_name" value="end_node"/>
+        <param name="modality" value="events"/>
+        <param name="stop_time" value="10"/>
+
     </node>
 
 </launch>
