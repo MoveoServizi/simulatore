@@ -1,0 +1,2 @@
+simulator
+-DCATKIN_DEVEL_PREFIX=/home/ubuntu/Desktop/simulatore/devel -DCMAKE_INSTALL_PREFIX=/home/ubuntu/Desktop/simulatore/install -G Unix Makefiles
