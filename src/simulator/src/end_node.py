@@ -185,8 +185,8 @@ class EndNode:
 
 
 if __name__ == '__main__':
-    node_name = "end_node"
-    rospy.init_node(node_name)
+    rospy.init_node(rospy.get_param("~node_name", "end_node"))
+    node_name = rospy.get_param("~node_name", "end_node")
     modality = rospy.get_param("~modality", "events")
     stop_time = rospy.get_param("~stop_time", 540)
     plt.ion()

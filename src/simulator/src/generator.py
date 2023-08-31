@@ -89,7 +89,7 @@ if __name__ == '__main__':
     event_type = rospy.get_param("~event_type", "evento_semplice")
     
     attribute1 = rospy.get_param("~split_attribute1", "-")
-    value1 = rospy.get_param("~value1", "0.0")
+    value1 = rospy.get_param("~value1", 0.0)
 
     generator = GeneratorNode(node_name, next_element, gen_freq, num_messages, event_type, node_id,attribute1,value1)
     generator.generate_messages()

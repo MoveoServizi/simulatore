@@ -1,0 +1,26 @@
+<!-- Launch the generator node -->
+<launch>
+	<node name="gen" pkg="simulator" type="generator.py" output="screen">
+		<param name="node_id" value="1"/>
+		<param name="node_name" value="gen"/>
+		<param name="next_element" value="coda1"/>
+		<param name="gen_freq" value="5"/>
+		<param name="num_messages" value="5"/>
+	</node>
+
+	<node name="coda1" pkg="simulator" type="blocco_base.py" output="screen">
+		<param name="node_id" value="2"/>
+		<param name="node_name" value="coda1"/>
+		<param name="next_element" value="end"/>
+		<param name="num_servers" value="1"/>
+		<param name="server_time" value="1"/>
+	</node>
+
+	<node name="end" pkg="simulator" type="end_node.py" output="screen">
+		<param name="node_id" value="3"/>
+		<param name="node_name" value="end"/>
+		<param name="modality" value="events"/>
+	</node>
+
+</launch>
+
