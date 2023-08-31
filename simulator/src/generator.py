@@ -46,7 +46,7 @@ class GeneratorNode:
                 event_msg.generation_date = rospy.Time.now()
                 event_msg.gen_time = self.stamp_date()
                 
-                event_msg.attribute1 = self.attribute1
+                event_msg.split_attribute1 = self.attribute1
                 event_msg.split1 = self.value1
                 
                 
@@ -81,14 +81,14 @@ class GeneratorNode:
 
 if __name__ == '__main__':
     rospy.init_node(rospy.get_param("~node_name", "generator"))
-
+    node_id = rospy.get_param("~node_id", 1)
     node_name = rospy.get_param("~node_name", "generator")
     next_element = rospy.get_param("~next_element", "next_element")
     gen_freq = rospy.get_param("~gen_freq", 1.0)
     num_messages = rospy.get_param("~num_messages", 10)
     event_type = rospy.get_param("~event_type", "evento_semplice")
-    node_id = rospy.get_param("~node_id", 1)
-    attribute1 = rospy.get_param("~attribute1", "-")
+    
+    attribute1 = rospy.get_param("~split_attribute1", "-")
     value1 = rospy.get_param("~value1", "0.0")
 
     generator = GeneratorNode(node_name, next_element, gen_freq, num_messages, event_type, node_id,attribute1,value1)

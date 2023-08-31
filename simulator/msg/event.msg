@@ -6,8 +6,12 @@ string gen_time
 time completed_date
 string compl_time
 string[] route
-string attribute1
+string split_attribute1
 float32 split1
+string split_attribute2
+float32 split2
+string split_attribute3
+float32 split3
 
 string attribute2
 float32 value2

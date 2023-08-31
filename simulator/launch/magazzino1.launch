@@ -26,10 +26,11 @@
     <node name="switch" pkg="simulator" type="switch2.py" output="screen">
         <param name="node_id" value="101"/>
         <param name="node_name" value="switch"/>
-        <param name="modality" value="attribute1_split"/>
-        <param name="topic1_attribute" value="standard"/>
+        <param name="modality" value="split_attribute"/>
+        <param name="split_attribute" value="standard"/>
         <param name="topic1" value="standard"/>
         <param name="topic2" value="geek"/>
+        <param name="attribute_num" value="1"/>
     </node>
         
     <node name="geek" pkg="simulator" type="blocco_base.py" output="screen">
@@ -54,7 +55,8 @@
         <param name="modality" value="type"/>
         <param name="topic1" value="multicollo"/>
         <param name="topic2" value="corriere"/>
-        <param name="topic1_attribute" value="multicollo"/>
+        <param name="split_attribute" value="multicollo"/>
+        
     
     </node>
 
