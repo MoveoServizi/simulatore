@@ -33,7 +33,7 @@
         <param name="attribute_num" value="1"/>
     </node>
         
-    <node name="geek" pkg="simulator" type="blocco_base.py" output="screen">
+    <node name="geek" pkg="simulator" type="coda.py" output="screen">
         <param name="node_id" value="21"/>
         <param name="node_name" value="geek"/>
         <param name="next_element" value="switch2"/>
@@ -41,7 +41,7 @@
         <param name="server_time" value="0.3"/>
     </node>
 
-    <node name="standard" pkg="simulator" type="blocco_base.py" output="screen">
+    <node name="standard" pkg="simulator" type="coda.py" output="screen">
         <param name="node_id" value="21"/>
         <param name="node_name" value="standard"/>
         <param name="next_element" value="switch2"/>
@@ -60,7 +60,7 @@
     
     </node>
 
-    <node name="multicollo" pkg="simulator" type="blocco_base.py" output="screen">
+    <node name="multicollo" pkg="simulator" type="coda.py" output="screen">
         <param name="node_id" value="21"/>
         <param name="node_name" value="multicollo"/>
         <param name="next_element" value="end_node"/>
@@ -68,7 +68,7 @@
         <param name="server_time" value="2"/>
     </node>
 
-    <node name="corriere" pkg="simulator" type="blocco_base.py" output="screen">
+    <node name="corriere" pkg="simulator" type="coda.py" output="screen">
         <param name="node_id" value="22"/>
         <param name="node_name" value="corriere"/>
         <param name="next_element" value="end_node"/>
