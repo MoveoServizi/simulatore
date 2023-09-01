@@ -194,11 +194,11 @@ class Interfaccia(customtkinter.CTk):
         self.tabview_main.add("launch_file") 
 
        # Crea una figura vuota
-        self.fig, self.ax = plt.subplots(figsize=(6, 4))
-        self.ax.set_facecolor('black')
+        self.fig, self.ax = plt.subplots(figsize=(9.5,6.5))
+        #self.ax.set_facecolor('black')
         canvas = FigureCanvasTkAgg(self.fig, master=self.tabview_main.tab("grafo"))
         canvas_widget = canvas.get_tk_widget()
-        canvas_widget.grid(row=0, column=0, padx=(5, 15), pady=(5, 15), sticky="nsew")
+        canvas_widget.grid(row=0, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
         self.G = nx.Graph()
 
 
@@ -241,7 +241,7 @@ class Interfaccia(customtkinter.CTk):
         
         # Aggiungi i nodi e le connessioni al grafo
         self.G.add_node(self.node_name1.get())
-        self.colors[self.node_name1.get()] = "PowderBlue"
+        self.colors[self.node_name1.get()] = "CornflowerBlue"
         if self.next1.get() not in self.G:
             self.colors[self.next1.get()] = "LightGray"
         self.G.add_edge(self.node_name1.get(), self.next1.get())
@@ -285,7 +285,7 @@ class Interfaccia(customtkinter.CTk):
         self.textbox.insert("end", coda_node_text)
         # Aggiungi i nodi e le connessioni al grafo
         self.G.add_node(self.node_name2.get())
-        self.colors[self.node_name2.get()] = "MediumAquamarine"
+        self.colors[self.node_name2.get()] = "IndianRed"
         if self.next2.get() not in self.G:
             self.colors[self.next2.get()] = "LightGray"
         self.G.add_edge(self.node_name2.get(), self.next2.get())
@@ -328,7 +328,7 @@ class Interfaccia(customtkinter.CTk):
         self.textbox.insert("end", switch_node_text)
         # Aggiungi i nodi e le connessioni al grafo
         self.G.add_node(self.node_name3.get())
-        self.colors[self.node_name3.get()] = "DarkTurquoise"
+        self.colors[self.node_name3.get()] = "DarkSeaGreen"
         if self.topic1.get() not in self.G:
             self.colors[self.topic1.get()] = "LightGray"
         if self.topic2.get() not in self.G:
@@ -373,7 +373,7 @@ class Interfaccia(customtkinter.CTk):
         self.textbox.insert("end", "</launch>\n")
         # Aggiungi i nodi e le connessioni al grafo
         self.G.add_node(self.node_name4.get())
-        self.colors[self.node_name4.get()] = "MintCream"
+        self.colors[self.node_name4.get()] = "DarkKhaki"
         self.visualizza_grafo()
 
     def format_end_node(self):
