@@ -10,7 +10,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
+customtkinter.set_appearance_mode("Light")  # Modes: "System" (standard), "Dark", "Light"
+customtkinter.deactivate_automatic_dpi_awareness() 
 
 class Interfaccia(customtkinter.CTk):
     def __init__(self):
@@ -36,23 +37,23 @@ class Interfaccia(customtkinter.CTk):
         self.logo_image = customtkinter.CTkImage(image_data, size=(160, 90))
         
         self.title("Moveo Servizi - Simulatore flussi")
-        self.geometry(f"{1420}x{800}")
+        self.geometry(f"{1420}x{900}")
 
         # Configure grid layout (4x4)
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(1, weight=1)
 
         # Create logo widget
-        self.logo_frame = customtkinter.CTkFrame(self, fg_color="black")
-        self.logo_frame.grid(row=0, column=0, padx=(5, 15), pady=(15, 5), sticky="nsew")
+        self.logo_frame = customtkinter.CTkFrame(self, fg_color="black",corner_radius=20)
+        self.logo_frame.grid(row=0, column=0, padx=(15, 1), pady=(25, 5), sticky="nsew")
         
 
         self.logo_label = customtkinter.CTkLabel(self.logo_frame, corner_radius=2, text="", image=self.logo_image)
         self.logo_label.grid(row=0, column=0, padx=(90, 40), pady=(10, 10), sticky="ew")
         
         # create node widget 
-        self.node_frame = customtkinter.CTkFrame(self)
-        self.node_frame.grid(row=1, column=0, padx=(5,15), pady=(5, 15),rowspan=2, sticky="nsew")
+        self.node_frame = customtkinter.CTkFrame(self,corner_radius=20)
+        self.node_frame.grid(row=1, column=0, padx=(15,5), pady=(5, 15),rowspan=2, sticky="nsew")
         
         
         tabview = customtkinter.CTkTabview(master=self.node_frame)
@@ -193,10 +194,10 @@ class Interfaccia(customtkinter.CTk):
 
                 
         ### file tab ##
-        self.file_frame = customtkinter.CTkFrame(self)
-        self.file_frame.grid(row=0, column=1, padx=(5,15), pady=(5, 5), sticky="nsew",rowspan=2)
+        self.file_frame = customtkinter.CTkFrame(self,corner_radius=20)
+        self.file_frame.grid(row=0, column=1, padx=(5,15), pady=(25, 5), sticky="nsew",rowspan=2)
         self.tabview_main = customtkinter.CTkTabview(master=self.file_frame)
-        self.tabview_main.grid(row=0, column=1, padx=(15,15), pady=(15, 20), sticky="nsew")
+        self.tabview_main.grid(row=0, column=1, padx=(15,15), pady=(15, 5), sticky="nsew")
         
         
         self.tabview_main.add("launch_file") 
@@ -212,15 +213,20 @@ class Interfaccia(customtkinter.CTk):
         button_grafo.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w") 
         
         ## generazione launch file
-        self.textbox = customtkinter.CTkTextbox(self.tabview_main.tab("launch_file") , width=900,height=650, corner_radius=10)
+        self.textbox = customtkinter.CTkTextbox(self.tabview_main.tab("launch_file") , width=900,height=700, corner_radius=10)
         self.textbox.grid(row=0, column=0,padx=(35,15), pady=(15, 15), sticky="nsew", columnspan = 3)
         self.textbox.insert("0.0", "<!-- Create the launch file for ROS -->\n<launch>\n")
-        self.load_button = customtkinter.CTkButton(self.tabview_main.tab("launch_file"), text="LOAD", command=self.load_file)
-        self.load_button.grid(row=2, column=0, padx=(85,5), pady=(5,2), sticky="w")
-        button_save = customtkinter.CTkButton(self.tabview_main.tab("launch_file"), text="SAVE", command=lambda: self.save_file(True))
-        button_save.grid(row=2, column=1, padx=(15,5), pady=(5,2),sticky="w")
-        button_run = customtkinter.CTkButton(self.tabview_main.tab("launch_file"), text="RUN", command=self.run_file)
-        button_run.grid(row=2, column=2, padx=(15,5), pady=(5,2),sticky="w")
+        
+        #bottoni
+        self.button_frame = customtkinter.CTkFrame(self,height=80,corner_radius=50)
+        self.button_frame.grid(row=2, column=1, padx=(5,15), pady=(5, 15), sticky="nsew")
+        
+        self.load_button = customtkinter.CTkButton(self.button_frame, text="LOAD", command=self.load_file)
+        self.load_button.grid(row=0, column=0, padx=(150,85), pady=(5,5), sticky="e")
+        button_save = customtkinter.CTkButton(self.button_frame, text="SAVE", command=lambda: self.save_file(True))
+        button_save.grid(row=0, column=1, padx=(85,85), pady=(5,5),sticky="ew")
+        button_run = customtkinter.CTkButton(self.button_frame, text="RUN", command=self.run_file)
+        button_run.grid(row=0, column=2, padx=(85,100), pady=(5,5),sticky="e")
     
     
     ## funzioni pannello generatore  
@@ -401,17 +407,10 @@ class Interfaccia(customtkinter.CTk):
         
         source_command = "source devel/setup.bash" #/home/ubuntu/Desktop/simulatore/
         launch_command = "roslaunch simulator generated_launch_file.launch"
-        
         full_command = f"{source_command} && {launch_command}"
-        
         # Aggiungi 'read -p "Press Enter to exit..."' per mantenere il terminale aperto
         full_command_with_read = f"{full_command} && read -p 'Press Enter to exit...'"
-        
-        graph = "rqt_graph"
-        
         subprocess.Popen(["gnome-terminal", "--", "bash", "-c", f"{full_command_with_read}; exec $SHELL"])
-        subprocess.Popen(["gnome-terminal", "--", "bash", "-c", f"{graph}; exec $SHELL"])
-        
         print("Script is running.")
             
     def save_file(self,popup):
@@ -458,7 +457,6 @@ class Interfaccia(customtkinter.CTk):
         # Disegna il grafo aggiornato
         self.fig.canvas.draw()
         
-    
     def read_textbox(self):
         launch_text = self.textbox.get("1.0", "end")       
         self.G.clear()
@@ -481,7 +479,6 @@ class Interfaccia(customtkinter.CTk):
             elif current_node_name:
                 # Verifica se questa riga contiene un parametro del nodo
                 self.extract_connection(line, node_name,node_type)
-
 
     def extract_node_name(self, line):
         name = ""
