@@ -199,9 +199,9 @@ class Interfaccia(customtkinter.CTk):
         self.tabview_main = customtkinter.CTkTabview(master=self.file_frame)
         self.tabview_main.grid(row=0, column=1, padx=(15,15), pady=(15, 5), sticky="nsew")
         
-        
+        self.tabview_main.add("grafo")
         self.tabview_main.add("launch_file") 
-        self.tabview_main.add("grafo") 
+        self.tabview_main.add("statistiche") 
 
        # Visualizzazione grafo
         self.fig, self.ax = plt.subplots(figsize=(9.5,6.5))
@@ -227,6 +227,13 @@ class Interfaccia(customtkinter.CTk):
         button_save.grid(row=0, column=1, padx=(85,85), pady=(5,5),sticky="ew")
         button_run = customtkinter.CTkButton(self.button_frame, text="RUN", command=self.run_file)
         button_run.grid(row=0, column=2, padx=(85,100), pady=(5,5),sticky="e")
+        
+        
+        ## generazione launch file
+        self.textbox_statistic = customtkinter.CTkTextbox(self.tabview_main.tab("statistiche") , width=900,height=600, corner_radius=10)
+        self.textbox_statistic.grid(row=0, column=0,padx=(35,15), pady=(15, 15), sticky="nsew", columnspan = 3)
+        button_statistic = customtkinter.CTkButton(self.tabview_main.tab("statistiche"), text="show Satistic", command=self.show_statistic)
+        button_statistic.grid(row=1, column=0, padx=(100,100), pady=(5,5),sticky="ew")
     
     
     ## funzioni pannello generatore  
@@ -403,15 +410,11 @@ class Interfaccia(customtkinter.CTk):
     ## file menagment   
     def run_file(self):
         print("Running the script ...")
-        self.save_file(False)  # Salva il file generato
-        
-        source_command = "source devel/setup.bash" #/home/ubuntu/Desktop/simulatore/
+        self.save_file(False)  # Salva il file generato solo su file temporaneo
+        source_command = "source devel/setup.bash"
         launch_command = "roslaunch simulator generated_launch_file.launch"
         full_command = f"{source_command} && {launch_command}"
-        # Aggiungi 'read -p "Press Enter to exit..."' per mantenere il terminale aperto
-        full_command_with_read = f"{full_command} && read -p 'Press Enter to exit...'"
-        subprocess.Popen(["gnome-terminal", "--", "bash", "-c", f"{full_command_with_read}; exec $SHELL"])
-        print("Script is running.")
+        subprocess.Popen(["gnome-terminal", "--", "bash", "-c", f"{full_command}"]) 
             
     def save_file(self,popup):
         print("saving the script ...")
@@ -419,15 +422,12 @@ class Interfaccia(customtkinter.CTk):
         if popup:
             file_name = tkinter.simpledialog.askstring("Salva File", "Inserisci il nome del file:", initialvalue="")
             if file_name:
-                file_path = "src/simulator/launch/" + file_name + ".launch"  # Aggiunge l'estensione .launch al nome del file
-                
+                file_path = "src/simulator/launch/" + file_name + ".launch"  # Aggiunge l'estensione .launch al nome del file        
         else:
             file_path = "src/simulator/launch/generated_launch_file.launch"  # Scegli il percorso e il nome del file di destinazione
-        launch_text = self.textbox.get("1.0", "end")  # Ottieni il testo completo dal textbox
-                
+        launch_text = self.textbox.get("1.0", "end")  # Ottieni il testo completo dal textbox      
         with open(file_path, "w") as file:
-            file.write(launch_text)
-            
+            file.write(launch_text)  
         print("File saved:", file_path)
         
     def load_file(self):
@@ -520,6 +520,18 @@ class Interfaccia(customtkinter.CTk):
                 next_node = line[start_name:end_name]
                 self.G.add_edge(node_name, next_node)
 
+    ## statistic
+    def show_statistic(self):
+        file_path = "/home/ubuntu/Desktop/simulatore/src/simulator/statistic/last_statistic.txt"
+        try:
+            # Apri il file e leggi il contenuto
+            with open(file_path, 'r') as file:
+                statistic_content = file.read()
+            # Inserisci il contenuto nel widget CTkTextbox
+            self.textbox_statistic.insert("end",statistic_content)
+        except FileNotFoundError:
+            # Se il file non è stato trovato, gestisci l'eccezione
+            self.textbox_statistic.insert("end","Il file di statistiche non è stato trovato.")
 
 
 if __name__ == "__main__":

@@ -2,6 +2,7 @@
 
 import rospy
 from simulator.msg import event
+from simulator.msg import loginfo
 import random
 
 class SwitchNode:
@@ -18,6 +19,7 @@ class SwitchNode:
         self.sub = rospy.Subscriber(self.node_name, event, self.switch_callback)
         self.pub1 = rospy.Publisher(self.topic1, event, queue_size=10)
         self.pub2 = rospy.Publisher(self.topic2, event, queue_size=10)
+        self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
 
     def switch_callback(self, msg):
         route_list = list(msg.route)
@@ -87,7 +89,11 @@ class SwitchNode:
                 self.pub2.publish(msg)
         else:
             self.split_message(msg)
-        
+    
+    def process_log_info(self,msg):
+        if msg.type == "end_node":
+            if msg.stop_esecution == True:
+                rospy.signal_shutdown('Chiusura dello switch')  
 
 if __name__ == '__main__':
     rospy.init_node("switch2")

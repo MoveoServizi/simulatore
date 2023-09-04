@@ -1,0 +1,26 @@
+################  STATISTIC ############
+total esecution time:  5.226727724075317
+events recived:
+Generator gen1: 5 messages
+
+Route of events:
+
+Message type: test_typw
+Total count: 5
+Average arrival time: 0 hours, 0 minutes, 4.15 seconds
+Node gen1: 100.00%
+Node coda1: 100.00%
+Type coda:
+
+node_name: coda2
+utilizzazione totale: 0.0
+utilizzazione: []
+info: test info
+
+
+node_name: coda1
+utilizzazione totale: 1.2
+utilizzazione: []
+info: test info
+
+

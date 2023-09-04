@@ -1,196 +1,184 @@
 #!/usr/bin/env python3
 
+# elemento base del simulatore. coda M/M/n
+# questp elemento è composto da due parti, la prima è la coda di eventi che si accumulano, la seconda è il server che elabora gli eventi.
+# la coda è un puro elemento di accumolo, può avere capacità illimitata o limitata.
+# il server elabora il singolo evento in una certa quantità di tempo, questa può essere fissa, seguire un distribuzione (poisson), dipendere da parametri esterni o da parametri intrinsechi dell'evento da elaborare.
+# ci possono essere più server in parallelo per ogni singola coda. Ogni server può indirizzare gli elementi elaborati a uno o più code successive.
 import rospy
-from std_msgs.msg import String
 from simulator.msg import event
 from simulator.msg import loginfo
+import threading
 import time
-from datetime import datetime
-import matplotlib.pyplot as plt
-import numpy as np
+import logging
+import datetime
 
-class EndNode:
+class Coda():
+    def __init__(self,node_name,next_element, num_servers, server_time, node_id):
+        # Valori configurazione
+        self.name = node_name
+        self.topic_queue = "/" + node_name
+        self.topic_pub = "/" + next_element
+        self.max_length = -1
+        self.server_time = server_time
+        self.server_time_distribution = 0
+        self.number_of_server =  num_servers
+        self.node_id = node_id
 
-    def __init__(self,node_name,modality,stop_time):
-        self.modality = modality
-        self.stop_time = stop_time
-        self.node_name = node_name
-        self.received_messages = set()
-        self.num_expected_messages = 0
-        self.arrived_msgs = 0
-        self.all_previous_ids_received = False
-        self.node_passing_stats = {}  # Dizionario per tenere traccia delle statistiche di passaggio per ogni nodo
-        self.start = rospy.Time.now()
+        # Valori dinamici
+        self.queue_length = 0
+        self.queue_list = []
+            #calcolo utilizzo
+        self.first_arrival_time = None
+        self.last_arrival_time = None
+        self.total_arrival_events = 0
+        self.time_interval = 10 #self.server_time * 10
+        self.utilization_intervals = []
+        self.queue_length_intervals = []
+        self.time_array = []
+        self.server_occupancy = [False] *int(num_servers)
+        self.occupancy_lock = threading.Lock()  # Per garantire l'accesso sincronizzato
 
-        self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
-        self.event_sub = rospy.Subscriber(self.node_name, event, self.process_event)
+        #topic
+        # Create a subscriber
+        self.subscriber = rospy.Subscriber(self.topic_queue, event, self.queue)
+        # Create a publisher
+        self.pub = rospy.Publisher(self.topic_pub, event, queue_size=10)
         self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=20)
-        self.type_stats = {}
-        self.data_by_type = {}
+        self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
 
-    
-    def process_event(self, msg):
-        self.arrived_msgs += 1
-        generator_id = msg.generator_id
-        event_id = msg.ID
-        msg.completed_date = rospy.Time.now()
-        msg.compl_time = self.stamp_date()
-        self.received_messages.add((generator_id, event_id))
-
-        # Update type statistics
-        if msg.type in self.type_stats:
-            self.type_stats[msg.type]["count"] += 1
-            spend_time = msg.completed_date-msg.generation_date
-            self.type_stats[msg.type]["arrival_times"].append(spend_time)
-        else:
-            spend_time = msg.completed_date-msg.generation_date
-            self.type_stats[msg.type] = {"count": 1, "arrival_times": [spend_time]}
-        
-        # Update node passing statistics
-        for node_id in msg.route:
-            if msg.type in self.node_passing_stats:
-                if node_id in self.node_passing_stats[msg.type]:
-                    self.node_passing_stats[msg.type][node_id] += 1
-                else:
-                    self.node_passing_stats[msg.type][node_id] = 1
-            else:
-                self.node_passing_stats[msg.type] = {node_id: 1}
-
-        #stop condition
-        if self.modality == "events":
-            if self.arrived_msgs == self.num_expected_messages:
-                self.total_seconds = rospy.Time.now().to_sec() - self.start.to_sec()
-                self.print_result()
-        elif self.modality == "time":
-            self.total_seconds = rospy.Time.now().to_sec() - self.start.to_sec()
-            if self.total_seconds > self.stop_time:
-                print("TIME IS OVER!!!")
-                self.print_result()
-            
-    
-    
-    def process_log_info(self, msg):
-        rospy.loginfo(f"Received log info from node {msg.node_name}")
-        if msg.type == "generator":
-            self.num_expected_messages += msg.events_left  # Assuming value1 stores the number of messages
-        if msg.statistic == True and msg.type == "coda":
-            data = {
-            "node_name": msg.node_name,
-            "utiliz_tot": round(msg.utiliz_tot,2),
-            "utiliz_array": [round(number, 2) for number in msg.utiliz_array],
-            "info": msg.info,
-            "queue_length": msg.queue_array,
-            "time_array" : msg.time_array
-            }
-            msg_type = msg.type
-            if msg_type not in self.data_by_type:
-                self.data_by_type[msg_type] = []
-
-            self.data_by_type[msg_type].append(data)
- 
-
-    def print_result(self):
-        info_msg =loginfo()
-            
-        info_msg.type = "end_node"
-        info_msg.node_name = self.node_name
-        info_msg.stop_esecution = True
-        self.pub_info.publish(info_msg)
         time.sleep(5)
-        self.print_statistics()
-        self.print_data_by_type()
+        info_msg =loginfo()
+        info_msg.ID_node = node_id
+        info_msg.type = "coda"
+        info_msg.node_name = node_name
+        self.pub_info.publish(info_msg)
+
+        # Launch servers
+        server_threads = []
+        for server_number in range(1, num_servers + 1):
+            server_thread_instance = threading.Thread(target=self.server, args=(server_number,))
+            server_threads.append(server_thread_instance)
+            server_thread_instance.start()
+
+        #lauch computation of utilization
+        self.occupancy_monitor_thread = threading.Thread(target=self.monitor_occupancy)
+        self.occupancy_monitor_thread.start()
+
+    def process_log_info(self,msg):
+        if msg.type == "end_node":
+            if msg.stop_esecution == True:
+                info_msg =loginfo()
+                info_msg.ID_node = self.node_id
+                info_msg.type = "coda"
+                info_msg.node_name = self.name
+                info_msg.info = "test info"
+                info_msg.utiliz_tot = self.get_general_utilization()
+                info_msg.utiliz_array = self.get_interval_utilizations()
+                info_msg.time_array = self.time_array
+                info_msg.queue_array = self.queue_length_intervals
+                info_msg.statistic = True
+                self.pub_info.publish(info_msg)
+                rospy.signal_shutdown('Chiusura della coda')
+
+
+    def queue(self, msg):
+        route_list = list(msg.route)
+        route_list.append(self.name)
+        msg.route = route_list
+
+        # Calcola l'utilizzazione generale al momento dell'arrivo di un evento
+        if self.first_arrival_time is None:
+            self.first_arrival_time = rospy.Time.now()
+        
+        self.last_arrival_time = rospy.Time.now()
+        self.total_arrival_events += 1
+        
+        if self.max_length != -1:
+            if self.queue_length < self.max_length:
+                self.queue_length += 1
+                self.queue_list.append(msg)
+        else:
+            self.queue_length += 1
+            self.queue_list.append(msg)
+        print(self.name, ": adding element, queue: ", self.queue_length)
         
 
-    def print_statistics(self):
-        print("################  STATISTIC ############")
-        print("total esecution time: ", str(self.total_seconds))
-        print("events recived:")
-        for generator_id in self.get_unique_generator_ids():
-            count = sum([1 for gid, _ in self.received_messages if gid == generator_id])
-            print(f"Generator {generator_id}: {count} messages")
+    def get_general_utilization(self):
+        if self.first_arrival_time is None or self.last_arrival_time is None:
+            return 0.0
+        total_time = (self.last_arrival_time - self.first_arrival_time).to_sec()
+        utilization = (self.total_arrival_events/total_time) / (self.number_of_server * (1/self.server_time))
+        util = round(utilization,2)
+        return util
+    
+    def get_interval_utilizations(self):
+        return self.utilization_intervals
+    
 
+    def server(self, server_number):
+        print(self.name, " - server ", server_number, " avviato")
+        
+
+        while not rospy.is_shutdown():
+            if self.queue_length > 0:
+                current_event = self.queue_list[0]
+                self.queue_list.pop(0)
+                self.queue_length -= 1
+                with self.occupancy_lock:
+                    self.server_occupancy[server_number - 1] = True
+                
+                time.sleep(self.server_time)
+                
+                self.pub.publish(current_event)
+                with self.occupancy_lock:
+                    self.server_occupancy[server_number - 1] = False
+                print(self.name, " server ", server_number, ": completed event ", current_event.ID, "  queue ", self.queue_length)
             
-        print("\nRoute of events:")
-        for msg_type, stats in self.type_stats.items():
-            print(f"\nMessage type: {msg_type}")
-            print(f"Total count: {stats['count']}")
-            if stats['count'] > 0:
-                total_time = sum([t.to_sec() for t in stats['arrival_times']])
-                avg_arrival_time = total_time / stats['count']
-                formatted_avg_time = self.format_time(avg_arrival_time)
-                print(f"Average arrival time: {formatted_avg_time}")
+    def monitor_occupancy(self):
+        cicle_max = max(1,round(self.time_interval/self.server_time/2))
+        cicle = 0
+        count = 0
+        while not rospy.is_shutdown():
+            # Dormi per mezzo self.server_time prima di registrare lo stato di occupazione
+            time.sleep(self.server_time / 2)
+            
+            with self.occupancy_lock:
+                if cicle == 0:
+                    server_occupied_counts = [0] * num_servers
+
+                # Calcola l'utilizzazione in base allo stato di occupazione dei server
+                for server_number in range(num_servers):
+                    if self.server_occupancy[server_number]:
+                        server_occupied_counts[server_number] += 1
+
+            cicle += 1
+            # Calcola l'utilizzazione nei vari intervalli di tempo
+            if cicle == cicle_max:
+                utilization = sum(server_occupied_counts) / (num_servers * cicle_max)
+                util =round(utilization,2)
+                self.utilization_intervals.append(util)
+                self.queue_length_intervals.append(self.queue_length)
+                self.time_array.append(rospy.Time.now())
+                cicle = 0
+
                 
-            passing_stats = self.node_passing_stats.get(msg_type, {})
-            total_passing_events = stats['count']
-            #print("\nNode passing statistics:")
-            for node_id, passing_count in passing_stats.items():
-                passing_percentage = (passing_count / total_passing_events) * 100
-                print(f"Node {node_id}: {passing_percentage:.2f}%")
-                
-    def print_data_by_type(self):
-        for msg_type, data_list in self.data_by_type.items():
-            print(f"Type {msg_type}:\n")
-            for data in data_list:
-                print(f"node_name: {data['node_name']}")
-                print(f"utilizzazione totale: {data['utiliz_tot']}")
-                print(f"utilizzazione: {data['utiliz_array']}")
-                print(f"info: {data['info']}")
-                print("\n")
-                
-                self.plot_temporal_data(data['queue_length'],data['utiliz_array'],data['time_array'],data['node_name'])
-                
-    def plot_temporal_data(self,values1, values2,time_array, title):
-        time_steps = [(time.to_sec() - self.start.to_sec()) for time in time_array]
-        
-        # Creazione della griglia con 1 riga e 2 colonne per i subplot
-        plt.figure(figsize=(10, 5))  # Imposta le dimensioni della figura
-        plt.subplot(1, 2, 1)  # Primo subplot
-        plt.plot(time_steps, values1, marker='*')
-        plt.title('Lunghezza coda')
-        plt.xlabel('Tempo')
-        plt.ylabel('entità in coda')
-        plt.grid(True)
-        
-        plt.subplot(1, 2, 2)  # Secondo subplot
-        plt.plot(time_steps, values2, marker='*', color='m')
-        plt.title('Utilizzazione')
-        plt.xlabel('Tempo')
-        plt.ylabel('percentuale di utilizzazione')
-        plt.grid(True)
-        
-        plt.suptitle(title)  # Titolo dell'intera figura
-        plt.tight_layout()   # Ottimizza la disposizione dei subplot
-        plt.show()
-        plt.pause(0.001)
-       
-        
-    ##funzioni di servizio
-    def get_unique_generator_ids(self):
-        return set([generator_id for generator_id, _ in self.received_messages])
-
-    def stamp_date(self):
-        completed_date = rospy.Time.now().to_sec()
-        formatted_date = datetime.fromtimestamp(completed_date)
-        date_string = formatted_date.strftime('%d-%m-%y %H:%M:%S')
-        return date_string
-
-    def format_time(self,seconds):
-        hours = int(seconds // 3600)
-        minutes = int((seconds % 3600) // 60)
-        seconds = seconds % 60
-        return f"{hours} hours, {minutes} minutes, {seconds:.2f} seconds"
-
-
-
 
 
 if __name__ == '__main__':
-    rospy.init_node(rospy.get_param("~node_name", "end_node"))
-    node_name = rospy.get_param("~node_name", "end_node")
-    modality = rospy.get_param("~modality", "events")
-    stop_time = rospy.get_param("~stop_time", 540)
-    plt.ion()
     
-    end_node = EndNode(node_name,modality,stop_time)
+    # Initialize the ROS node
+    rospy.init_node(rospy.get_param("~node_name", "coda_node"))
+    
+    # Get the parameters from the launch file
+    node_name = rospy.get_param("~node_name", "coda_node")
+    next_element = rospy.get_param("~next_element", "next_element_topic")
+    num_servers = rospy.get_param("~num_servers", 1)
+    server_time = rospy.get_param("~server_time", 2)
+    node_id = rospy.get_param("~node_id", 1)
+    # Create an instance of the Coda class with parameters from the launch file
+    coda1 = Coda(node_name, next_element, num_servers, server_time,node_id)
+
+   
+    # Spin ROS node
     rospy.spin()
-    
