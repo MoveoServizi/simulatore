@@ -5,6 +5,10 @@
           TYPE
           NODE_NAME-VAL
           NODE_NAME
+          SERVER_TIME-VAL
+          SERVER_TIME
+          NUM_SERVERS-VAL
+          NUM_SERVERS
           UTILIZ_TOT-VAL
           UTILIZ_TOT
           UTILIZ_ARRAY-VAL
@@ -13,10 +17,10 @@
           QUEUE_ARRAY
           TIME_ARRAY-VAL
           TIME_ARRAY
-          INFO-VAL
-          INFO
           QUEUE_LEFT-VAL
           QUEUE_LEFT
+          INFO-VAL
+          INFO
           EVENTS_LEFT-VAL
           EVENTS_LEFT
           STOP_ESECUTION-VAL

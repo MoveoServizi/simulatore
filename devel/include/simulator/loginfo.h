@@ -27,12 +27,14 @@ struct loginfo_
     : ID_node(0)
     , type()
     , node_name()
+    , server_time(0.0)
+    , num_servers(0.0)
     , utiliz_tot(0.0)
     , utiliz_array()
     , queue_array()
     , time_array()
-    , info()
     , queue_left(0)
+    , info()
     , events_left(0)
     , stop_esecution(false)
     , statistic(false)  {
@@ -41,12 +43,14 @@ struct loginfo_
     : ID_node(0)
     , type(_alloc)
     , node_name(_alloc)
+    , server_time(0.0)
+    , num_servers(0.0)
     , utiliz_tot(0.0)
     , utiliz_array(_alloc)
     , queue_array(_alloc)
     , time_array(_alloc)
-    , info(_alloc)
     , queue_left(0)
+    , info(_alloc)
     , events_left(0)
     , stop_esecution(false)
     , statistic(false)  {
@@ -64,6 +68,12 @@ struct loginfo_
    typedef std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> _node_name_type;
   _node_name_type node_name;
 
+   typedef float _server_time_type;
+  _server_time_type server_time;
+
+   typedef float _num_servers_type;
+  _num_servers_type num_servers;
+
    typedef float _utiliz_tot_type;
   _utiliz_tot_type utiliz_tot;
 
@@ -76,11 +86,11 @@ struct loginfo_
    typedef std::vector<ros::Time, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<ros::Time>> _time_array_type;
   _time_array_type time_array;
 
-   typedef std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> _info_type;
-  _info_type info;
-
    typedef int32_t _queue_left_type;
   _queue_left_type queue_left;
+
+   typedef std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> _info_type;
+  _info_type info;
 
    typedef int32_t _events_left_type;
   _events_left_type events_left;
@@ -123,12 +133,14 @@ bool operator==(const ::simulator::loginfo_<ContainerAllocator1> & lhs, const ::
   return lhs.ID_node == rhs.ID_node &&
     lhs.type == rhs.type &&
     lhs.node_name == rhs.node_name &&
+    lhs.server_time == rhs.server_time &&
+    lhs.num_servers == rhs.num_servers &&
     lhs.utiliz_tot == rhs.utiliz_tot &&
     lhs.utiliz_array == rhs.utiliz_array &&
     lhs.queue_array == rhs.queue_array &&
     lhs.time_array == rhs.time_array &&
-    lhs.info == rhs.info &&
     lhs.queue_left == rhs.queue_left &&
+    lhs.info == rhs.info &&
     lhs.events_left == rhs.events_left &&
     lhs.stop_esecution == rhs.stop_esecution &&
     lhs.statistic == rhs.statistic;
@@ -188,12 +200,12 @@ struct MD5Sum< ::simulator::loginfo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "a5ab383abb11907064bb91db32d4aea1";
+    return "b4daeb6ff2f474e72dec452bb1376c78";
   }
 
   static const char* value(const ::simulator::loginfo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xa5ab383abb119070ULL;
-  static const uint64_t static_value2 = 0x64bb91db32d4aea1ULL;
+  static const uint64_t static_value1 = 0xb4daeb6ff2f474e7ULL;
+  static const uint64_t static_value2 = 0x2dec452bb1376c78ULL;
 };
 
 template<class ContainerAllocator>
@@ -216,12 +228,14 @@ struct Definition< ::simulator::loginfo_<ContainerAllocator> >
 "string type\n"
 "string node_name\n"
 "\n"
+"float32 server_time\n"
+"float32 num_servers\n"
 "float32 utiliz_tot\n"
 "float32[] utiliz_array\n"
 "float32[] queue_array\n"
 "time[] time_array\n"
-"string info\n"
 "int32 queue_left\n"
+"string info\n"
 "\n"
 "int32 events_left\n"
 "\n"
@@ -248,12 +262,14 @@ namespace serialization
       stream.next(m.ID_node);
       stream.next(m.type);
       stream.next(m.node_name);
+      stream.next(m.server_time);
+      stream.next(m.num_servers);
       stream.next(m.utiliz_tot);
       stream.next(m.utiliz_array);
       stream.next(m.queue_array);
       stream.next(m.time_array);
-      stream.next(m.info);
       stream.next(m.queue_left);
+      stream.next(m.info);
       stream.next(m.events_left);
       stream.next(m.stop_esecution);
       stream.next(m.statistic);
@@ -281,6 +297,10 @@ struct Printer< ::simulator::loginfo_<ContainerAllocator> >
     Printer<std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>>::stream(s, indent + "  ", v.type);
     s << indent << "node_name: ";
     Printer<std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>>::stream(s, indent + "  ", v.node_name);
+    s << indent << "server_time: ";
+    Printer<float>::stream(s, indent + "  ", v.server_time);
+    s << indent << "num_servers: ";
+    Printer<float>::stream(s, indent + "  ", v.num_servers);
     s << indent << "utiliz_tot: ";
     Printer<float>::stream(s, indent + "  ", v.utiliz_tot);
     s << indent << "utiliz_array[]" << std::endl;
@@ -301,10 +321,10 @@ struct Printer< ::simulator::loginfo_<ContainerAllocator> >
       s << indent << "  time_array[" << i << "]: ";
       Printer<ros::Time>::stream(s, indent + "  ", v.time_array[i]);
     }
-    s << indent << "info: ";
-    Printer<std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>>::stream(s, indent + "  ", v.info);
     s << indent << "queue_left: ";
     Printer<int32_t>::stream(s, indent + "  ", v.queue_left);
+    s << indent << "info: ";
+    Printer<std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>>::stream(s, indent + "  ", v.info);
     s << indent << "events_left: ";
     Printer<int32_t>::stream(s, indent + "  ", v.events_left);
     s << indent << "stop_esecution: ";

@@ -9,26 +9,28 @@ import struct
 import genpy
 
 class loginfo(genpy.Message):
-  _md5sum = "a5ab383abb11907064bb91db32d4aea1"
+  _md5sum = "b4daeb6ff2f474e72dec452bb1376c78"
   _type = "simulator/loginfo"
   _has_header = False  # flag to mark the presence of a Header object
   _full_text = """int32 ID_node
 string type
 string node_name
 
+float32 server_time
+float32 num_servers
 float32 utiliz_tot
 float32[] utiliz_array
 float32[] queue_array
 time[] time_array
-string info
 int32 queue_left
+string info
 
 int32 events_left
 
 bool stop_esecution
 bool statistic"""
-  __slots__ = ['ID_node','type','node_name','utiliz_tot','utiliz_array','queue_array','time_array','info','queue_left','events_left','stop_esecution','statistic']
-  _slot_types = ['int32','string','string','float32','float32[]','float32[]','time[]','string','int32','int32','bool','bool']
+  __slots__ = ['ID_node','type','node_name','server_time','num_servers','utiliz_tot','utiliz_array','queue_array','time_array','queue_left','info','events_left','stop_esecution','statistic']
+  _slot_types = ['int32','string','string','float32','float32','float32','float32[]','float32[]','time[]','int32','string','int32','bool','bool']
 
   def __init__(self, *args, **kwds):
     """
@@ -38,7 +40,7 @@ bool statistic"""
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       ID_node,type,node_name,utiliz_tot,utiliz_array,queue_array,time_array,info,queue_left,events_left,stop_esecution,statistic
+       ID_node,type,node_name,server_time,num_servers,utiliz_tot,utiliz_array,queue_array,time_array,queue_left,info,events_left,stop_esecution,statistic
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -53,6 +55,10 @@ bool statistic"""
         self.type = ''
       if self.node_name is None:
         self.node_name = ''
+      if self.server_time is None:
+        self.server_time = 0.
+      if self.num_servers is None:
+        self.num_servers = 0.
       if self.utiliz_tot is None:
         self.utiliz_tot = 0.
       if self.utiliz_array is None:
@@ -61,10 +67,10 @@ bool statistic"""
         self.queue_array = []
       if self.time_array is None:
         self.time_array = []
-      if self.info is None:
-        self.info = ''
       if self.queue_left is None:
         self.queue_left = 0
+      if self.info is None:
+        self.info = ''
       if self.events_left is None:
         self.events_left = 0
       if self.stop_esecution is None:
@@ -75,12 +81,14 @@ bool statistic"""
       self.ID_node = 0
       self.type = ''
       self.node_name = ''
+      self.server_time = 0.
+      self.num_servers = 0.
       self.utiliz_tot = 0.
       self.utiliz_array = []
       self.queue_array = []
       self.time_array = []
-      self.info = ''
       self.queue_left = 0
+      self.info = ''
       self.events_left = 0
       self.stop_esecution = False
       self.statistic = False
@@ -111,8 +119,8 @@ bool statistic"""
         _x = _x.encode('utf-8')
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      _x = self.utiliz_tot
-      buff.write(_get_struct_f().pack(_x))
+      _x = self
+      buff.write(_get_struct_3f().pack(_x.server_time, _x.num_servers, _x.utiliz_tot))
       length = len(self.utiliz_array)
       buff.write(_struct_I.pack(length))
       pattern = '<%sf'%length
@@ -126,6 +134,8 @@ bool statistic"""
       for val1 in self.time_array:
         _x = val1
         buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
+      _x = self.queue_left
+      buff.write(_get_struct_i().pack(_x))
       _x = self.info
       length = len(_x)
       if python3 or type(_x) == unicode:
@@ -133,7 +143,7 @@ bool statistic"""
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
       _x = self
-      buff.write(_get_struct_2i2B().pack(_x.queue_left, _x.events_left, _x.stop_esecution, _x.statistic))
+      buff.write(_get_struct_i2B().pack(_x.events_left, _x.stop_esecution, _x.statistic))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -169,9 +179,10 @@ bool statistic"""
         self.node_name = str[start:end].decode('utf-8', 'rosmsg')
       else:
         self.node_name = str[start:end]
+      _x = self
       start = end
-      end += 4
-      (self.utiliz_tot,) = _get_struct_f().unpack(str[start:end])
+      end += 12
+      (_x.server_time, _x.num_servers, _x.utiliz_tot,) = _get_struct_3f().unpack(str[start:end])
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
@@ -201,6 +212,9 @@ bool statistic"""
         self.time_array.append(val1)
       start = end
       end += 4
+      (self.queue_left,) = _get_struct_i().unpack(str[start:end])
+      start = end
+      end += 4
       (length,) = _struct_I.unpack(str[start:end])
       start = end
       end += length
@@ -210,8 +224,8 @@ bool statistic"""
         self.info = str[start:end]
       _x = self
       start = end
-      end += 10
-      (_x.queue_left, _x.events_left, _x.stop_esecution, _x.statistic,) = _get_struct_2i2B().unpack(str[start:end])
+      end += 6
+      (_x.events_left, _x.stop_esecution, _x.statistic,) = _get_struct_i2B().unpack(str[start:end])
       self.stop_esecution = bool(self.stop_esecution)
       self.statistic = bool(self.statistic)
       return self
@@ -240,8 +254,8 @@ bool statistic"""
         _x = _x.encode('utf-8')
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      _x = self.utiliz_tot
-      buff.write(_get_struct_f().pack(_x))
+      _x = self
+      buff.write(_get_struct_3f().pack(_x.server_time, _x.num_servers, _x.utiliz_tot))
       length = len(self.utiliz_array)
       buff.write(_struct_I.pack(length))
       pattern = '<%sf'%length
@@ -255,6 +269,8 @@ bool statistic"""
       for val1 in self.time_array:
         _x = val1
         buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
+      _x = self.queue_left
+      buff.write(_get_struct_i().pack(_x))
       _x = self.info
       length = len(_x)
       if python3 or type(_x) == unicode:
@@ -262,7 +278,7 @@ bool statistic"""
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
       _x = self
-      buff.write(_get_struct_2i2B().pack(_x.queue_left, _x.events_left, _x.stop_esecution, _x.statistic))
+      buff.write(_get_struct_i2B().pack(_x.events_left, _x.stop_esecution, _x.statistic))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -299,9 +315,10 @@ bool statistic"""
         self.node_name = str[start:end].decode('utf-8', 'rosmsg')
       else:
         self.node_name = str[start:end]
+      _x = self
       start = end
-      end += 4
-      (self.utiliz_tot,) = _get_struct_f().unpack(str[start:end])
+      end += 12
+      (_x.server_time, _x.num_servers, _x.utiliz_tot,) = _get_struct_3f().unpack(str[start:end])
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
@@ -331,6 +348,9 @@ bool statistic"""
         self.time_array.append(val1)
       start = end
       end += 4
+      (self.queue_left,) = _get_struct_i().unpack(str[start:end])
+      start = end
+      end += 4
       (length,) = _struct_I.unpack(str[start:end])
       start = end
       end += length
@@ -340,8 +360,8 @@ bool statistic"""
         self.info = str[start:end]
       _x = self
       start = end
-      end += 10
-      (_x.queue_left, _x.events_left, _x.stop_esecution, _x.statistic,) = _get_struct_2i2B().unpack(str[start:end])
+      end += 6
+      (_x.events_left, _x.stop_esecution, _x.statistic,) = _get_struct_i2B().unpack(str[start:end])
       self.stop_esecution = bool(self.stop_esecution)
       self.statistic = bool(self.statistic)
       return self
@@ -358,21 +378,21 @@ def _get_struct_2I():
     if _struct_2I is None:
         _struct_2I = struct.Struct("<2I")
     return _struct_2I
-_struct_2i2B = None
-def _get_struct_2i2B():
-    global _struct_2i2B
-    if _struct_2i2B is None:
-        _struct_2i2B = struct.Struct("<2i2B")
-    return _struct_2i2B
-_struct_f = None
-def _get_struct_f():
-    global _struct_f
-    if _struct_f is None:
-        _struct_f = struct.Struct("<f")
-    return _struct_f
+_struct_3f = None
+def _get_struct_3f():
+    global _struct_3f
+    if _struct_3f is None:
+        _struct_3f = struct.Struct("<3f")
+    return _struct_3f
 _struct_i = None
 def _get_struct_i():
     global _struct_i
     if _struct_i is None:
         _struct_i = struct.Struct("<i")
     return _struct_i
+_struct_i2B = None
+def _get_struct_i2B():
+    global _struct_i2B
+    if _struct_i2B is None:
+        _struct_i2B = struct.Struct("<i2B")
+    return _struct_i2B

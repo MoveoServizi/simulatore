@@ -14,7 +14,7 @@
 
 (defclass simulator::loginfo
   :super ros::object
-  :slots (_ID_node _type _node_name _utiliz_tot _utiliz_array _queue_array _time_array _info _queue_left _events_left _stop_esecution _statistic ))
+  :slots (_ID_node _type _node_name _server_time _num_servers _utiliz_tot _utiliz_array _queue_array _time_array _queue_left _info _events_left _stop_esecution _statistic ))
 
 (defmethod simulator::loginfo
   (:init
@@ -22,12 +22,14 @@
     ((:ID_node __ID_node) 0)
     ((:type __type) "")
     ((:node_name __node_name) "")
+    ((:server_time __server_time) 0.0)
+    ((:num_servers __num_servers) 0.0)
     ((:utiliz_tot __utiliz_tot) 0.0)
     ((:utiliz_array __utiliz_array) (make-array 0 :initial-element 0.0 :element-type :float))
     ((:queue_array __queue_array) (make-array 0 :initial-element 0.0 :element-type :float))
     ((:time_array __time_array) (let (r) (dotimes (i 0) (push (instance ros::time :init) r)) r))
-    ((:info __info) "")
     ((:queue_left __queue_left) 0)
+    ((:info __info) "")
     ((:events_left __events_left) 0)
     ((:stop_esecution __stop_esecution) nil)
     ((:statistic __statistic) nil)
@@ -36,12 +38,14 @@
    (setq _ID_node (round __ID_node))
    (setq _type (string __type))
    (setq _node_name (string __node_name))
+   (setq _server_time (float __server_time))
+   (setq _num_servers (float __num_servers))
    (setq _utiliz_tot (float __utiliz_tot))
    (setq _utiliz_array __utiliz_array)
    (setq _queue_array __queue_array)
    (setq _time_array __time_array)
-   (setq _info (string __info))
    (setq _queue_left (round __queue_left))
+   (setq _info (string __info))
    (setq _events_left (round __events_left))
    (setq _stop_esecution __stop_esecution)
    (setq _statistic __statistic)
@@ -55,6 +59,12 @@
   (:node_name
    (&optional __node_name)
    (if __node_name (setq _node_name __node_name)) _node_name)
+  (:server_time
+   (&optional __server_time)
+   (if __server_time (setq _server_time __server_time)) _server_time)
+  (:num_servers
+   (&optional __num_servers)
+   (if __num_servers (setq _num_servers __num_servers)) _num_servers)
   (:utiliz_tot
    (&optional __utiliz_tot)
    (if __utiliz_tot (setq _utiliz_tot __utiliz_tot)) _utiliz_tot)
@@ -67,12 +77,12 @@
   (:time_array
    (&optional __time_array)
    (if __time_array (setq _time_array __time_array)) _time_array)
-  (:info
-   (&optional __info)
-   (if __info (setq _info __info)) _info)
   (:queue_left
    (&optional __queue_left)
    (if __queue_left (setq _queue_left __queue_left)) _queue_left)
+  (:info
+   (&optional __info)
+   (if __info (setq _info __info)) _info)
   (:events_left
    (&optional __events_left)
    (if __events_left (setq _events_left __events_left)) _events_left)
@@ -91,6 +101,10 @@
     4 (length _type)
     ;; string _node_name
     4 (length _node_name)
+    ;; float32 _server_time
+    4
+    ;; float32 _num_servers
+    4
     ;; float32 _utiliz_tot
     4
     ;; float32[] _utiliz_array
@@ -99,10 +113,10 @@
     (* 4    (length _queue_array)) 4
     ;; time[] _time_array
     (* 8    (length _time_array)) 4
-    ;; string _info
-    4 (length _info)
     ;; int32 _queue_left
     4
+    ;; string _info
+    4 (length _info)
     ;; int32 _events_left
     4
     ;; bool _stop_esecution
@@ -120,6 +134,10 @@
        (write-long (length _type) s) (princ _type s)
      ;; string _node_name
        (write-long (length _node_name) s) (princ _node_name s)
+     ;; float32 _server_time
+       (sys::poke _server_time (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
+     ;; float32 _num_servers
+       (sys::poke _num_servers (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
      ;; float32 _utiliz_tot
        (sys::poke _utiliz_tot (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
      ;; float32[] _utiliz_array
@@ -137,10 +155,10 @@
      (dotimes (i (length _time_array))
        (write-long (send (elt _time_array i) :sec) s) (write-long (send (elt _time_array i) :nsec) s)
        )
-     ;; string _info
-       (write-long (length _info) s) (princ _info s)
      ;; int32 _queue_left
        (write-long _queue_left s)
+     ;; string _info
+       (write-long (length _info) s) (princ _info s)
      ;; int32 _events_left
        (write-long _events_left s)
      ;; bool _stop_esecution
@@ -157,6 +175,10 @@
      (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _type (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
    ;; string _node_name
      (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _node_name (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
+   ;; float32 _server_time
+     (setq _server_time (sys::peek buf ptr- :float)) (incf ptr- 4)
+   ;; float32 _num_servers
+     (setq _num_servers (sys::peek buf ptr- :float)) (incf ptr- 4)
    ;; float32 _utiliz_tot
      (setq _utiliz_tot (sys::peek buf ptr- :float)) (incf ptr- 4)
    ;; float32[] _utiliz_array
@@ -180,10 +202,10 @@
      (dolist (elem- _time_array)
      (send elem- :sec (sys::peek buf ptr- :integer)) (incf ptr- 4)  (send elem- :nsec (sys::peek buf ptr- :integer)) (incf ptr- 4)
      ))
-   ;; string _info
-     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _info (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
    ;; int32 _queue_left
      (setq _queue_left (sys::peek buf ptr- :integer)) (incf ptr- 4)
+   ;; string _info
+     (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _info (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
    ;; int32 _events_left
      (setq _events_left (sys::peek buf ptr- :integer)) (incf ptr- 4)
    ;; bool _stop_esecution
@@ -194,19 +216,21 @@
    self)
   )
 
-(setf (get simulator::loginfo :md5sum-) "a5ab383abb11907064bb91db32d4aea1")
+(setf (get simulator::loginfo :md5sum-) "b4daeb6ff2f474e72dec452bb1376c78")
 (setf (get simulator::loginfo :datatype-) "simulator/loginfo")
 (setf (get simulator::loginfo :definition-)
       "int32 ID_node
 string type
 string node_name
 
+float32 server_time
+float32 num_servers
 float32 utiliz_tot
 float32[] utiliz_array
 float32[] queue_array
 time[] time_array
-string info
 int32 queue_left
+string info
 
 int32 events_left
 
@@ -216,6 +240,6 @@ bool statistic
 
 
 
-(provide :simulator/loginfo "a5ab383abb11907064bb91db32d4aea1")
+(provide :simulator/loginfo "b4daeb6ff2f474e72dec452bb1376c78")
 
 

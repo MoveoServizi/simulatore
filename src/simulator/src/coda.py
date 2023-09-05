@@ -14,16 +14,17 @@ import logging
 import datetime
 
 class Coda():
-    def __init__(self,node_name,next_element, num_servers, server_time, node_id):
+    def __init__(self,node_name,next_element, num_servers, server_time, node_id, speed):
         # Valori configurazione
         self.name = node_name
         self.topic_queue = "/" + node_name
         self.topic_pub = "/" + next_element
         self.max_length = -1
-        self.server_time = server_time
+        self.server_time = server_time/speed
         self.server_time_distribution = 0
         self.number_of_server =  num_servers
         self.node_id = node_id
+        self.speed = speed
 
         # Valori dinamici
         self.queue_length = 0
@@ -32,7 +33,7 @@ class Coda():
         self.first_arrival_time = None
         self.last_arrival_time = None
         self.total_arrival_events = 0
-        self.time_interval = 10 #self.server_time * 10
+        self.time_interval = self.server_time * 2
         self.utilization_intervals = []
         self.queue_length_intervals = []
         self.time_array = []
@@ -73,6 +74,8 @@ class Coda():
                 info_msg.type = "coda"
                 info_msg.node_name = self.name
                 info_msg.info = "test info"
+                info_msg.num_servers = self.number_of_server
+                info_msg.server_time = self.server_time*self.speed
                 info_msg.utiliz_tot = self.get_general_utilization()
                 info_msg.utiliz_array = self.get_interval_utilizations()
                 info_msg.time_array = self.time_array
@@ -176,8 +179,9 @@ if __name__ == '__main__':
     num_servers = rospy.get_param("~num_servers", 1)
     server_time = rospy.get_param("~server_time", 2)
     node_id = rospy.get_param("~node_id", 1)
+    speed = rospy.get_param("~speed", 1)
     # Create an instance of the Coda class with parameters from the launch file
-    coda1 = Coda(node_name, next_element, num_servers, server_time,node_id)
+    coda1 = Coda(node_name, next_element, num_servers,server_time,node_id, speed)
 
    
     # Spin ROS node

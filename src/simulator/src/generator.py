@@ -87,9 +87,10 @@ if __name__ == '__main__':
     gen_freq = rospy.get_param("~gen_freq", 1.0)
     num_messages = rospy.get_param("~num_messages", 10)
     event_type = rospy.get_param("~event_type", "evento_semplice")
+    speed = rospy.get_param("~speed", 1)
     
     attribute1 = rospy.get_param("~split_attribute1", "-")
     value1 = rospy.get_param("~value1", 0.0)
 
-    generator = GeneratorNode(node_name, next_element, gen_freq, num_messages, event_type, node_id,attribute1,value1)
+    generator = GeneratorNode(node_name, next_element, gen_freq*speed, num_messages, event_type, node_id,attribute1,value1)
     generator.generate_messages()

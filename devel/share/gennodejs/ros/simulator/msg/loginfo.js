@@ -21,12 +21,14 @@ class loginfo {
       this.ID_node = null;
       this.type = null;
       this.node_name = null;
+      this.server_time = null;
+      this.num_servers = null;
       this.utiliz_tot = null;
       this.utiliz_array = null;
       this.queue_array = null;
       this.time_array = null;
-      this.info = null;
       this.queue_left = null;
+      this.info = null;
       this.events_left = null;
       this.stop_esecution = null;
       this.statistic = null;
@@ -49,6 +51,18 @@ class loginfo {
       }
       else {
         this.node_name = '';
+      }
+      if (initObj.hasOwnProperty('server_time')) {
+        this.server_time = initObj.server_time
+      }
+      else {
+        this.server_time = 0.0;
+      }
+      if (initObj.hasOwnProperty('num_servers')) {
+        this.num_servers = initObj.num_servers
+      }
+      else {
+        this.num_servers = 0.0;
       }
       if (initObj.hasOwnProperty('utiliz_tot')) {
         this.utiliz_tot = initObj.utiliz_tot
@@ -74,17 +88,17 @@ class loginfo {
       else {
         this.time_array = [];
       }
-      if (initObj.hasOwnProperty('info')) {
-        this.info = initObj.info
-      }
-      else {
-        this.info = '';
-      }
       if (initObj.hasOwnProperty('queue_left')) {
         this.queue_left = initObj.queue_left
       }
       else {
         this.queue_left = 0;
+      }
+      if (initObj.hasOwnProperty('info')) {
+        this.info = initObj.info
+      }
+      else {
+        this.info = '';
       }
       if (initObj.hasOwnProperty('events_left')) {
         this.events_left = initObj.events_left
@@ -115,6 +129,10 @@ class loginfo {
     bufferOffset = _serializer.string(obj.type, buffer, bufferOffset);
     // Serialize message field [node_name]
     bufferOffset = _serializer.string(obj.node_name, buffer, bufferOffset);
+    // Serialize message field [server_time]
+    bufferOffset = _serializer.float32(obj.server_time, buffer, bufferOffset);
+    // Serialize message field [num_servers]
+    bufferOffset = _serializer.float32(obj.num_servers, buffer, bufferOffset);
     // Serialize message field [utiliz_tot]
     bufferOffset = _serializer.float32(obj.utiliz_tot, buffer, bufferOffset);
     // Serialize message field [utiliz_array]
@@ -123,10 +141,10 @@ class loginfo {
     bufferOffset = _arraySerializer.float32(obj.queue_array, buffer, bufferOffset, null);
     // Serialize message field [time_array]
     bufferOffset = _arraySerializer.time(obj.time_array, buffer, bufferOffset, null);
-    // Serialize message field [info]
-    bufferOffset = _serializer.string(obj.info, buffer, bufferOffset);
     // Serialize message field [queue_left]
     bufferOffset = _serializer.int32(obj.queue_left, buffer, bufferOffset);
+    // Serialize message field [info]
+    bufferOffset = _serializer.string(obj.info, buffer, bufferOffset);
     // Serialize message field [events_left]
     bufferOffset = _serializer.int32(obj.events_left, buffer, bufferOffset);
     // Serialize message field [stop_esecution]
@@ -146,6 +164,10 @@ class loginfo {
     data.type = _deserializer.string(buffer, bufferOffset);
     // Deserialize message field [node_name]
     data.node_name = _deserializer.string(buffer, bufferOffset);
+    // Deserialize message field [server_time]
+    data.server_time = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [num_servers]
+    data.num_servers = _deserializer.float32(buffer, bufferOffset);
     // Deserialize message field [utiliz_tot]
     data.utiliz_tot = _deserializer.float32(buffer, bufferOffset);
     // Deserialize message field [utiliz_array]
@@ -154,10 +176,10 @@ class loginfo {
     data.queue_array = _arrayDeserializer.float32(buffer, bufferOffset, null)
     // Deserialize message field [time_array]
     data.time_array = _arrayDeserializer.time(buffer, bufferOffset, null)
-    // Deserialize message field [info]
-    data.info = _deserializer.string(buffer, bufferOffset);
     // Deserialize message field [queue_left]
     data.queue_left = _deserializer.int32(buffer, bufferOffset);
+    // Deserialize message field [info]
+    data.info = _deserializer.string(buffer, bufferOffset);
     // Deserialize message field [events_left]
     data.events_left = _deserializer.int32(buffer, bufferOffset);
     // Deserialize message field [stop_esecution]
@@ -175,7 +197,7 @@ class loginfo {
     length += 4 * object.queue_array.length;
     length += 8 * object.time_array.length;
     length += _getByteLength(object.info);
-    return length + 42;
+    return length + 50;
   }
 
   static datatype() {
@@ -185,7 +207,7 @@ class loginfo {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'a5ab383abb11907064bb91db32d4aea1';
+    return 'b4daeb6ff2f474e72dec452bb1376c78';
   }
 
   static messageDefinition() {
@@ -195,12 +217,14 @@ class loginfo {
     string type
     string node_name
     
+    float32 server_time
+    float32 num_servers
     float32 utiliz_tot
     float32[] utiliz_array
     float32[] queue_array
     time[] time_array
-    string info
     int32 queue_left
+    string info
     
     int32 events_left
     
@@ -236,6 +260,20 @@ class loginfo {
       resolved.node_name = ''
     }
 
+    if (msg.server_time !== undefined) {
+      resolved.server_time = msg.server_time;
+    }
+    else {
+      resolved.server_time = 0.0
+    }
+
+    if (msg.num_servers !== undefined) {
+      resolved.num_servers = msg.num_servers;
+    }
+    else {
+      resolved.num_servers = 0.0
+    }
+
     if (msg.utiliz_tot !== undefined) {
       resolved.utiliz_tot = msg.utiliz_tot;
     }
@@ -264,18 +302,18 @@ class loginfo {
       resolved.time_array = []
     }
 
-    if (msg.info !== undefined) {
-      resolved.info = msg.info;
-    }
-    else {
-      resolved.info = ''
-    }
-
     if (msg.queue_left !== undefined) {
       resolved.queue_left = msg.queue_left;
     }
     else {
       resolved.queue_left = 0
+    }
+
+    if (msg.info !== undefined) {
+      resolved.info = msg.info;
+    }
+    else {
+      resolved.info = ''
     }
 
     if (msg.events_left !== undefined) {

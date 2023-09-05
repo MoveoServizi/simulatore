@@ -23,7 +23,7 @@ class Interfaccia(customtkinter.CTk):
             "end_node": "DarkKhaki" 
             # Aggiungi altri tipi di nodo e colori qui
         }
-
+        self.file_name = "no_name"
         self.colors = {}
         self.costruttore_interfaccia()
 
@@ -215,8 +215,9 @@ class Interfaccia(customtkinter.CTk):
         ## generazione launch file
         self.textbox = customtkinter.CTkTextbox(self.tabview_main.tab("launch_file") , width=900,height=700, corner_radius=10)
         self.textbox.grid(row=0, column=0,padx=(35,15), pady=(15, 15), sticky="nsew", columnspan = 3)
-        self.textbox.insert("0.0", "<!-- Create the launch file for ROS -->\n<launch>\n")
-        
+        self.textbox.insert("0.0", "<!-- Create the launch file for ROS -->\n<launch>\n\t<arg name=\"speed\" default=\"1.0\"/>\n\t<arg name=\"file_name\" default=\"test\"/>")
+        button_textbox = customtkinter.CTkButton(self.tabview_main.tab("launch_file"), text="Reset File", command=self.reset_file)
+        button_textbox.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
         #bottoni
         self.button_frame = customtkinter.CTkFrame(self,height=80,corner_radius=50)
         self.button_frame.grid(row=2, column=1, padx=(5,15), pady=(5, 15), sticky="nsew")
@@ -230,7 +231,7 @@ class Interfaccia(customtkinter.CTk):
         
         
         ## generazione launch file
-        self.textbox_statistic = customtkinter.CTkTextbox(self.tabview_main.tab("statistiche") , width=900,height=600, corner_radius=10)
+        self.textbox_statistic = customtkinter.CTkTextbox(self.tabview_main.tab("statistiche") , width=900,height=500, corner_radius=10)
         self.textbox_statistic.grid(row=0, column=0,padx=(35,15), pady=(15, 15), sticky="nsew", columnspan = 3)
         button_statistic = customtkinter.CTkButton(self.tabview_main.tab("statistiche"), text="show Satistic", command=self.show_statistic)
         button_statistic.grid(row=1, column=0, padx=(100,100), pady=(5,5),sticky="ew")
@@ -426,6 +427,16 @@ class Interfaccia(customtkinter.CTk):
         else:
             file_path = "src/simulator/launch/generated_launch_file.launch"  # Scegli il percorso e il nome del file di destinazione
         launch_text = self.textbox.get("1.0", "end")  # Ottieni il testo completo dal textbox      
+        file_name_idx = launch_text.find('<arg name="file_name" default="')
+        file_name_idx += len('<arg name="file_name" default="')
+        current_name = launch_text[file_name_idx:file_name_idx+4]
+        print(current_name)
+        if current_name == "test":
+                print("changing name")
+                end_idx = file_name_idx+4
+                self.textbox.delete("4.32", "4.36")  # Converti gli indici in stringhe
+                #file_name = "NuovoNome"  # Assumi che tu abbia una variabile chiamata file_name con il nuovo nome
+                self.textbox.insert("4.32", file_name)
         with open(file_path, "w") as file:
             file.write(launch_text)  
         print("File saved:", file_path)
@@ -441,6 +452,9 @@ class Interfaccia(customtkinter.CTk):
             self.read_textbox()
             self.visualizza_grafo()
     
+    def reset_file(self):
+        self.textbox.delete("0.0",END)
+        self.textbox.insert("0.0", "<!-- Create the launch file for ROS -->\n<launch>\n\t<arg name=\"speed\" default=\"1.0\"/>\n\t<arg name=\"file_name\" default=\"no_name\"/>")
     ## tab grafico
     def visualizza_grafo(self):
 
@@ -464,7 +478,9 @@ class Interfaccia(customtkinter.CTk):
         current_node_name = None # Variabile per tenere traccia del nome del nodo corrente
         for line in lines:
             line = line.strip().lower() # Rimuovi spazi iniziali e finali e converti in minuscolo per una migliore corrispondenza
-            # Verifica se questa riga contiene un nuovo nodo
+            if line.startswith('<arg name="file_name"'):
+                end_name = line.find('"', 31)
+                self.file_name = line[31:end_name]
             if line.startswith("<node"):
                 
                 [node_name, node_type] = self.extract_node_name(line) # Estrai il nome del nodo
@@ -520,9 +536,22 @@ class Interfaccia(customtkinter.CTk):
                 next_node = line[start_name:end_name]
                 self.G.add_edge(node_name, next_node)
 
+    def find_file_name(self):
+        launch_text = self.textbox.get("1.0", "end")       
+        lines = launch_text.splitlines()
+        for line in lines:
+            line = line.strip().lower() # Rimuovi spazi iniziali e finali e converti in minuscolo per una migliore corrispondenza
+            if line.startswith('<arg name="file_name"'):
+                end_name = line.find('"', 31)
+                self.file_name = line[31:end_name]
+                return
+
     ## statistic
     def show_statistic(self):
-        file_path = "/home/ubuntu/Desktop/simulatore/src/simulator/statistic/last_statistic.txt"
+        self.find_file_name()
+        folder_path = "/home/ubuntu/Desktop/simulatore/src/simulator/statistic/" + self.file_name
+        file_path = folder_path +  "/last_statistic.txt"
+        self.textbox_statistic.delete("0.0", "end")
         try:
             # Apri il file e leggi il contenuto
             with open(file_path, 'r') as file:
@@ -532,6 +561,26 @@ class Interfaccia(customtkinter.CTk):
         except FileNotFoundError:
             # Se il file non è stato trovato, gestisci l'eccezione
             self.textbox_statistic.insert("end","Il file di statistiche non è stato trovato.")
+        self.plot_images(folder_path) 
+                
+    def plot_images(self, folder_path):
+    # Verifica che la cartella esista
+        if os.path.exists(folder_path):
+            # Elenco dei file nella cartella
+            png_files = [f for f in os.listdir(folder_path) if f.endswith('.png')]
+
+            # Apri e visualizza tutti i file .png nella cartella
+            for png_file in png_files:
+                file_path = os.path.join(folder_path, png_file)
+                try:
+                    img = Image.open(file_path)
+                    # Puoi fare qualcosa con l'immagine qui, ad esempio visualizzarla o elaborarla
+                    img.show()  # Apre l'immagine con l'applicazione predefinita
+                except Exception as e:
+                    print(f"Errore nell'apertura di {png_file}: {str(e)}")
+        else:
+            print(f"La cartella {folder_path} non esiste.")
+      
 
 
 if __name__ == "__main__":
