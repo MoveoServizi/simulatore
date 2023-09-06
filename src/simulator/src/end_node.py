@@ -132,7 +132,8 @@ class EndNode:
 
     def print_statistics(self):
         print("################  STATISTIC ############")
-        print("\nTempo esecuzione:\t\t",str(round(self.total_seconds,2)), " sec")
+        print("\nTempo simulazione:\t\t",str(round(self.total_seconds,2)), " sec")
+        print("\nTempo processo:\t\t",str(round(self.total_seconds*self.speed,2)), " sec")
         print("Personale usato:\t\t", str(self.total_people))
         print("Events recived:")
         for generator_id in self.get_unique_generator_ids():
@@ -146,7 +147,7 @@ class EndNode:
             print(f"\tTotal count:\t\t{stats['count']}")
             if stats['count'] > 0:
                 total_time = sum([t.to_sec() for t in stats['arrival_times']])
-                avg_arrival_time = total_time / stats['count']
+                avg_arrival_time = (total_time*self.speed) / stats['count']
                 formatted_avg_time = self.format_time(avg_arrival_time)
                 print(f"\tAverage arrival time:\t\t{formatted_avg_time}")
                 
@@ -166,8 +167,8 @@ class EndNode:
                 print(f"\tnumero operatori:\t\t{data['num_servers']} ")
                 print(f"\ttempo esecuzione:\t\t{data['server_time']} ")
                 print(f"\tutilizzazione totale:\t\t{data['utiliz_tot']}")
-                print(f"\tutilizzazione:\t\t{data['utiliz_array']}")
-                print(f"\tlunghezza coda:\t\t{data['queue_length']}")
+                #print(f"\tutilizzazione:\t\t{data['utiliz_array']}")
+                #print(f"\tlunghezza coda:\t\t{data['queue_length']}")
                 print(f"\tinfo:\t\t{data['info']}")
                 print("\n")
                 

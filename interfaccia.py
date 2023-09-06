@@ -37,7 +37,7 @@ class Interfaccia(customtkinter.CTk):
         self.logo_image = customtkinter.CTkImage(image_data, size=(160, 90))
         
         self.title("Moveo Servizi - Simulatore flussi")
-        self.geometry(f"{1420}x{900}")
+        self.geometry(f"{1420}x{1000}")
 
         # Configure grid layout (4x4)
         self.grid_columnconfigure(1, weight=1)
@@ -215,7 +215,7 @@ class Interfaccia(customtkinter.CTk):
         ## generazione launch file
         self.textbox = customtkinter.CTkTextbox(self.tabview_main.tab("launch_file") , width=900,height=700, corner_radius=10)
         self.textbox.grid(row=0, column=0,padx=(35,15), pady=(15, 15), sticky="nsew", columnspan = 3)
-        self.textbox.insert("0.0", "<!-- Create the launch file for ROS -->\n<launch>\n\t<arg name=\"speed\" default=\"1.0\"/>\n\t<arg name=\"file_name\" default=\"test\"/>")
+        self.textbox.insert("0.0", "<!-- Create the launch file for ROS -->\n<launch>\n\t<arg name=\"speed\" default=\"1.0\"/>\n\t<arg name=\"file_name\" default=\"test\"/>\n")
         button_textbox = customtkinter.CTkButton(self.tabview_main.tab("launch_file"), text="Reset File", command=self.reset_file)
         button_textbox.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
         #bottoni
@@ -231,7 +231,7 @@ class Interfaccia(customtkinter.CTk):
         
         
         ## generazione launch file
-        self.textbox_statistic = customtkinter.CTkTextbox(self.tabview_main.tab("statistiche") , width=900,height=500, corner_radius=10)
+        self.textbox_statistic = customtkinter.CTkTextbox(self.tabview_main.tab("statistiche") , width=900,height=700, corner_radius=10)
         self.textbox_statistic.grid(row=0, column=0,padx=(35,15), pady=(15, 15), sticky="nsew", columnspan = 3)
         button_statistic = customtkinter.CTkButton(self.tabview_main.tab("statistiche"), text="show Satistic", command=self.show_statistic)
         button_statistic.grid(row=1, column=0, padx=(100,100), pady=(5,5),sticky="ew")
@@ -249,6 +249,7 @@ class Interfaccia(customtkinter.CTk):
                 "node_name": self.node_name1.get(),
                 "next_element": self.next1.get(),
                 "gen_freq": self.frequenza.get(),
+                "speed": "$(arg speed)",
                 "num_messages": self.num_events.get(),
                 "event_type": self.event_type.get(),
                 "attribute1": self.attribute1.get(),
@@ -297,6 +298,7 @@ class Interfaccia(customtkinter.CTk):
                 "next_element": self.next2.get(),
                 "num_servers": self.num_servers.get(),
                 "server_time": self.server_time.get(),
+                "speed": "$(arg speed)"
             }
         }
         coda_node_text = self.format_coda_node()
@@ -384,6 +386,8 @@ class Interfaccia(customtkinter.CTk):
                 "node_name": self.node_name4.get(),
                 "modality": self.end_modality.get(),
                 "stop_time": self.stop_time.get(),
+                "speed": "$(arg speed)",
+                "file_name":"$(arg file_name)"
             }
         }
         end_node_text = self.format_end_node()
@@ -437,6 +441,7 @@ class Interfaccia(customtkinter.CTk):
                 self.textbox.delete("4.32", "4.36")  # Converti gli indici in stringhe
                 #file_name = "NuovoNome"  # Assumi che tu abbia una variabile chiamata file_name con il nuovo nome
                 self.textbox.insert("4.32", file_name)
+                launch_text = self.textbox.get("1.0", "end")
         with open(file_path, "w") as file:
             file.write(launch_text)  
         print("File saved:", file_path)
@@ -454,7 +459,8 @@ class Interfaccia(customtkinter.CTk):
     
     def reset_file(self):
         self.textbox.delete("0.0",END)
-        self.textbox.insert("0.0", "<!-- Create the launch file for ROS -->\n<launch>\n\t<arg name=\"speed\" default=\"1.0\"/>\n\t<arg name=\"file_name\" default=\"no_name\"/>")
+        self.textbox.insert("0.0", "<!-- Create the launch file for ROS -->\n<launch>\n\t<arg name=\"speed\" default=\"1.0\"/>\n\t<arg name=\"file_name\" default=\"test\"/>\n")
+        self.G.clear()
     ## tab grafico
     def visualizza_grafo(self):
 
@@ -540,7 +546,7 @@ class Interfaccia(customtkinter.CTk):
         launch_text = self.textbox.get("1.0", "end")       
         lines = launch_text.splitlines()
         for line in lines:
-            line = line.strip().lower() # Rimuovi spazi iniziali e finali e converti in minuscolo per una migliore corrispondenza
+            line = line.strip() # Rimuovi spazi iniziali e finali e converti in minuscolo per una migliore corrispondenza
             if line.startswith('<arg name="file_name"'):
                 end_name = line.find('"', 31)
                 self.file_name = line[31:end_name]

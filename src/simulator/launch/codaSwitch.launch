@@ -6,7 +6,7 @@
 	<node name="generatore" pkg="simulator" type="generator.py" output="screen">
 		<param name="node_name" value="generatore"/>
 		<param name="next_element" value="switch"/>
-		<param name="gen_freq" value="15"/>
+		<param name="gen_freq" value="2"/>
 		<param name="speed" value="$(arg speed)"/>
 		<param name="num_messages" value="600"/>
 	</node>
@@ -21,7 +21,7 @@
 	<node name="coda1" pkg="simulator" type="coda.py" output="screen">
 		<param name="node_name" value="coda1"/>
 		<param name="next_element" value="coda3"/>
-		<param name="num_servers" value="8"/>
+		<param name="num_servers" value="1"/>
 		<param name="server_time" value="1.5"/>
 		<param name="speed" value="$(arg speed)"/>
 	</node>
@@ -29,7 +29,7 @@
 	<node name="coda2" pkg="simulator" type="coda.py" output="screen">
 		<param name="node_name" value="coda2"/>
 		<param name="next_element" value="coda3"/>
-		<param name="num_servers" value="8"/>
+		<param name="num_servers" value="2"/>
 		<param name="server_time" value="1"/>
 		<param name="speed" value="$(arg speed)"/>
 	</node>
@@ -37,7 +37,7 @@
 	<node name="coda3" pkg="simulator" type="coda.py" output="screen">
 		<param name="node_name" value="coda3"/>
 		<param name="next_element" value="end_node"/>
-		<param name="num_servers" value="10"/>
+		<param name="num_servers" value="3"/>
 		<param name="server_time" value="0.8"/>
 		<param name="speed" value="$(arg speed)"/>
 	</node>

@@ -33,7 +33,7 @@ class Coda():
         self.first_arrival_time = None
         self.last_arrival_time = None
         self.total_arrival_events = 0
-        self.time_interval = self.server_time * 2
+        self.time_interval = self.server_time * 4
         self.utilization_intervals = []
         self.queue_length_intervals = []
         self.time_array = []
@@ -48,7 +48,7 @@ class Coda():
         self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=20)
         self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
 
-        time.sleep(5)
+        time.sleep(1)
         info_msg =loginfo()
         info_msg.ID_node = node_id
         info_msg.type = "coda"
