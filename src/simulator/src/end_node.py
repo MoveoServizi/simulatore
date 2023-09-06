@@ -257,7 +257,6 @@ if __name__ == '__main__':
     stop_time = rospy.get_param("~stop_time", 540)
     speed = rospy.get_param("~speed", 1)
     file_name = rospy.get_param("~file_name", "no_name")
-    print("FILE NAME 1 =", file_name)
     plt.ion()
     
     end_node = EndNode(node_name,modality,stop_time,speed,file_name)

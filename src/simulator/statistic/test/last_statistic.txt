@@ -1,0 +1,17 @@
+################  STATISTIC ############
+
+Tempo simulazione:		 2.64  sec
+Moltiplicatore velocità:		 1.0
+Tempo processo:		 2.64  sec
+Personale usato:		 0
+Events recived:
+	Generator gen:		10   messages
+
+Route of events:
+	Message type:		evento_semplice
+		Total count:		10
+		Avg process time:		0.00 seconds
+		Avg arrival time:		0.18 seconds
+		Node gen:		100.00%
+
+

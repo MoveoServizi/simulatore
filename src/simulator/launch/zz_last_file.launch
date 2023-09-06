@@ -1,0 +1,21 @@
+<!-- Create the launch file for ROS -->
+<launch>
+	<arg name="speed" default="1.0"/>
+	<arg name="file_name" default="test"/>
+	<node name="gen" pkg="simulator" type="generator.py" output="screen">
+		<param name="node_name" value="gen"/>
+		<param name="next_element" value="end"/>
+		<param name="gen_freq" value="5"/>
+		<param name="speed" value="$(arg speed)"/>
+		<param name="num_messages" value="10"/>
+	</node>
+
+	<node name="end" pkg="simulator" type="end_node.py" output="screen">
+		<param name="node_name" value="end"/>
+		<param name="modality" value="events"/>
+		<param name="speed" value="$(arg speed)"/>
+		<param name="file_name" value="$(arg file_name)"/>
+	</node>
+
+</launch>
+

@@ -86,23 +86,31 @@ class Interfaccia(customtkinter.CTk):
         self.t_frequenza.grid(row=5, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.frequenza = customtkinter.CTkEntry(tabview.tab("generatore"))
         self.frequenza.grid(row=5, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.t_pause_time = customtkinter.CTkLabel(tabview.tab("generatore"), text="pause time : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_pause_time.grid(row=6, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.pause_time = customtkinter.CTkEntry(tabview.tab("generatore"))
+        self.pause_time.grid(row=6, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.t_group_size = customtkinter.CTkLabel(tabview.tab("generatore"), text="group size : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_group_size.grid(row=7, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.group_size = customtkinter.CTkEntry(tabview.tab("generatore"))
+        self.group_size.grid(row=7, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         self.t_event_type = customtkinter.CTkLabel(tabview.tab("generatore"), text="event type : ", font=customtkinter.CTkFont(size=12, weight="bold"))
-        self.t_event_type.grid(row=6, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.t_event_type.grid(row=8, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.event_type = customtkinter.CTkEntry(tabview.tab("generatore"))
-        self.event_type.grid(row=6, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.event_type.grid(row=8, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         self.t_attribute1 = customtkinter.CTkLabel(tabview.tab("generatore"), text="attribute1 : ", font=customtkinter.CTkFont(size=12, weight="bold"))
-        self.t_attribute1.grid(row=7, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.t_attribute1.grid(row=9, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.attribute1 = customtkinter.CTkEntry(tabview.tab("generatore"))
-        self.attribute1.grid(row=7, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.attribute1.grid(row=9, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         self.t_value1 = customtkinter.CTkLabel(tabview.tab("generatore"), text="value1 : ", font=customtkinter.CTkFont(size=12, weight="bold"))
-        self.t_value1.grid(row=8, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.t_value1.grid(row=10, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.value1 = customtkinter.CTkEntry(tabview.tab("generatore"))
-        self.value1.grid(row=8, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.value1.grid(row=10, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         
         reset1 = customtkinter.CTkButton(master=tabview.tab("generatore"), text="Reset", command=self.reset_generator)
-        reset1.grid(row=10, column=0, padx=(15,5), pady=(20,10),sticky="w")
+        reset1.grid(row=12, column=0, padx=(15,5), pady=(20,10),sticky="w")
         button1 = customtkinter.CTkButton(master=tabview.tab("generatore"), text="Add", command=self.add_generator)
-        button1.grid(row=10, column=1, padx=(15,5), pady=(20,10),sticky="w")
+        button1.grid(row=12, column=1, padx=(15,5), pady=(20,10),sticky="w")
         
         ## coda
         self.t_node_name2 = customtkinter.CTkLabel(tabview.tab("coda"), text="Nome : ", font=customtkinter.CTkFont(size=12, weight="bold"))
@@ -251,6 +259,8 @@ class Interfaccia(customtkinter.CTk):
                 "gen_freq": self.frequenza.get(),
                 "speed": "$(arg speed)",
                 "num_messages": self.num_events.get(),
+                "pause_time": self.pause_time.get(),
+                "group_size" : self.group_size.get(),
                 "event_type": self.event_type.get(),
                 "attribute1": self.attribute1.get(),
                 "value1": self.value1.get(),
@@ -417,31 +427,33 @@ class Interfaccia(customtkinter.CTk):
         print("Running the script ...")
         self.save_file(False)  # Salva il file generato solo su file temporaneo
         source_command = "source devel/setup.bash"
-        launch_command = "roslaunch simulator generated_launch_file.launch"
+        launch_command = "roslaunch simulator zz_last_file.launch"
         full_command = f"{source_command} && {launch_command}"
         subprocess.Popen(["gnome-terminal", "--", "bash", "-c", f"{full_command}"]) 
             
     def save_file(self,popup):
         print("saving the script ...")
         # Mostra un popup per inserire il nome del file
+        file_name = "test"
         if popup:
             file_name = tkinter.simpledialog.askstring("Salva File", "Inserisci il nome del file:", initialvalue="")
             if file_name:
                 file_path = "src/simulator/launch/" + file_name + ".launch"  # Aggiunge l'estensione .launch al nome del file        
         else:
-            file_path = "src/simulator/launch/generated_launch_file.launch"  # Scegli il percorso e il nome del file di destinazione
+            file_path = "src/simulator/launch/zz_last_file.launch"  # Scegli il percorso e il nome del file di destinazione
         launch_text = self.textbox.get("1.0", "end")  # Ottieni il testo completo dal textbox      
-        file_name_idx = launch_text.find('<arg name="file_name" default="')
-        file_name_idx += len('<arg name="file_name" default="')
-        current_name = launch_text[file_name_idx:file_name_idx+4]
-        print(current_name)
-        if current_name == "test":
-                print("changing name")
-                end_idx = file_name_idx+4
-                self.textbox.delete("4.32", "4.36")  # Converti gli indici in stringhe
-                #file_name = "NuovoNome"  # Assumi che tu abbia una variabile chiamata file_name con il nuovo nome
-                self.textbox.insert("4.32", file_name)
-                launch_text = self.textbox.get("1.0", "end")
+        
+        if popup:
+            file_name_idx = launch_text.find('<arg name="file_name" default="')
+            file_name_idx += len('<arg name="file_name" default="')
+            current_name = launch_text[file_name_idx:file_name_idx+4]
+            if current_name == "test":
+                    print("changing name")
+                    end_idx = file_name_idx+4
+                    self.textbox.delete("4.32", "4.36")  # Converti gli indici in stringhe
+                    #file_name = "NuovoNome"  # Assumi che tu abbia una variabile chiamata file_name con il nuovo nome
+                    self.textbox.insert("4.32", file_name)
+                    launch_text = self.textbox.get("1.0", "end")
         with open(file_path, "w") as file:
             file.write(launch_text)  
         print("File saved:", file_path)
