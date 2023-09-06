@@ -42,7 +42,8 @@ struct event_
     , value2(0.0)
     , attribute3()
     , value3(0.0)
-    , last_event(false)  {
+    , last_event(false)
+    , first_event(false)  {
     }
   event_(const ContainerAllocator& _alloc)
     : generator_id(_alloc)
@@ -63,7 +64,8 @@ struct event_
     , value2(0.0)
     , attribute3(_alloc)
     , value3(0.0)
-    , last_event(false)  {
+    , last_event(false)
+    , first_event(false)  {
   (void)_alloc;
     }
 
@@ -126,6 +128,9 @@ struct event_
    typedef uint8_t _last_event_type;
   _last_event_type last_event;
 
+   typedef uint8_t _first_event_type;
+  _first_event_type first_event;
+
 
 
 
@@ -173,7 +178,8 @@ bool operator==(const ::simulator::event_<ContainerAllocator1> & lhs, const ::si
     lhs.value2 == rhs.value2 &&
     lhs.attribute3 == rhs.attribute3 &&
     lhs.value3 == rhs.value3 &&
-    lhs.last_event == rhs.last_event;
+    lhs.last_event == rhs.last_event &&
+    lhs.first_event == rhs.first_event;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -230,12 +236,12 @@ struct MD5Sum< ::simulator::event_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "11f9a94c34d2636c3fb0efd1e69990b4";
+    return "5783b9c2f01c2af0c22209cf660c120e";
   }
 
   static const char* value(const ::simulator::event_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x11f9a94c34d2636cULL;
-  static const uint64_t static_value2 = 0x3fb0efd1e69990b4ULL;
+  static const uint64_t static_value1 = 0x5783b9c2f01c2af0ULL;
+  static const uint64_t static_value2 = 0xc22209cf660c120eULL;
 };
 
 template<class ContainerAllocator>
@@ -276,6 +282,7 @@ struct Definition< ::simulator::event_<ContainerAllocator> >
 "\n"
 "\n"
 "bool last_event\n"
+"bool first_event\n"
 ;
   }
 
@@ -313,6 +320,7 @@ namespace serialization
       stream.next(m.attribute3);
       stream.next(m.value3);
       stream.next(m.last_event);
+      stream.next(m.first_event);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -373,6 +381,8 @@ struct Printer< ::simulator::event_<ContainerAllocator> >
     Printer<float>::stream(s, indent + "  ", v.value3);
     s << indent << "last_event: ";
     Printer<uint8_t>::stream(s, indent + "  ", v.last_event);
+    s << indent << "first_event: ";
+    Printer<uint8_t>::stream(s, indent + "  ", v.first_event);
   }
 };
 

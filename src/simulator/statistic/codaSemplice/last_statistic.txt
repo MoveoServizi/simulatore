@@ -1,24 +1,44 @@
 ################  STATISTIC ############
 
-Tempo esecuzione:		 9.87  sec
-Personale usato:		 1.0
+Tempo simulazione:		 20.12  sec
+moltiplicatore velocità:		 10.0  sec
+Tempo processo:		 201.19  sec
+Personale usato:		 3.0
 Events recived:
+	Generator gen2:		20   messages
 	Generator generatore:		60   messages
 
 Route of events:
 	Message type:		evento_semplice
-	Total count:		60
-	Average arrival time:		0 hours, 0 minutes, 3.04 seconds
-	Node generatore:		100.00%
-	Node coda:		100.00%
+		Total count:		60
+		Avg process time:		4.24 seconds
+		Avg arrival time:		0.46 seconds
+		Node generatore:		100.00%
+		Node coda:		100.00%
+		Node coda2:		100.00%
+
+
+	Message type:		slow
+		Total count:		20
+		Avg process time:		2.33 seconds
+		Avg arrival time:		9.55 seconds
+		Node gen2:		100.00%
+		Node coda:		100.00%
+		Node coda2:		100.00%
+
 
 Analisi code:
-	nome:		coda
-	numero operatori:		1.0 
-	tempo esecuzione:		1.5 
-	utilizzazione totale:		2.85
-	utilizzazione:		[0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
-	lunghezza coda:		(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 6.0, 8.0, 8.0, 10.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 15.0, 17.0, 17.0, 19.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 24.0, 26.0, 26.0, 28.0, 28.0, 29.0, 30.0, 31.0, 32.0, 33.0, 34.0, 35.0, 35.0, 37.0, 37.0, 39.0, 38.0, 38.0, 37.0, 37.0, 36.0, 36.0, 35.0, 35.0, 34.0, 34.0, 33.0, 33.0, 32.0, 32.0, 31.0, 31.0, 30.0, 30.0, 29.0, 29.0, 28.0, 28.0, 27.0, 27.0, 26.0, 26.0, 25.0, 25.0, 24.0, 24.0, 23.0, 23.0, 22.0, 22.0, 21.0, 21.0, 20.0, 20.0, 19.0, 19.0, 18.0, 18.0, 17.0, 17.0, 16.0, 16.0, 15.0, 15.0, 14.0, 14.0, 13.0, 13.0, 12.0, 12.0, 11.0, 11.0, 10.0, 10.0, 9.0, 9.0, 8.0, 8.0, 7.0, 7.0, 6.0, 6.0, 5.0, 5.0, 4.0, 4.0, 3.0, 3.0, 2.0, 2.0, 1.0, 1.0, 0.0, 0.0)
-	info:		test info
+	nome nodo:	coda
+		numero operatori:		1.0 
+		tempo esecuzione:		0.5 
+		utilizzazione totale:		0.21
+		info:		test info
+
+
+	nome nodo:	coda2
+		numero operatori:		2.0 
+		tempo esecuzione:		1.0 
+		utilizzazione totale:		0.21
+		info:		test info
 
 

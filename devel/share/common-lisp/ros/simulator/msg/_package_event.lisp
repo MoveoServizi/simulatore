@@ -37,4 +37,6 @@
           VALUE3
           LAST_EVENT-VAL
           LAST_EVENT
+          FIRST_EVENT-VAL
+          FIRST_EVENT
 ))

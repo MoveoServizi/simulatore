@@ -101,6 +101,11 @@
     :reader last_event
     :initarg :last_event
     :type cl:boolean
+    :initform cl:nil)
+   (first_event
+    :reader first_event
+    :initarg :first_event
+    :type cl:boolean
     :initform cl:nil))
 )
 
@@ -206,6 +211,11 @@
 (cl:defmethod last_event-val ((m <event>))
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader simulator-msg:last_event-val is deprecated.  Use simulator-msg:last_event instead.")
   (last_event m))
+
+(cl:ensure-generic-function 'first_event-val :lambda-list '(m))
+(cl:defmethod first_event-val ((m <event>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader simulator-msg:first_event-val is deprecated.  Use simulator-msg:first_event instead.")
+  (first_event m))
 (cl:defmethod roslisp-msg-protocol:serialize ((msg <event>) ostream)
   "Serializes a message object of type '<event>"
   (cl:let ((__ros_str_len (cl:length (cl:slot-value msg 'generator_id))))
@@ -326,6 +336,7 @@
     (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream))
   (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:if (cl:slot-value msg 'last_event) 1 0)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:if (cl:slot-value msg 'first_event) 1 0)) ostream)
 )
 (cl:defmethod roslisp-msg-protocol:deserialize ((msg <event>) istream)
   "Deserializes a message object of type '<event>"
@@ -474,6 +485,7 @@
       (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
     (cl:setf (cl:slot-value msg 'value3) (roslisp-utils:decode-single-float-bits bits)))
     (cl:setf (cl:slot-value msg 'last_event) (cl:not (cl:zerop (cl:read-byte istream))))
+    (cl:setf (cl:slot-value msg 'first_event) (cl:not (cl:zerop (cl:read-byte istream))))
   msg
 )
 (cl:defmethod roslisp-msg-protocol:ros-datatype ((msg (cl:eql '<event>)))
@@ -484,16 +496,16 @@
   "simulator/event")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<event>)))
   "Returns md5sum for a message object of type '<event>"
-  "11f9a94c34d2636c3fb0efd1e69990b4")
+  "5783b9c2f01c2af0c22209cf660c120e")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'event)))
   "Returns md5sum for a message object of type 'event"
-  "11f9a94c34d2636c3fb0efd1e69990b4")
+  "5783b9c2f01c2af0c22209cf660c120e")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<event>)))
   "Returns full string definition for message of type '<event>"
-  (cl:format cl:nil "string generator_id~%int32 ID~%string type~%time generation_date~%string gen_time~%time completed_date~%string compl_time~%string[] route~%string split_attribute1~%float32 split1~%string split_attribute2~%float32 split2~%string split_attribute3~%float32 split3~%~%string attribute2~%float32 value2~%string attribute3~%float32 value3~%~%~%bool last_event~%~%~%"))
+  (cl:format cl:nil "string generator_id~%int32 ID~%string type~%time generation_date~%string gen_time~%time completed_date~%string compl_time~%string[] route~%string split_attribute1~%float32 split1~%string split_attribute2~%float32 split2~%string split_attribute3~%float32 split3~%~%string attribute2~%float32 value2~%string attribute3~%float32 value3~%~%~%bool last_event~%bool first_event~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'event)))
   "Returns full string definition for message of type 'event"
-  (cl:format cl:nil "string generator_id~%int32 ID~%string type~%time generation_date~%string gen_time~%time completed_date~%string compl_time~%string[] route~%string split_attribute1~%float32 split1~%string split_attribute2~%float32 split2~%string split_attribute3~%float32 split3~%~%string attribute2~%float32 value2~%string attribute3~%float32 value3~%~%~%bool last_event~%~%~%"))
+  (cl:format cl:nil "string generator_id~%int32 ID~%string type~%time generation_date~%string gen_time~%time completed_date~%string compl_time~%string[] route~%string split_attribute1~%float32 split1~%string split_attribute2~%float32 split2~%string split_attribute3~%float32 split3~%~%string attribute2~%float32 value2~%string attribute3~%float32 value3~%~%~%bool last_event~%bool first_event~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <event>))
   (cl:+ 0
      4 (cl:length (cl:slot-value msg 'generator_id))
@@ -514,6 +526,7 @@
      4
      4 (cl:length (cl:slot-value msg 'attribute3))
      4
+     1
      1
 ))
 (cl:defmethod roslisp-msg-protocol:ros-message-to-list ((msg <event>))
@@ -538,4 +551,5 @@
     (cl:cons ':attribute3 (attribute3 msg))
     (cl:cons ':value3 (value3 msg))
     (cl:cons ':last_event (last_event msg))
+    (cl:cons ':first_event (first_event msg))
 ))

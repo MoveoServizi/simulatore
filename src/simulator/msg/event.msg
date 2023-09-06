@@ -20,3 +20,4 @@ float32 value3
 
 
 bool last_event
+bool first_event

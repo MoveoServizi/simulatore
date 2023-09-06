@@ -1,7 +1,7 @@
 <!-- Create the launch file for ROS -->
 <launch>
 	<arg name="speed" default="10.0"/>
-	<arg name="file_name" default="codaSemplice"/>
+	<arg name="file_name" default="dueGeneratori"/>
 	<node name="generatore" pkg="simulator" type="generator.py" output="screen">
 		<param name="node_name" value="generatore"/>
 		<param name="next_element" value="coda"/>

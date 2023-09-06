@@ -14,7 +14,7 @@
 
 (defclass simulator::event
   :super ros::object
-  :slots (_generator_id _ID _type _generation_date _gen_time _completed_date _compl_time _route _split_attribute1 _split1 _split_attribute2 _split2 _split_attribute3 _split3 _attribute2 _value2 _attribute3 _value3 _last_event ))
+  :slots (_generator_id _ID _type _generation_date _gen_time _completed_date _compl_time _route _split_attribute1 _split1 _split_attribute2 _split2 _split_attribute3 _split3 _attribute2 _value2 _attribute3 _value3 _last_event _first_event ))
 
 (defmethod simulator::event
   (:init
@@ -38,6 +38,7 @@
     ((:attribute3 __attribute3) "")
     ((:value3 __value3) 0.0)
     ((:last_event __last_event) nil)
+    ((:first_event __first_event) nil)
     )
    (send-super :init)
    (setq _generator_id (string __generator_id))
@@ -59,6 +60,7 @@
    (setq _attribute3 (string __attribute3))
    (setq _value3 (float __value3))
    (setq _last_event __last_event)
+   (setq _first_event __first_event)
    self)
   (:generator_id
    (&optional __generator_id)
@@ -117,6 +119,9 @@
   (:last_event
    (&optional (__last_event :null))
    (if (not (eq __last_event :null)) (setq _last_event __last_event)) _last_event)
+  (:first_event
+   (&optional (__first_event :null))
+   (if (not (eq __first_event :null)) (setq _first_event __first_event)) _first_event)
   (:serialization-length
    ()
    (+
@@ -157,6 +162,8 @@
     ;; float32 _value3
     4
     ;; bool _last_event
+    1
+    ;; bool _first_event
     1
     ))
   (:serialize
@@ -204,6 +211,8 @@
        (sys::poke _value3 (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
      ;; bool _last_event
        (if _last_event (write-byte -1 s) (write-byte 0 s))
+     ;; bool _first_event
+       (if _first_event (write-byte -1 s) (write-byte 0 s))
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
@@ -251,11 +260,13 @@
      (setq _value3 (sys::peek buf ptr- :float)) (incf ptr- 4)
    ;; bool _last_event
      (setq _last_event (not (= 0 (sys::peek buf ptr- :char)))) (incf ptr- 1)
+   ;; bool _first_event
+     (setq _first_event (not (= 0 (sys::peek buf ptr- :char)))) (incf ptr- 1)
    ;;
    self)
   )
 
-(setf (get simulator::event :md5sum-) "11f9a94c34d2636c3fb0efd1e69990b4")
+(setf (get simulator::event :md5sum-) "5783b9c2f01c2af0c22209cf660c120e")
 (setf (get simulator::event :datatype-) "simulator/event")
 (setf (get simulator::event :definition-)
       "string generator_id
@@ -280,11 +291,12 @@ float32 value3
 
 
 bool last_event
+bool first_event
 
 ")
 
 
 
-(provide :simulator/event "11f9a94c34d2636c3fb0efd1e69990b4")
+(provide :simulator/event "5783b9c2f01c2af0c22209cf660c120e")
 
 

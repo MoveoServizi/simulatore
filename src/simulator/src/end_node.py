@@ -46,15 +46,26 @@ class EndNode:
         msg.completed_date = rospy.Time.now()
         msg.compl_time = self.stamp_date()
         self.received_messages.add((generator_id, event_id))
-
+        if msg.first_event:
+            if msg.generation_date < self.start:
+                self.start_ = msg.generation_date
         # Update type statistics
         if msg.type in self.type_stats:
             self.type_stats[msg.type]["count"] += 1
             spend_time = msg.completed_date-msg.generation_date
-            self.type_stats[msg.type]["arrival_times"].append(spend_time)
+            self.type_stats[msg.type]["spended_time"].append(spend_time)
+            if msg.generation_date > self.type_stats[msg.type]["last"]:
+                self.type_stats[msg.type]["last"] = msg.generation_date
+            if msg.generation_date < self.type_stats[msg.type]["first"]:
+                self.type_stats[msg.type]["first"] = msg.generation_date
         else:
-            spend_time = msg.completed_date-msg.generation_date
-            self.type_stats[msg.type] = {"count": 1, "arrival_times": [spend_time]}
+            spend_time = msg.completed_date - msg.generation_date
+            self.type_stats[msg.type] = {
+                "count": 1,
+                "spended_time": [spend_time],
+                "first": msg.generation_date,
+                "last": msg.generation_date
+            }
         
         # Update node passing statistics
         for node_id in msg.route:
@@ -133,7 +144,8 @@ class EndNode:
     def print_statistics(self):
         print("################  STATISTIC ############")
         print("\nTempo simulazione:\t\t",str(round(self.total_seconds,2)), " sec")
-        print("\nTempo processo:\t\t",str(round(self.total_seconds*self.speed,2)), " sec")
+        print("Moltiplicatore velocità:\t\t",str(round(self.speed,2)))
+        print("Tempo processo:\t\t",str(round(self.total_seconds*self.speed,2)), " sec")
         print("Personale usato:\t\t", str(self.total_people))
         print("Events recived:")
         for generator_id in self.get_unique_generator_ids():
@@ -144,32 +156,36 @@ class EndNode:
         print("\nRoute of events:")
         for msg_type, stats in self.type_stats.items():
             print(f"\tMessage type:\t\t{msg_type}")
-            print(f"\tTotal count:\t\t{stats['count']}")
+            print(f"\t\tTotal count:\t\t{stats['count']}")
             if stats['count'] > 0:
-                total_time = sum([t.to_sec() for t in stats['arrival_times']])
-                avg_arrival_time = (total_time*self.speed) / stats['count']
-                formatted_avg_time = self.format_time(avg_arrival_time)
-                print(f"\tAverage arrival time:\t\t{formatted_avg_time}")
+                total_time = sum([t.to_sec() for t in stats['spended_time']])
+                avg_spend_time = (total_time*self.speed) / stats['count']
+                formatted_avg_time = self.format_time(avg_spend_time)
+                print(f"\t\tAvg process time:\t\t{formatted_avg_time}")
+                total_execution_time = stats['last'].to_sec() - stats['first'].to_sec()
+                avg_arrival_time = (total_execution_time*self.speed)/ stats['count']
+                avg_time = self.format_time(avg_arrival_time)
+                print(f"\t\tAvg arrival time:\t\t{avg_time}")
                 
             passing_stats = self.node_passing_stats.get(msg_type, {})
             total_passing_events = stats['count']
             #print("\nNode passing statistics:")
             for node_id, passing_count in passing_stats.items():
                 passing_percentage = (passing_count / total_passing_events) * 100
-                print(f"\tNode {node_id}:\t\t{passing_percentage:.2f}%")
-                
+                print(f"\t\tNode {node_id}:\t\t{passing_percentage:.2f}%")
+            print("\n")  
     def print_data_by_type(self,plot):
         for msg_type, data_list in self.data_by_type.items():
             #print(f"Type {msg_type}:\n")
-            print("\nAnalisi code:")
+            print("Analisi code:")
             for data in data_list:
-                print(f"\tnome:\t\t{data['node_name']}")
-                print(f"\tnumero operatori:\t\t{data['num_servers']} ")
-                print(f"\ttempo esecuzione:\t\t{data['server_time']} ")
-                print(f"\tutilizzazione totale:\t\t{data['utiliz_tot']}")
+                print(f"\tnome nodo:\t{data['node_name']}")
+                print(f"\t\tnumero operatori:\t\t{data['num_servers']} ")
+                print(f"\t\ttempo esecuzione:\t\t{data['server_time']} ")
+                print(f"\t\tutilizzazione totale:\t\t{data['utiliz_tot']}")
                 #print(f"\tutilizzazione:\t\t{data['utiliz_array']}")
                 #print(f"\tlunghezza coda:\t\t{data['queue_length']}")
-                print(f"\tinfo:\t\t{data['info']}")
+                print(f"\t\tinfo:\t\t{data['info']}")
                 print("\n")
                 
                 if plot:
@@ -218,6 +234,10 @@ class EndNode:
         hours = int(seconds // 3600)
         minutes = int((seconds % 3600) // 60)
         seconds = seconds % 60
+        if hours == 0:
+            if minutes == 0:
+                return f"{seconds:.2f} seconds"
+            return f"{minutes} minutes, {seconds:.2f} seconds" 
         return f"{hours} hours, {minutes} minutes, {seconds:.2f} seconds"
 
     def self_kill(self): 

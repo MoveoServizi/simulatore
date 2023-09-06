@@ -9,7 +9,7 @@ import time
 from datetime import datetime
 
 class GeneratorNode:
-    def __init__(self, node_name, next_element, gen_freq, num_messages, event_type, node_id,attribute1,value1):
+    def __init__(self, node_name, next_element, gen_freq, num_messages, event_type, node_id,attribute1,value1,speed):
         self.node_name = node_name
         self.next_element = "/" + next_element
         self.gen_freq = gen_freq
@@ -18,6 +18,7 @@ class GeneratorNode:
         self.event_id = 1
         self.attribute1 = attribute1
         self.value1 = value1
+        self.speed = speed
 
         self.pub = rospy.Publisher(self.next_element, event, queue_size=10)
         self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=10)
@@ -48,15 +49,13 @@ class GeneratorNode:
                 
                 event_msg.split_attribute1 = self.attribute1
                 event_msg.split1 = self.value1
-                
-                
-                if i == self.num_messages - 1:
-                    event_msg.last_event = True
+                if i == 0:
+                    event_msg.first_event = True
                 self.pub.publish(event_msg)
                 self.event_id += 1
                 i += 1
                 rospy.loginfo(f"{self.node_name}: Published event ID {event_msg.ID}")
-                time.sleep(1 / self.gen_freq)
+                time.sleep((1 / self.gen_freq)/self.speed)
 
     def stamp_date(self):
         completed_date = rospy.Time.now().to_sec()  # Ottieni il timestamp in secondi
@@ -92,5 +91,5 @@ if __name__ == '__main__':
     attribute1 = rospy.get_param("~split_attribute1", "-")
     value1 = rospy.get_param("~value1", 0.0)
 
-    generator = GeneratorNode(node_name, next_element, gen_freq*speed, num_messages, event_type, node_id,attribute1,value1)
+    generator = GeneratorNode(node_name, next_element, gen_freq, num_messages, event_type, node_id,attribute1,value1,speed)
     generator.generate_messages()

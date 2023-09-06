@@ -9,7 +9,7 @@ import struct
 import genpy
 
 class event(genpy.Message):
-  _md5sum = "11f9a94c34d2636c3fb0efd1e69990b4"
+  _md5sum = "5783b9c2f01c2af0c22209cf660c120e"
   _type = "simulator/event"
   _has_header = False  # flag to mark the presence of a Header object
   _full_text = """string generator_id
@@ -34,9 +34,10 @@ float32 value3
 
 
 bool last_event
+bool first_event
 """
-  __slots__ = ['generator_id','ID','type','generation_date','gen_time','completed_date','compl_time','route','split_attribute1','split1','split_attribute2','split2','split_attribute3','split3','attribute2','value2','attribute3','value3','last_event']
-  _slot_types = ['string','int32','string','time','string','time','string','string[]','string','float32','string','float32','string','float32','string','float32','string','float32','bool']
+  __slots__ = ['generator_id','ID','type','generation_date','gen_time','completed_date','compl_time','route','split_attribute1','split1','split_attribute2','split2','split_attribute3','split3','attribute2','value2','attribute3','value3','last_event','first_event']
+  _slot_types = ['string','int32','string','time','string','time','string','string[]','string','float32','string','float32','string','float32','string','float32','string','float32','bool','bool']
 
   def __init__(self, *args, **kwds):
     """
@@ -46,7 +47,7 @@ bool last_event
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       generator_id,ID,type,generation_date,gen_time,completed_date,compl_time,route,split_attribute1,split1,split_attribute2,split2,split_attribute3,split3,attribute2,value2,attribute3,value3,last_event
+       generator_id,ID,type,generation_date,gen_time,completed_date,compl_time,route,split_attribute1,split1,split_attribute2,split2,split_attribute3,split3,attribute2,value2,attribute3,value3,last_event,first_event
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -93,6 +94,8 @@ bool last_event
         self.value3 = 0.
       if self.last_event is None:
         self.last_event = False
+      if self.first_event is None:
+        self.first_event = False
     else:
       self.generator_id = ''
       self.ID = 0
@@ -113,6 +116,7 @@ bool last_event
       self.attribute3 = ''
       self.value3 = 0.
       self.last_event = False
+      self.first_event = False
 
   def _get_types(self):
     """
@@ -203,7 +207,7 @@ bool last_event
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
       _x = self
-      buff.write(_get_struct_fB().pack(_x.value3, _x.last_event))
+      buff.write(_get_struct_f2B().pack(_x.value3, _x.last_event, _x.first_event))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -341,9 +345,10 @@ bool last_event
         self.attribute3 = str[start:end]
       _x = self
       start = end
-      end += 5
-      (_x.value3, _x.last_event,) = _get_struct_fB().unpack(str[start:end])
+      end += 6
+      (_x.value3, _x.last_event, _x.first_event,) = _get_struct_f2B().unpack(str[start:end])
       self.last_event = bool(self.last_event)
+      self.first_event = bool(self.first_event)
       self.generation_date.canon()
       self.completed_date.canon()
       return self
@@ -435,7 +440,7 @@ bool last_event
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
       _x = self
-      buff.write(_get_struct_fB().pack(_x.value3, _x.last_event))
+      buff.write(_get_struct_f2B().pack(_x.value3, _x.last_event, _x.first_event))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -574,9 +579,10 @@ bool last_event
         self.attribute3 = str[start:end]
       _x = self
       start = end
-      end += 5
-      (_x.value3, _x.last_event,) = _get_struct_fB().unpack(str[start:end])
+      end += 6
+      (_x.value3, _x.last_event, _x.first_event,) = _get_struct_f2B().unpack(str[start:end])
       self.last_event = bool(self.last_event)
+      self.first_event = bool(self.first_event)
       self.generation_date.canon()
       self.completed_date.canon()
       return self
@@ -599,12 +605,12 @@ def _get_struct_f():
     if _struct_f is None:
         _struct_f = struct.Struct("<f")
     return _struct_f
-_struct_fB = None
-def _get_struct_fB():
-    global _struct_fB
-    if _struct_fB is None:
-        _struct_fB = struct.Struct("<fB")
-    return _struct_fB
+_struct_f2B = None
+def _get_struct_f2B():
+    global _struct_f2B
+    if _struct_f2B is None:
+        _struct_f2B = struct.Struct("<f2B")
+    return _struct_f2B
 _struct_i = None
 def _get_struct_i():
     global _struct_i

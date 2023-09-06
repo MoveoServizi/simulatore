@@ -37,6 +37,7 @@ class event {
       this.attribute3 = null;
       this.value3 = null;
       this.last_event = null;
+      this.first_event = null;
     }
     else {
       if (initObj.hasOwnProperty('generator_id')) {
@@ -153,6 +154,12 @@ class event {
       else {
         this.last_event = false;
       }
+      if (initObj.hasOwnProperty('first_event')) {
+        this.first_event = initObj.first_event
+      }
+      else {
+        this.first_event = false;
+      }
     }
   }
 
@@ -196,6 +203,8 @@ class event {
     bufferOffset = _serializer.float32(obj.value3, buffer, bufferOffset);
     // Serialize message field [last_event]
     bufferOffset = _serializer.bool(obj.last_event, buffer, bufferOffset);
+    // Serialize message field [first_event]
+    bufferOffset = _serializer.bool(obj.first_event, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -241,6 +250,8 @@ class event {
     data.value3 = _deserializer.float32(buffer, bufferOffset);
     // Deserialize message field [last_event]
     data.last_event = _deserializer.bool(buffer, bufferOffset);
+    // Deserialize message field [first_event]
+    data.first_event = _deserializer.bool(buffer, bufferOffset);
     return data;
   }
 
@@ -258,7 +269,7 @@ class event {
     length += _getByteLength(object.split_attribute3);
     length += _getByteLength(object.attribute2);
     length += _getByteLength(object.attribute3);
-    return length + 81;
+    return length + 82;
   }
 
   static datatype() {
@@ -268,7 +279,7 @@ class event {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '11f9a94c34d2636c3fb0efd1e69990b4';
+    return '5783b9c2f01c2af0c22209cf660c120e';
   }
 
   static messageDefinition() {
@@ -296,6 +307,7 @@ class event {
     
     
     bool last_event
+    bool first_event
     
     `;
   }
@@ -437,6 +449,13 @@ class event {
     }
     else {
       resolved.last_event = false
+    }
+
+    if (msg.first_event !== undefined) {
+      resolved.first_event = msg.first_event;
+    }
+    else {
+      resolved.first_event = false
     }
 
     return resolved;
