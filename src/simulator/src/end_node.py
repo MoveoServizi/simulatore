@@ -99,10 +99,12 @@ class EndNode:
             "node_name": msg.node_name,
             "utiliz_tot": round(msg.utiliz_tot,2),
             "utiliz_array": [round(number, 2) for number in msg.utiliz_array],
+            "utiliz_array_tot" : [round(number, 2) for number in msg.utiliz_array_tot],
             "num_servers": msg.num_servers,
             "server_time": round(msg.server_time,2),
             "queue_length": msg.queue_array,
             "time_array" : msg.time_array,
+            "time_array_intervals" : msg.time_array_intervals,
             "info": msg.info
             }
             self.total_people += msg.num_servers
@@ -189,27 +191,37 @@ class EndNode:
                 print("\n")
                 
                 if plot:
-                    self.plot_temporal_data(data['queue_length'],data['utiliz_array'],data['time_array'],data['node_name'])
+                    self.plot_temporal_data(data['queue_length'],data['utiliz_array'],data['utiliz_array_tot'],data['time_array'],data["time_array_intervals"],data['node_name'])
                 
-    def plot_temporal_data(self,values1, values2,time_array, title):
+    def plot_temporal_data(self,values1, values2,util_ar_tot,time_array,time_array_intervals, title):
         time_steps = [(time.to_sec() - self.start.to_sec())*self.speed for time in time_array]
+        time_steps_intervals = [(time.to_sec() - self.start.to_sec())*self.speed for time in time_array_intervals]
         output_file1 ="/home/ubuntu/Desktop/simulatore/src/simulator/statistic/"
         output_file = output_file1 + file_name + "/" + title + ".png"
         # Creazione della griglia con 1 riga e 2 colonne per i subplot
         plt.figure(figsize=(10, 5))  # Imposta le dimensioni della figura
-        plt.subplot(1, 2, 1)  # Primo subplot
+        plt.subplot(1, 3, 1)  # Primo subplot
         plt.plot(time_steps, values1, marker='*')
         plt.title('Lunghezza coda')
         plt.xlabel('Tempo')
         plt.ylabel('entità in coda')
         plt.grid(True)
         
-        plt.subplot(1, 2, 2)  # Secondo subplot
-        plt.plot(time_steps, values2, marker='*', color='m')
-        plt.title('Utilizzazione')
+        plt.subplot(1, 3, 2)  # Secondo subplot
+        plt.plot(time_steps, util_ar_tot, marker='*', color='m')
+        plt.title('Utilizzazione totale tempo')
         plt.xlabel('Tempo')
         plt.ylabel('percentuale di utilizzazione')
         plt.grid(True)
+        
+        plt.subplot(1, 3, 3)  # Secondo subplot
+        plt.plot(time_steps_intervals, values2, marker='*', color='m')
+        plt.title('Utilizzazione negli intervalli')
+        plt.xlabel('Tempo')
+        plt.ylabel('percentuale di utilizzazione')
+        plt.grid(True)
+        
+        
         
         plt.suptitle(title)  # Titolo dell'intera figura
         plt.tight_layout()   # Ottimizza la disposizione dei subplot

@@ -13,10 +13,14 @@
           UTILIZ_TOT
           UTILIZ_ARRAY-VAL
           UTILIZ_ARRAY
+          UTILIZ_ARRAY_TOT-VAL
+          UTILIZ_ARRAY_TOT
           QUEUE_ARRAY-VAL
           QUEUE_ARRAY
           TIME_ARRAY-VAL
           TIME_ARRAY
+          TIME_ARRAY_INTERVALS-VAL
+          TIME_ARRAY_INTERVALS
           QUEUE_LEFT-VAL
           QUEUE_LEFT
           INFO-VAL

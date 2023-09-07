@@ -42,6 +42,11 @@
     :initarg :utiliz_array
     :type (cl:vector cl:float)
    :initform (cl:make-array 0 :element-type 'cl:float :initial-element 0.0))
+   (utiliz_array_tot
+    :reader utiliz_array_tot
+    :initarg :utiliz_array_tot
+    :type (cl:vector cl:float)
+   :initform (cl:make-array 0 :element-type 'cl:float :initial-element 0.0))
    (queue_array
     :reader queue_array
     :initarg :queue_array
@@ -50,6 +55,11 @@
    (time_array
     :reader time_array
     :initarg :time_array
+    :type (cl:vector cl:real)
+   :initform (cl:make-array 0 :element-type 'cl:real :initial-element 0))
+   (time_array_intervals
+    :reader time_array_intervals
+    :initarg :time_array_intervals
     :type (cl:vector cl:real)
    :initform (cl:make-array 0 :element-type 'cl:real :initial-element 0))
    (queue_left
@@ -122,6 +132,11 @@
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader simulator-msg:utiliz_array-val is deprecated.  Use simulator-msg:utiliz_array instead.")
   (utiliz_array m))
 
+(cl:ensure-generic-function 'utiliz_array_tot-val :lambda-list '(m))
+(cl:defmethod utiliz_array_tot-val ((m <loginfo>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader simulator-msg:utiliz_array_tot-val is deprecated.  Use simulator-msg:utiliz_array_tot instead.")
+  (utiliz_array_tot m))
+
 (cl:ensure-generic-function 'queue_array-val :lambda-list '(m))
 (cl:defmethod queue_array-val ((m <loginfo>))
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader simulator-msg:queue_array-val is deprecated.  Use simulator-msg:queue_array instead.")
@@ -131,6 +146,11 @@
 (cl:defmethod time_array-val ((m <loginfo>))
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader simulator-msg:time_array-val is deprecated.  Use simulator-msg:time_array instead.")
   (time_array m))
+
+(cl:ensure-generic-function 'time_array_intervals-val :lambda-list '(m))
+(cl:defmethod time_array_intervals-val ((m <loginfo>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader simulator-msg:time_array_intervals-val is deprecated.  Use simulator-msg:time_array_intervals instead.")
+  (time_array_intervals m))
 
 (cl:ensure-generic-function 'queue_left-val :lambda-list '(m))
 (cl:defmethod queue_left-val ((m <loginfo>))
@@ -202,6 +222,17 @@
     (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream)))
    (cl:slot-value msg 'utiliz_array))
+  (cl:let ((__ros_arr_len (cl:length (cl:slot-value msg 'utiliz_array_tot))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_arr_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (ele) (cl:let ((bits (roslisp-utils:encode-single-float-bits ele)))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream)))
+   (cl:slot-value msg 'utiliz_array_tot))
   (cl:let ((__ros_arr_len (cl:length (cl:slot-value msg 'queue_array))))
     (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_arr_len) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_arr_len) ostream)
@@ -229,6 +260,22 @@
     (cl:write-byte (cl:ldb (cl:byte 8 16) __nsec) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 24) __nsec) ostream)))
    (cl:slot-value msg 'time_array))
+  (cl:let ((__ros_arr_len (cl:length (cl:slot-value msg 'time_array_intervals))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_arr_len) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_arr_len) ostream))
+  (cl:map cl:nil #'(cl:lambda (ele) (cl:let ((__sec (cl:floor ele))
+        (__nsec (cl:round (cl:* 1e9 (cl:- ele (cl:floor ele))))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __sec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __sec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __sec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __sec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __nsec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __nsec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __nsec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __nsec) ostream)))
+   (cl:slot-value msg 'time_array_intervals))
   (cl:let* ((signed (cl:slot-value msg 'queue_left)) (unsigned (cl:if (cl:< signed 0) (cl:+ signed 4294967296) signed)))
     (cl:write-byte (cl:ldb (cl:byte 8 0) unsigned) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) unsigned) ostream)
@@ -311,6 +358,20 @@
     (cl:setf (cl:ldb (cl:byte 8 8) __ros_arr_len) (cl:read-byte istream))
     (cl:setf (cl:ldb (cl:byte 8 16) __ros_arr_len) (cl:read-byte istream))
     (cl:setf (cl:ldb (cl:byte 8 24) __ros_arr_len) (cl:read-byte istream))
+  (cl:setf (cl:slot-value msg 'utiliz_array_tot) (cl:make-array __ros_arr_len))
+  (cl:let ((vals (cl:slot-value msg 'utiliz_array_tot)))
+    (cl:dotimes (i __ros_arr_len)
+    (cl:let ((bits 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
+    (cl:setf (cl:aref vals i) (roslisp-utils:decode-single-float-bits bits))))))
+  (cl:let ((__ros_arr_len 0))
+    (cl:setf (cl:ldb (cl:byte 8 0) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 8) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 16) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 24) __ros_arr_len) (cl:read-byte istream))
   (cl:setf (cl:slot-value msg 'queue_array) (cl:make-array __ros_arr_len))
   (cl:let ((vals (cl:slot-value msg 'queue_array)))
     (cl:dotimes (i __ros_arr_len)
@@ -327,6 +388,24 @@
     (cl:setf (cl:ldb (cl:byte 8 24) __ros_arr_len) (cl:read-byte istream))
   (cl:setf (cl:slot-value msg 'time_array) (cl:make-array __ros_arr_len))
   (cl:let ((vals (cl:slot-value msg 'time_array)))
+    (cl:dotimes (i __ros_arr_len)
+    (cl:let ((__sec 0) (__nsec 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) __sec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __sec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __sec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __sec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 0) __nsec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __nsec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __nsec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __nsec) (cl:read-byte istream))
+      (cl:setf (cl:aref vals i) (cl:+ (cl:coerce __sec 'cl:double-float) (cl:/ __nsec 1e9)))))))
+  (cl:let ((__ros_arr_len 0))
+    (cl:setf (cl:ldb (cl:byte 8 0) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 8) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 16) __ros_arr_len) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 24) __ros_arr_len) (cl:read-byte istream))
+  (cl:setf (cl:slot-value msg 'time_array_intervals) (cl:make-array __ros_arr_len))
+  (cl:let ((vals (cl:slot-value msg 'time_array_intervals)))
     (cl:dotimes (i __ros_arr_len)
     (cl:let ((__sec 0) (__nsec 0))
       (cl:setf (cl:ldb (cl:byte 8 0) __sec) (cl:read-byte istream))
@@ -370,16 +449,16 @@
   "simulator/loginfo")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<loginfo>)))
   "Returns md5sum for a message object of type '<loginfo>"
-  "b4daeb6ff2f474e72dec452bb1376c78")
+  "7b5bd36ae2b220f7dc505e09323dabcc")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'loginfo)))
   "Returns md5sum for a message object of type 'loginfo"
-  "b4daeb6ff2f474e72dec452bb1376c78")
+  "7b5bd36ae2b220f7dc505e09323dabcc")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<loginfo>)))
   "Returns full string definition for message of type '<loginfo>"
-  (cl:format cl:nil "int32 ID_node~%string type~%string node_name~%~%float32 server_time~%float32 num_servers~%float32 utiliz_tot~%float32[] utiliz_array~%float32[] queue_array~%time[] time_array~%int32 queue_left~%string info~%~%int32 events_left~%~%bool stop_esecution~%bool statistic~%~%"))
+  (cl:format cl:nil "int32 ID_node~%string type~%string node_name~%~%float32 server_time~%float32 num_servers~%float32 utiliz_tot~%float32[] utiliz_array~%float32[] utiliz_array_tot~%float32[] queue_array~%time[] time_array~%time[] time_array_intervals~%int32 queue_left~%string info~%~%int32 events_left~%~%bool stop_esecution~%bool statistic~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'loginfo)))
   "Returns full string definition for message of type 'loginfo"
-  (cl:format cl:nil "int32 ID_node~%string type~%string node_name~%~%float32 server_time~%float32 num_servers~%float32 utiliz_tot~%float32[] utiliz_array~%float32[] queue_array~%time[] time_array~%int32 queue_left~%string info~%~%int32 events_left~%~%bool stop_esecution~%bool statistic~%~%"))
+  (cl:format cl:nil "int32 ID_node~%string type~%string node_name~%~%float32 server_time~%float32 num_servers~%float32 utiliz_tot~%float32[] utiliz_array~%float32[] utiliz_array_tot~%float32[] queue_array~%time[] time_array~%time[] time_array_intervals~%int32 queue_left~%string info~%~%int32 events_left~%~%bool stop_esecution~%bool statistic~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <loginfo>))
   (cl:+ 0
      4
@@ -389,8 +468,10 @@
      4
      4
      4 (cl:reduce #'cl:+ (cl:slot-value msg 'utiliz_array) :key #'(cl:lambda (ele) (cl:declare (cl:ignorable ele)) (cl:+ 4)))
+     4 (cl:reduce #'cl:+ (cl:slot-value msg 'utiliz_array_tot) :key #'(cl:lambda (ele) (cl:declare (cl:ignorable ele)) (cl:+ 4)))
      4 (cl:reduce #'cl:+ (cl:slot-value msg 'queue_array) :key #'(cl:lambda (ele) (cl:declare (cl:ignorable ele)) (cl:+ 4)))
      4 (cl:reduce #'cl:+ (cl:slot-value msg 'time_array) :key #'(cl:lambda (ele) (cl:declare (cl:ignorable ele)) (cl:+ 8)))
+     4 (cl:reduce #'cl:+ (cl:slot-value msg 'time_array_intervals) :key #'(cl:lambda (ele) (cl:declare (cl:ignorable ele)) (cl:+ 8)))
      4
      4 (cl:length (cl:slot-value msg 'info))
      4
@@ -407,8 +488,10 @@
     (cl:cons ':num_servers (num_servers msg))
     (cl:cons ':utiliz_tot (utiliz_tot msg))
     (cl:cons ':utiliz_array (utiliz_array msg))
+    (cl:cons ':utiliz_array_tot (utiliz_array_tot msg))
     (cl:cons ':queue_array (queue_array msg))
     (cl:cons ':time_array (time_array msg))
+    (cl:cons ':time_array_intervals (time_array_intervals msg))
     (cl:cons ':queue_left (queue_left msg))
     (cl:cons ':info (info msg))
     (cl:cons ':events_left (events_left msg))

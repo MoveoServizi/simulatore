@@ -133,6 +133,10 @@ class Interfaccia(customtkinter.CTk):
         self.t_server_time.grid(row=5, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.server_time = customtkinter.CTkEntry(tabview.tab("coda"))
         self.server_time.grid(row=5, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.t_uncertanity = customtkinter.CTkLabel(tabview.tab("end"), text="uncertainty : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_uncertanity.grid(row=6, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.uncertanity = customtkinter.CTkComboBox(tabview.tab("end"), values=["False", "True"])
+        self.uncertanity.grid(row=6, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         
         reset2 = customtkinter.CTkButton(master=tabview.tab("coda"), text="Reset", command=self.reset_coda)
         reset2.grid(row=10, column=0, padx=(15,5), pady=(20,10),sticky="w")
@@ -308,7 +312,8 @@ class Interfaccia(customtkinter.CTk):
                 "next_element": self.next2.get(),
                 "num_servers": self.num_servers.get(),
                 "server_time": self.server_time.get(),
-                "speed": "$(arg speed)"
+                "speed": "$(arg speed)",
+                "uncertanity" : self.uncertanity.get()
             }
         }
         coda_node_text = self.format_coda_node()

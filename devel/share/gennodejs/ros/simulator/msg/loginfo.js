@@ -25,8 +25,10 @@ class loginfo {
       this.num_servers = null;
       this.utiliz_tot = null;
       this.utiliz_array = null;
+      this.utiliz_array_tot = null;
       this.queue_array = null;
       this.time_array = null;
+      this.time_array_intervals = null;
       this.queue_left = null;
       this.info = null;
       this.events_left = null;
@@ -76,6 +78,12 @@ class loginfo {
       else {
         this.utiliz_array = [];
       }
+      if (initObj.hasOwnProperty('utiliz_array_tot')) {
+        this.utiliz_array_tot = initObj.utiliz_array_tot
+      }
+      else {
+        this.utiliz_array_tot = [];
+      }
       if (initObj.hasOwnProperty('queue_array')) {
         this.queue_array = initObj.queue_array
       }
@@ -87,6 +95,12 @@ class loginfo {
       }
       else {
         this.time_array = [];
+      }
+      if (initObj.hasOwnProperty('time_array_intervals')) {
+        this.time_array_intervals = initObj.time_array_intervals
+      }
+      else {
+        this.time_array_intervals = [];
       }
       if (initObj.hasOwnProperty('queue_left')) {
         this.queue_left = initObj.queue_left
@@ -137,10 +151,14 @@ class loginfo {
     bufferOffset = _serializer.float32(obj.utiliz_tot, buffer, bufferOffset);
     // Serialize message field [utiliz_array]
     bufferOffset = _arraySerializer.float32(obj.utiliz_array, buffer, bufferOffset, null);
+    // Serialize message field [utiliz_array_tot]
+    bufferOffset = _arraySerializer.float32(obj.utiliz_array_tot, buffer, bufferOffset, null);
     // Serialize message field [queue_array]
     bufferOffset = _arraySerializer.float32(obj.queue_array, buffer, bufferOffset, null);
     // Serialize message field [time_array]
     bufferOffset = _arraySerializer.time(obj.time_array, buffer, bufferOffset, null);
+    // Serialize message field [time_array_intervals]
+    bufferOffset = _arraySerializer.time(obj.time_array_intervals, buffer, bufferOffset, null);
     // Serialize message field [queue_left]
     bufferOffset = _serializer.int32(obj.queue_left, buffer, bufferOffset);
     // Serialize message field [info]
@@ -172,10 +190,14 @@ class loginfo {
     data.utiliz_tot = _deserializer.float32(buffer, bufferOffset);
     // Deserialize message field [utiliz_array]
     data.utiliz_array = _arrayDeserializer.float32(buffer, bufferOffset, null)
+    // Deserialize message field [utiliz_array_tot]
+    data.utiliz_array_tot = _arrayDeserializer.float32(buffer, bufferOffset, null)
     // Deserialize message field [queue_array]
     data.queue_array = _arrayDeserializer.float32(buffer, bufferOffset, null)
     // Deserialize message field [time_array]
     data.time_array = _arrayDeserializer.time(buffer, bufferOffset, null)
+    // Deserialize message field [time_array_intervals]
+    data.time_array_intervals = _arrayDeserializer.time(buffer, bufferOffset, null)
     // Deserialize message field [queue_left]
     data.queue_left = _deserializer.int32(buffer, bufferOffset);
     // Deserialize message field [info]
@@ -194,10 +216,12 @@ class loginfo {
     length += _getByteLength(object.type);
     length += _getByteLength(object.node_name);
     length += 4 * object.utiliz_array.length;
+    length += 4 * object.utiliz_array_tot.length;
     length += 4 * object.queue_array.length;
     length += 8 * object.time_array.length;
+    length += 8 * object.time_array_intervals.length;
     length += _getByteLength(object.info);
-    return length + 50;
+    return length + 58;
   }
 
   static datatype() {
@@ -207,7 +231,7 @@ class loginfo {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'b4daeb6ff2f474e72dec452bb1376c78';
+    return '7b5bd36ae2b220f7dc505e09323dabcc';
   }
 
   static messageDefinition() {
@@ -221,8 +245,10 @@ class loginfo {
     float32 num_servers
     float32 utiliz_tot
     float32[] utiliz_array
+    float32[] utiliz_array_tot
     float32[] queue_array
     time[] time_array
+    time[] time_array_intervals
     int32 queue_left
     string info
     
@@ -288,6 +314,13 @@ class loginfo {
       resolved.utiliz_array = []
     }
 
+    if (msg.utiliz_array_tot !== undefined) {
+      resolved.utiliz_array_tot = msg.utiliz_array_tot;
+    }
+    else {
+      resolved.utiliz_array_tot = []
+    }
+
     if (msg.queue_array !== undefined) {
       resolved.queue_array = msg.queue_array;
     }
@@ -300,6 +333,13 @@ class loginfo {
     }
     else {
       resolved.time_array = []
+    }
+
+    if (msg.time_array_intervals !== undefined) {
+      resolved.time_array_intervals = msg.time_array_intervals;
+    }
+    else {
+      resolved.time_array_intervals = []
     }
 
     if (msg.queue_left !== undefined) {

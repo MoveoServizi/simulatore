@@ -9,7 +9,7 @@ import struct
 import genpy
 
 class loginfo(genpy.Message):
-  _md5sum = "b4daeb6ff2f474e72dec452bb1376c78"
+  _md5sum = "7b5bd36ae2b220f7dc505e09323dabcc"
   _type = "simulator/loginfo"
   _has_header = False  # flag to mark the presence of a Header object
   _full_text = """int32 ID_node
@@ -20,8 +20,10 @@ float32 server_time
 float32 num_servers
 float32 utiliz_tot
 float32[] utiliz_array
+float32[] utiliz_array_tot
 float32[] queue_array
 time[] time_array
+time[] time_array_intervals
 int32 queue_left
 string info
 
@@ -29,8 +31,8 @@ int32 events_left
 
 bool stop_esecution
 bool statistic"""
-  __slots__ = ['ID_node','type','node_name','server_time','num_servers','utiliz_tot','utiliz_array','queue_array','time_array','queue_left','info','events_left','stop_esecution','statistic']
-  _slot_types = ['int32','string','string','float32','float32','float32','float32[]','float32[]','time[]','int32','string','int32','bool','bool']
+  __slots__ = ['ID_node','type','node_name','server_time','num_servers','utiliz_tot','utiliz_array','utiliz_array_tot','queue_array','time_array','time_array_intervals','queue_left','info','events_left','stop_esecution','statistic']
+  _slot_types = ['int32','string','string','float32','float32','float32','float32[]','float32[]','float32[]','time[]','time[]','int32','string','int32','bool','bool']
 
   def __init__(self, *args, **kwds):
     """
@@ -40,7 +42,7 @@ bool statistic"""
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       ID_node,type,node_name,server_time,num_servers,utiliz_tot,utiliz_array,queue_array,time_array,queue_left,info,events_left,stop_esecution,statistic
+       ID_node,type,node_name,server_time,num_servers,utiliz_tot,utiliz_array,utiliz_array_tot,queue_array,time_array,time_array_intervals,queue_left,info,events_left,stop_esecution,statistic
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -63,10 +65,14 @@ bool statistic"""
         self.utiliz_tot = 0.
       if self.utiliz_array is None:
         self.utiliz_array = []
+      if self.utiliz_array_tot is None:
+        self.utiliz_array_tot = []
       if self.queue_array is None:
         self.queue_array = []
       if self.time_array is None:
         self.time_array = []
+      if self.time_array_intervals is None:
+        self.time_array_intervals = []
       if self.queue_left is None:
         self.queue_left = 0
       if self.info is None:
@@ -85,8 +91,10 @@ bool statistic"""
       self.num_servers = 0.
       self.utiliz_tot = 0.
       self.utiliz_array = []
+      self.utiliz_array_tot = []
       self.queue_array = []
       self.time_array = []
+      self.time_array_intervals = []
       self.queue_left = 0
       self.info = ''
       self.events_left = 0
@@ -125,6 +133,10 @@ bool statistic"""
       buff.write(_struct_I.pack(length))
       pattern = '<%sf'%length
       buff.write(struct.Struct(pattern).pack(*self.utiliz_array))
+      length = len(self.utiliz_array_tot)
+      buff.write(_struct_I.pack(length))
+      pattern = '<%sf'%length
+      buff.write(struct.Struct(pattern).pack(*self.utiliz_array_tot))
       length = len(self.queue_array)
       buff.write(_struct_I.pack(length))
       pattern = '<%sf'%length
@@ -132,6 +144,11 @@ bool statistic"""
       length = len(self.time_array)
       buff.write(_struct_I.pack(length))
       for val1 in self.time_array:
+        _x = val1
+        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
+      length = len(self.time_array_intervals)
+      buff.write(_struct_I.pack(length))
+      for val1 in self.time_array_intervals:
         _x = val1
         buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
       _x = self.queue_left
@@ -157,6 +174,8 @@ bool statistic"""
     try:
       if self.time_array is None:
         self.time_array = None
+      if self.time_array_intervals is None:
+        self.time_array_intervals = None
       end = 0
       start = end
       end += 4
@@ -198,6 +217,14 @@ bool statistic"""
       start = end
       s = struct.Struct(pattern)
       end += s.size
+      self.utiliz_array_tot = s.unpack(str[start:end])
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      pattern = '<%sf'%length
+      start = end
+      s = struct.Struct(pattern)
+      end += s.size
       self.queue_array = s.unpack(str[start:end])
       start = end
       end += 4
@@ -210,6 +237,17 @@ bool statistic"""
         end += 8
         (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
         self.time_array.append(val1)
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      self.time_array_intervals = []
+      for i in range(0, length):
+        val1 = genpy.Time()
+        _x = val1
+        start = end
+        end += 8
+        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
+        self.time_array_intervals.append(val1)
       start = end
       end += 4
       (self.queue_left,) = _get_struct_i().unpack(str[start:end])
@@ -260,6 +298,10 @@ bool statistic"""
       buff.write(_struct_I.pack(length))
       pattern = '<%sf'%length
       buff.write(self.utiliz_array.tostring())
+      length = len(self.utiliz_array_tot)
+      buff.write(_struct_I.pack(length))
+      pattern = '<%sf'%length
+      buff.write(self.utiliz_array_tot.tostring())
       length = len(self.queue_array)
       buff.write(_struct_I.pack(length))
       pattern = '<%sf'%length
@@ -267,6 +309,11 @@ bool statistic"""
       length = len(self.time_array)
       buff.write(_struct_I.pack(length))
       for val1 in self.time_array:
+        _x = val1
+        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
+      length = len(self.time_array_intervals)
+      buff.write(_struct_I.pack(length))
+      for val1 in self.time_array_intervals:
         _x = val1
         buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
       _x = self.queue_left
@@ -293,6 +340,8 @@ bool statistic"""
     try:
       if self.time_array is None:
         self.time_array = None
+      if self.time_array_intervals is None:
+        self.time_array_intervals = None
       end = 0
       start = end
       end += 4
@@ -334,6 +383,14 @@ bool statistic"""
       start = end
       s = struct.Struct(pattern)
       end += s.size
+      self.utiliz_array_tot = numpy.frombuffer(str[start:end], dtype=numpy.float32, count=length)
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      pattern = '<%sf'%length
+      start = end
+      s = struct.Struct(pattern)
+      end += s.size
       self.queue_array = numpy.frombuffer(str[start:end], dtype=numpy.float32, count=length)
       start = end
       end += 4
@@ -346,6 +403,17 @@ bool statistic"""
         end += 8
         (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
         self.time_array.append(val1)
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      self.time_array_intervals = []
+      for i in range(0, length):
+        val1 = genpy.Time()
+        _x = val1
+        start = end
+        end += 8
+        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
+        self.time_array_intervals.append(val1)
       start = end
       end += 4
       (self.queue_left,) = _get_struct_i().unpack(str[start:end])

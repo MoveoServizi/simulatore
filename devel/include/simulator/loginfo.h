@@ -31,8 +31,10 @@ struct loginfo_
     , num_servers(0.0)
     , utiliz_tot(0.0)
     , utiliz_array()
+    , utiliz_array_tot()
     , queue_array()
     , time_array()
+    , time_array_intervals()
     , queue_left(0)
     , info()
     , events_left(0)
@@ -47,8 +49,10 @@ struct loginfo_
     , num_servers(0.0)
     , utiliz_tot(0.0)
     , utiliz_array(_alloc)
+    , utiliz_array_tot(_alloc)
     , queue_array(_alloc)
     , time_array(_alloc)
+    , time_array_intervals(_alloc)
     , queue_left(0)
     , info(_alloc)
     , events_left(0)
@@ -80,11 +84,17 @@ struct loginfo_
    typedef std::vector<float, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<float>> _utiliz_array_type;
   _utiliz_array_type utiliz_array;
 
+   typedef std::vector<float, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<float>> _utiliz_array_tot_type;
+  _utiliz_array_tot_type utiliz_array_tot;
+
    typedef std::vector<float, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<float>> _queue_array_type;
   _queue_array_type queue_array;
 
    typedef std::vector<ros::Time, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<ros::Time>> _time_array_type;
   _time_array_type time_array;
+
+   typedef std::vector<ros::Time, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<ros::Time>> _time_array_intervals_type;
+  _time_array_intervals_type time_array_intervals;
 
    typedef int32_t _queue_left_type;
   _queue_left_type queue_left;
@@ -137,8 +147,10 @@ bool operator==(const ::simulator::loginfo_<ContainerAllocator1> & lhs, const ::
     lhs.num_servers == rhs.num_servers &&
     lhs.utiliz_tot == rhs.utiliz_tot &&
     lhs.utiliz_array == rhs.utiliz_array &&
+    lhs.utiliz_array_tot == rhs.utiliz_array_tot &&
     lhs.queue_array == rhs.queue_array &&
     lhs.time_array == rhs.time_array &&
+    lhs.time_array_intervals == rhs.time_array_intervals &&
     lhs.queue_left == rhs.queue_left &&
     lhs.info == rhs.info &&
     lhs.events_left == rhs.events_left &&
@@ -200,12 +212,12 @@ struct MD5Sum< ::simulator::loginfo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "b4daeb6ff2f474e72dec452bb1376c78";
+    return "7b5bd36ae2b220f7dc505e09323dabcc";
   }
 
   static const char* value(const ::simulator::loginfo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xb4daeb6ff2f474e7ULL;
-  static const uint64_t static_value2 = 0x2dec452bb1376c78ULL;
+  static const uint64_t static_value1 = 0x7b5bd36ae2b220f7ULL;
+  static const uint64_t static_value2 = 0xdc505e09323dabccULL;
 };
 
 template<class ContainerAllocator>
@@ -232,8 +244,10 @@ struct Definition< ::simulator::loginfo_<ContainerAllocator> >
 "float32 num_servers\n"
 "float32 utiliz_tot\n"
 "float32[] utiliz_array\n"
+"float32[] utiliz_array_tot\n"
 "float32[] queue_array\n"
 "time[] time_array\n"
+"time[] time_array_intervals\n"
 "int32 queue_left\n"
 "string info\n"
 "\n"
@@ -266,8 +280,10 @@ namespace serialization
       stream.next(m.num_servers);
       stream.next(m.utiliz_tot);
       stream.next(m.utiliz_array);
+      stream.next(m.utiliz_array_tot);
       stream.next(m.queue_array);
       stream.next(m.time_array);
+      stream.next(m.time_array_intervals);
       stream.next(m.queue_left);
       stream.next(m.info);
       stream.next(m.events_left);
@@ -309,6 +325,12 @@ struct Printer< ::simulator::loginfo_<ContainerAllocator> >
       s << indent << "  utiliz_array[" << i << "]: ";
       Printer<float>::stream(s, indent + "  ", v.utiliz_array[i]);
     }
+    s << indent << "utiliz_array_tot[]" << std::endl;
+    for (size_t i = 0; i < v.utiliz_array_tot.size(); ++i)
+    {
+      s << indent << "  utiliz_array_tot[" << i << "]: ";
+      Printer<float>::stream(s, indent + "  ", v.utiliz_array_tot[i]);
+    }
     s << indent << "queue_array[]" << std::endl;
     for (size_t i = 0; i < v.queue_array.size(); ++i)
     {
@@ -320,6 +342,12 @@ struct Printer< ::simulator::loginfo_<ContainerAllocator> >
     {
       s << indent << "  time_array[" << i << "]: ";
       Printer<ros::Time>::stream(s, indent + "  ", v.time_array[i]);
+    }
+    s << indent << "time_array_intervals[]" << std::endl;
+    for (size_t i = 0; i < v.time_array_intervals.size(); ++i)
+    {
+      s << indent << "  time_array_intervals[" << i << "]: ";
+      Printer<ros::Time>::stream(s, indent + "  ", v.time_array_intervals[i]);
     }
     s << indent << "queue_left: ";
     Printer<int32_t>::stream(s, indent + "  ", v.queue_left);

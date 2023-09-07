@@ -14,7 +14,7 @@
 
 (defclass simulator::loginfo
   :super ros::object
-  :slots (_ID_node _type _node_name _server_time _num_servers _utiliz_tot _utiliz_array _queue_array _time_array _queue_left _info _events_left _stop_esecution _statistic ))
+  :slots (_ID_node _type _node_name _server_time _num_servers _utiliz_tot _utiliz_array _utiliz_array_tot _queue_array _time_array _time_array_intervals _queue_left _info _events_left _stop_esecution _statistic ))
 
 (defmethod simulator::loginfo
   (:init
@@ -26,8 +26,10 @@
     ((:num_servers __num_servers) 0.0)
     ((:utiliz_tot __utiliz_tot) 0.0)
     ((:utiliz_array __utiliz_array) (make-array 0 :initial-element 0.0 :element-type :float))
+    ((:utiliz_array_tot __utiliz_array_tot) (make-array 0 :initial-element 0.0 :element-type :float))
     ((:queue_array __queue_array) (make-array 0 :initial-element 0.0 :element-type :float))
     ((:time_array __time_array) (let (r) (dotimes (i 0) (push (instance ros::time :init) r)) r))
+    ((:time_array_intervals __time_array_intervals) (let (r) (dotimes (i 0) (push (instance ros::time :init) r)) r))
     ((:queue_left __queue_left) 0)
     ((:info __info) "")
     ((:events_left __events_left) 0)
@@ -42,8 +44,10 @@
    (setq _num_servers (float __num_servers))
    (setq _utiliz_tot (float __utiliz_tot))
    (setq _utiliz_array __utiliz_array)
+   (setq _utiliz_array_tot __utiliz_array_tot)
    (setq _queue_array __queue_array)
    (setq _time_array __time_array)
+   (setq _time_array_intervals __time_array_intervals)
    (setq _queue_left (round __queue_left))
    (setq _info (string __info))
    (setq _events_left (round __events_left))
@@ -71,12 +75,18 @@
   (:utiliz_array
    (&optional __utiliz_array)
    (if __utiliz_array (setq _utiliz_array __utiliz_array)) _utiliz_array)
+  (:utiliz_array_tot
+   (&optional __utiliz_array_tot)
+   (if __utiliz_array_tot (setq _utiliz_array_tot __utiliz_array_tot)) _utiliz_array_tot)
   (:queue_array
    (&optional __queue_array)
    (if __queue_array (setq _queue_array __queue_array)) _queue_array)
   (:time_array
    (&optional __time_array)
    (if __time_array (setq _time_array __time_array)) _time_array)
+  (:time_array_intervals
+   (&optional __time_array_intervals)
+   (if __time_array_intervals (setq _time_array_intervals __time_array_intervals)) _time_array_intervals)
   (:queue_left
    (&optional __queue_left)
    (if __queue_left (setq _queue_left __queue_left)) _queue_left)
@@ -109,10 +119,14 @@
     4
     ;; float32[] _utiliz_array
     (* 4    (length _utiliz_array)) 4
+    ;; float32[] _utiliz_array_tot
+    (* 4    (length _utiliz_array_tot)) 4
     ;; float32[] _queue_array
     (* 4    (length _queue_array)) 4
     ;; time[] _time_array
     (* 8    (length _time_array)) 4
+    ;; time[] _time_array_intervals
+    (* 8    (length _time_array_intervals)) 4
     ;; int32 _queue_left
     4
     ;; string _info
@@ -145,6 +159,11 @@
      (dotimes (i (length _utiliz_array))
        (sys::poke (elt _utiliz_array i) (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
        )
+     ;; float32[] _utiliz_array_tot
+     (write-long (length _utiliz_array_tot) s)
+     (dotimes (i (length _utiliz_array_tot))
+       (sys::poke (elt _utiliz_array_tot i) (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
+       )
      ;; float32[] _queue_array
      (write-long (length _queue_array) s)
      (dotimes (i (length _queue_array))
@@ -154,6 +173,11 @@
      (write-long (length _time_array) s)
      (dotimes (i (length _time_array))
        (write-long (send (elt _time_array i) :sec) s) (write-long (send (elt _time_array i) :nsec) s)
+       )
+     ;; time[] _time_array_intervals
+     (write-long (length _time_array_intervals) s)
+     (dotimes (i (length _time_array_intervals))
+       (write-long (send (elt _time_array_intervals i) :sec) s) (write-long (send (elt _time_array_intervals i) :nsec) s)
        )
      ;; int32 _queue_left
        (write-long _queue_left s)
@@ -188,6 +212,13 @@
      (dotimes (i n)
      (setf (elt _utiliz_array i) (sys::peek buf ptr- :float)) (incf ptr- 4)
      ))
+   ;; float32[] _utiliz_array_tot
+   (let (n)
+     (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4)
+     (setq _utiliz_array_tot (instantiate float-vector n))
+     (dotimes (i n)
+     (setf (elt _utiliz_array_tot i) (sys::peek buf ptr- :float)) (incf ptr- 4)
+     ))
    ;; float32[] _queue_array
    (let (n)
      (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4)
@@ -200,6 +231,13 @@
      (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4)
      (setq _time_array (let (r) (dotimes (i n) (push (instance ros::time :init) r)) r))
      (dolist (elem- _time_array)
+     (send elem- :sec (sys::peek buf ptr- :integer)) (incf ptr- 4)  (send elem- :nsec (sys::peek buf ptr- :integer)) (incf ptr- 4)
+     ))
+   ;; time[] _time_array_intervals
+   (let (n)
+     (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4)
+     (setq _time_array_intervals (let (r) (dotimes (i n) (push (instance ros::time :init) r)) r))
+     (dolist (elem- _time_array_intervals)
      (send elem- :sec (sys::peek buf ptr- :integer)) (incf ptr- 4)  (send elem- :nsec (sys::peek buf ptr- :integer)) (incf ptr- 4)
      ))
    ;; int32 _queue_left
@@ -216,7 +254,7 @@
    self)
   )
 
-(setf (get simulator::loginfo :md5sum-) "b4daeb6ff2f474e72dec452bb1376c78")
+(setf (get simulator::loginfo :md5sum-) "7b5bd36ae2b220f7dc505e09323dabcc")
 (setf (get simulator::loginfo :datatype-) "simulator/loginfo")
 (setf (get simulator::loginfo :definition-)
       "int32 ID_node
@@ -227,8 +265,10 @@ float32 server_time
 float32 num_servers
 float32 utiliz_tot
 float32[] utiliz_array
+float32[] utiliz_array_tot
 float32[] queue_array
 time[] time_array
+time[] time_array_intervals
 int32 queue_left
 string info
 
@@ -240,6 +280,6 @@ bool statistic
 
 
 
-(provide :simulator/loginfo "b4daeb6ff2f474e72dec452bb1376c78")
+(provide :simulator/loginfo "7b5bd36ae2b220f7dc505e09323dabcc")
 
 

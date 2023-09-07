@@ -12,9 +12,10 @@ import threading
 import time
 import logging
 import datetime
+import numpy as np
 
 class Coda():
-    def __init__(self,node_name,next_element, num_servers, server_time, node_id, speed):
+    def __init__(self,node_name,next_element, num_servers, server_time, node_id, speed,uncertanity):
         # Valori configurazione
         self.name = node_name
         self.topic_queue = "/" + node_name
@@ -25,6 +26,7 @@ class Coda():
         self.number_of_server =  num_servers
         self.node_id = node_id
         self.speed = speed
+        self.uncertanity = uncertanity
 
         # Valori dinamici
         self.queue_length = 0
@@ -33,12 +35,14 @@ class Coda():
         self.first_arrival_time = None
         self.last_arrival_time = None
         self.total_arrival_events = 0
-        self.time_interval = self.server_time * 4
+        self.time_interval = self.server_time * 10
         self.utilization_intervals = []
         self.queue_length_intervals = []
         self.time_array = []
+        self.time_array_intervals = []
         self.server_occupancy = [False] *int(num_servers)
         self.occupancy_lock = threading.Lock()  # Per garantire l'accesso sincronizzato
+        self.utilization_array = []
 
         #topic
         # Create a subscriber
@@ -78,7 +82,9 @@ class Coda():
                 info_msg.server_time = self.server_time*self.speed
                 info_msg.utiliz_tot = self.get_general_utilization()
                 info_msg.utiliz_array = self.get_interval_utilizations()
+                info_msg.utiliz_array_tot = self.utilization_array
                 info_msg.time_array = self.time_array
+                info_msg.time_array_intervals = self.time_array_intervals
                 info_msg.queue_array = self.queue_length_intervals
                 info_msg.statistic = True
                 self.pub_info.publish(info_msg)
@@ -131,7 +137,15 @@ class Coda():
                 with self.occupancy_lock:
                     self.server_occupancy[server_number - 1] = True
                 
-                time.sleep(self.server_time)
+                if self.uncertanity:
+                    # Pattern: Exponential distribution
+                    mu = 1/self.server_time
+                    dt = -1/mu * np.log(1 - np.random.rand())
+                else:
+                    dt = self.server_time
+                
+                
+                time.sleep(dt)
                 
                 self.pub.publish(current_event)
                 with self.occupancy_lock:
@@ -141,7 +155,7 @@ class Coda():
     def monitor_occupancy(self):
         cicle_max = max(1,round(self.time_interval/self.server_time/2))
         cicle = 0
-        count = 0
+
         while not rospy.is_shutdown():
             # Dormi per mezzo self.server_time prima di registrare lo stato di occupazione
             time.sleep(self.server_time / 2)
@@ -154,16 +168,20 @@ class Coda():
                 for server_number in range(num_servers):
                     if self.server_occupancy[server_number]:
                         server_occupied_counts[server_number] += 1
-
+            
+            self.utilization_array.append(min(self.get_general_utilization(),1))
+            self.queue_length_intervals.append(self.queue_length)
+            self.time_array.append(rospy.Time.now())
             cicle += 1
             # Calcola l'utilizzazione nei vari intervalli di tempo
             if cicle == cicle_max:
                 utilization = sum(server_occupied_counts) / (num_servers * cicle_max)
                 util =round(utilization,2)
                 self.utilization_intervals.append(util)
-                self.queue_length_intervals.append(self.queue_length)
-                self.time_array.append(rospy.Time.now())
+                #self.queue_length_intervals.append(self.queue_length)
+                self.time_array_intervals.append(rospy.Time.now())
                 cicle = 0
+                
 
                 
 
@@ -180,8 +198,9 @@ if __name__ == '__main__':
     server_time = rospy.get_param("~server_time", 2)
     node_id = rospy.get_param("~node_id", 1)
     speed = rospy.get_param("~speed", 1)
+    uncertanity = rospy.get_param("~uncertanity", "False")
     # Create an instance of the Coda class with parameters from the launch file
-    coda1 = Coda(node_name, next_element, num_servers,server_time,node_id, speed)
+    coda1 = Coda(node_name, next_element, num_servers,server_time,node_id, speed,uncertanity)
 
    
     # Spin ROS node
