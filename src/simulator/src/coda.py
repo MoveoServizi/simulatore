@@ -48,8 +48,8 @@ class Coda():
         # Create a subscriber
         self.subscriber = rospy.Subscriber(self.topic_queue, event, self.queue)
         # Create a publisher
-        self.pub = rospy.Publisher(self.topic_pub, event, queue_size=10)
-        self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=20)
+        self.pub = rospy.Publisher(self.topic_pub, event, queue_size=50)
+        self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=50)
         self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
 
         time.sleep(1)

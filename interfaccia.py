@@ -106,11 +106,19 @@ class Interfaccia(customtkinter.CTk):
         self.t_value1.grid(row=10, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.value1 = customtkinter.CTkEntry(tabview.tab("generatore"))
         self.value1.grid(row=10, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.t_attribute2 = customtkinter.CTkLabel(tabview.tab("generatore"), text="attribute2 : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_attribute2.grid(row=11, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.attribute2 = customtkinter.CTkEntry(tabview.tab("generatore"))
+        self.attribute2.grid(row=11, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.t_value2 = customtkinter.CTkLabel(tabview.tab("generatore"), text="value2 : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_value2.grid(row=12, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.value2 = customtkinter.CTkEntry(tabview.tab("generatore"))
+        self.value2.grid(row=12, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         
         reset1 = customtkinter.CTkButton(master=tabview.tab("generatore"), text="Reset", command=self.reset_generator)
-        reset1.grid(row=12, column=0, padx=(15,5), pady=(20,10),sticky="w")
+        reset1.grid(row=14, column=0, padx=(15,5), pady=(20,10),sticky="w")
         button1 = customtkinter.CTkButton(master=tabview.tab("generatore"), text="Add", command=self.add_generator)
-        button1.grid(row=12, column=1, padx=(15,5), pady=(20,10),sticky="w")
+        button1.grid(row=14, column=1, padx=(15,5), pady=(20,10),sticky="w")
         
         ## coda
         self.t_node_name2 = customtkinter.CTkLabel(tabview.tab("coda"), text="Nome : ", font=customtkinter.CTkFont(size=12, weight="bold"))
@@ -133,9 +141,9 @@ class Interfaccia(customtkinter.CTk):
         self.t_server_time.grid(row=5, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.server_time = customtkinter.CTkEntry(tabview.tab("coda"))
         self.server_time.grid(row=5, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
-        self.t_uncertanity = customtkinter.CTkLabel(tabview.tab("end"), text="uncertainty : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_uncertanity = customtkinter.CTkLabel(tabview.tab("coda"), text="uncertainty : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_uncertanity.grid(row=6, column=0, padx=(15,5), pady=(5,2),sticky="w")
-        self.uncertanity = customtkinter.CTkComboBox(tabview.tab("end"), values=["False", "True"])
+        self.uncertanity = customtkinter.CTkComboBox(tabview.tab("coda"), values=["False", "True"])
         self.uncertanity.grid(row=6, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         
         reset2 = customtkinter.CTkButton(master=tabview.tab("coda"), text="Reset", command=self.reset_coda)
@@ -266,8 +274,10 @@ class Interfaccia(customtkinter.CTk):
                 "pause_time": self.pause_time.get(),
                 "group_size" : self.group_size.get(),
                 "event_type": self.event_type.get(),
-                "attribute1": self.attribute1.get(),
-                "value1": self.value1.get(),
+                "split_attribute1": self.attribute1.get(),
+                "split1": self.value1.get(),
+                "split_attribute2": self.attribute2.get(),
+                "split2": self.value2.get(),
             }
         }
         generator_node_text = self.format_generator_node()

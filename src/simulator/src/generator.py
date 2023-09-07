@@ -9,7 +9,7 @@ import time
 from datetime import datetime
 
 class GeneratorNode:
-    def __init__(self, node_name, next_element, gen_freq, num_messages, event_type, node_id,attribute1,value1,speed, pause_time, group_size):
+    def __init__(self, node_name, next_element, gen_freq, num_messages, event_type, node_id,attribute1,value1,attribute2,value2,speed, pause_time, group_size):
         self.node_name = node_name
         self.next_element = "/" + next_element
         self.gen_freq = gen_freq
@@ -18,6 +18,8 @@ class GeneratorNode:
         self.event_id = 1
         self.attribute1 = attribute1
         self.value1 = value1
+        self.attribute2 = attribute2
+        self.value2 = value2
         self.speed = speed
         self.group_size = group_size
         self.pause_time = pause_time
@@ -25,8 +27,8 @@ class GeneratorNode:
         if pause_time != 0:
             self.pause = True
 
-        self.pub = rospy.Publisher(self.next_element, event, queue_size=10)
-        self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=10)
+        self.pub = rospy.Publisher(self.next_element, event, queue_size=50)
+        self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=50)
         self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
         
         time.sleep(1)
@@ -55,6 +57,8 @@ class GeneratorNode:
                 
                 event_msg.split_attribute1 = self.attribute1
                 event_msg.split1 = self.value1
+                event_msg.split_attribute2 = self.attribute2
+                event_msg.split2 = self.value2
                 if i == 0:
                     event_msg.first_event = True
                 self.pub.publish(event_msg)
@@ -67,6 +71,7 @@ class GeneratorNode:
                     count += 1
                     if count == self.group_size:
                         count = 0
+                        print("sliping time: ", self.pause_time/self.speed)
                         time.sleep(self.pause_time/self.speed)
 
     def stamp_date(self):
@@ -103,8 +108,10 @@ if __name__ == '__main__':
     group_size  = rospy.get_param("~group_size", 1)
     
     attribute1 = rospy.get_param("~split_attribute1", "-")
-    value1 = rospy.get_param("~value1", 0.0)
+    value1 = rospy.get_param("~split1", 0.0)
+    attribute2 = rospy.get_param("~split_attribute2", "-")
+    value2 = rospy.get_param("~split2", 0.0)
     
 
-    generator = GeneratorNode(node_name, next_element, gen_freq, num_messages, event_type, node_id,attribute1,value1,speed,pause_time, group_size)
+    generator = GeneratorNode(node_name, next_element, gen_freq, num_messages, event_type, node_id,attribute1,value1,attribute2,value2,speed,pause_time, group_size)
     generator.generate_messages()

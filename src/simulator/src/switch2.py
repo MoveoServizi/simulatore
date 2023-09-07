@@ -17,14 +17,14 @@ class SwitchNode:
         self.node_id = node_id
 
         self.sub = rospy.Subscriber(self.node_name, event, self.switch_callback)
-        self.pub1 = rospy.Publisher(self.topic1, event, queue_size=10)
-        self.pub2 = rospy.Publisher(self.topic2, event, queue_size=10)
+        self.pub1 = rospy.Publisher(self.topic1, event, queue_size=50)
+        self.pub2 = rospy.Publisher(self.topic2, event, queue_size=50)
         self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
 
     def switch_callback(self, msg):
         route_list = list(msg.route)
         route_list.append(self.node_name)
-        #msg.route = route_list
+        print(self.node_name, " ricevuto msg ", msg.ID)
 
         if self.modality == "split":
             self.split_message(msg)
@@ -60,12 +60,18 @@ class SwitchNode:
             attribute_name = 'split_attribute2'
         elif attribute_num == 3:
             attribute_name = 'split_attribute3'
+
+        if hasattr(msg, attribute_name):
+
             
-        if getattr(msg, attribute_name) == attribute:
-            self.pub1.publish(msg)
+            if getattr(msg, attribute_name) == attribute:
+                self.pub1.publish(msg)
+            else:
+                self.pub2.publish(msg)
         else:
-            self.pub2.publish(msg)
-            
+            print("ERRORE split non trovato")
+            self.split_message(msg)
+                
     def attribute_split_message(self, msg,attribute, attribute_num):
         if attribute_num == 1:
             attribute_name = 'split_attribute1'
@@ -81,13 +87,13 @@ class SwitchNode:
 
         if getattr(msg, attribute_name) == attribute:
             att_split_rate = getattr(msg, split_name)
-            p = random.random()
             p = random.random()  # Generate a random number between 0 and 1
             if p < att_split_rate:
                 self.pub1.publish(msg)
             else:
                 self.pub2.publish(msg)
         else:
+            print("ERRORE split non trovato")
             self.split_message(msg)
     
     def process_log_info(self,msg):

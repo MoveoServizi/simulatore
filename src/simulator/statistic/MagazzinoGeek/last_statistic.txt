@@ -1,0 +1,68 @@
+################  STATISTIC ############
+
+Tempo simulazione:		 54.62  sec
+Moltiplicatore velocità:		 10.0
+Tempo processo:		 546.23  sec
+Personale usato:		 63.0
+Events recived:
+	Generator GenCorrieri:		193   messages
+	Generator GenMulticollo:		291   messages
+
+Route of events:
+	Message type:		Multicollo
+		Total count:		291
+		Avg process time:		2 minutes, 39.67 seconds
+		Avg arrival time:		1.49 seconds
+		Node GenMulticollo:		100.00%
+		Node Geek:		100.00%
+		Node Multicollo:		100.00%
+		Node Standard_compl:		11.68%
+
+
+	Message type:		Corriere
+		Total count:		193
+		Avg process time:		2 minutes, 27.43 seconds
+		Avg arrival time:		2.35 seconds
+		Node GenCorrieri:		100.00%
+		Node Geek:		93.78%
+		Node Corriere:		93.78%
+		Node Standard_compl:		22.80%
+		Node Standard:		6.22%
+
+
+Analisi code:
+	nome nodo:	Standard_compl
+		numero operatori:		3.0 
+		tempo esecuzione:		10.0 
+		utilizzazione totale:		0.76
+		info:		test info
+
+
+	nome nodo:	Standard
+		numero operatori:		1.0 
+		tempo esecuzione:		15.0 
+		utilizzazione totale:		0.4
+		info:		test info
+
+
+	nome nodo:	Geek
+		numero operatori:		54.0 
+		tempo esecuzione:		15.0 
+		utilizzazione totale:		0.28
+		info:		test info
+
+
+	nome nodo:	Corriere
+		numero operatori:		3.0 
+		tempo esecuzione:		2.0 
+		utilizzazione totale:		0.23
+		info:		test info
+
+
+	nome nodo:	Multicollo
+		numero operatori:		2.0 
+		tempo esecuzione:		1.0 
+		utilizzazione totale:		0.28
+		info:		test info
+
+

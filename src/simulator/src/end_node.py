@@ -32,7 +32,7 @@ class EndNode:
         print("FILE NAME = ", file_name)
         
         self.event_sub = rospy.Subscriber(self.node_name, event, self.process_event)
-        self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=20)
+        self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=50)
         self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
         self.type_stats = {}
         self.data_by_type = {}
@@ -84,7 +84,7 @@ class EndNode:
                 self.print_result()
         elif self.modality == "time":
             self.total_seconds = rospy.Time.now().to_sec() - self.start.to_sec()
-            if self.total_seconds > self.stop_time: 
+            if self.total_seconds*self.speed > self.stop_time: 
                 print("TIME IS OVER!!!")
                 self.print_result()
             
