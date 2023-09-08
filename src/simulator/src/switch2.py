@@ -24,7 +24,7 @@ class SwitchNode:
     def switch_callback(self, msg):
         route_list = list(msg.route)
         route_list.append(self.node_name)
-        print(self.node_name, " ricevuto msg ", msg.ID)
+        #print(self.node_name, " ricevuto msg ", msg.ID)
 
         if self.modality == "split":
             self.split_message(msg)

@@ -1,6 +1,6 @@
 <!-- Create the launch file for ROS -->
 <launch>
-	<arg name="speed" default="10.0"/>
+	<arg name="speed" default="30.0"/>
 	<arg name="file_name" default="MagazzinoGeek"/>
 	<node name="GenCorrieri" pkg="simulator" type="generator.py" output="screen">
 		<param name="node_id" value="1"/>
@@ -16,7 +16,7 @@
 		<param name="split1" value="0.05"/>
 		<param name="split_attribute2" value="Standard"/>
 		<param name="split2" value="0.3"/>
-	</node>
+	</node>self.execution = False
 
 	<node name="GenMulticollo" pkg="simulator" type="generator.py" output="screen">
 		<param name="node_id" value="1"/>
@@ -40,8 +40,17 @@
 		<param name="modality" value="split_attribute"/>
 		<param name="split_attribute" value="totalStandard"/>
 		<param name="topic1" value="Standard"/>
-		<param name="topic2" value="Geek"/>
+		<param name="topic2" value="switchGeek"/>
 		<param name="attribute_num" value="1"/>
+	</node>
+
+	<node name="switchGeek" pkg="simulator" type="switch2.py" output="screen">
+		<param name="node_id" value="3"/>
+		<param name="node_name" value="switchGeek"/>
+		<param name="modality" value="split"/>
+		<param name="topic1" value="Geek1"/>
+		<param name="topic2" value="Geek2"/>
+		
 	</node>
 
 	<node name="Standard" pkg="simulator" type="coda.py" output="screen">
@@ -54,11 +63,21 @@
 		<param name="uncertanity" value="False"/>
 	</node>
 
-	<node name="Geek" pkg="simulator" type="coda.py" output="screen">
+	<node name="Geek1" pkg="simulator" type="coda.py" output="screen">
 		<param name="node_id" value="7"/>
-		<param name="node_name" value="Geek"/>
+		<param name="node_name" value="Geek1"/>
 		<param name="next_element" value="switchSt2"/>
-		<param name="num_servers" value="54"/>
+		<param name="num_servers" value="28"/>
+		<param name="server_time" value="15"/>
+		<param name="speed" value="$(arg speed)"/>
+		<param name="uncertanity" value="False"/>
+	</node>
+
+	<node name="Geek2" pkg="simulator" type="coda.py" output="screen">
+		<param name="node_id" value="7"/>
+		<param name="node_name" value="Geek2"/>
+		<param name="next_element" value="switchSt2"/>
+		<param name="num_servers" value="28"/>
 		<param name="server_time" value="15"/>
 		<param name="speed" value="$(arg speed)"/>
 		<param name="uncertanity" value="False"/>

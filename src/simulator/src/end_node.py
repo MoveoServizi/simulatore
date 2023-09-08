@@ -26,7 +26,7 @@ class EndNode:
         self.arrived_msgs = 0
         self.all_previous_ids_received = False
         self.node_passing_stats = {}  # Dizionario per tenere traccia delle statistiche di passaggio per ogni nodo
-        self.start = rospy.Time.now()
+        self.start = -1
         self.speed = speed
         self.file_name = file_name
         print("FILE NAME = ", file_name)
@@ -36,7 +36,10 @@ class EndNode:
         self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
         self.type_stats = {}
         self.data_by_type = {}
+        self.queue_states = {}
         self.total_people = 0
+        self.process_is_started = False
+        time.sleep(3)
 
     
     def process_event(self, msg):
@@ -46,9 +49,9 @@ class EndNode:
         msg.completed_date = rospy.Time.now()
         msg.compl_time = self.stamp_date()
         self.received_messages.add((generator_id, event_id))
-        if msg.first_event:
-            if msg.generation_date < self.start:
-                self.start_ = msg.generation_date
+        # if msg.first_event:
+        #     if msg.generation_date < self.start:
+        #         self.start = msg.generation_date
         # Update type statistics
         if msg.type in self.type_stats:
             self.type_stats[msg.type]["count"] += 1
@@ -84,7 +87,7 @@ class EndNode:
                 self.print_result()
         elif self.modality == "time":
             self.total_seconds = rospy.Time.now().to_sec() - self.start.to_sec()
-            if self.total_seconds*self.speed > self.stop_time: 
+            if self.total_seconds*self.speed > self.stop_time or self.arrived_msgs == self.num_expected_messages: 
                 print("TIME IS OVER!!!")
                 self.print_result()
             
@@ -94,30 +97,51 @@ class EndNode:
         rospy.loginfo(f"Received log info from node {msg.node_name}")
         if msg.type == "generator":
             self.num_expected_messages += msg.events_left  # Assuming value1 stores the number of messages
-        if msg.statistic == True and msg.type == "coda":
-            data = {
-            "node_name": msg.node_name,
-            "utiliz_tot": round(msg.utiliz_tot,2),
-            "utiliz_array": [round(number, 2) for number in msg.utiliz_array],
-            "utiliz_array_tot" : [round(number, 2) for number in msg.utiliz_array_tot],
-            "num_servers": msg.num_servers,
-            "server_time": round(msg.server_time,2),
-            "queue_length": msg.queue_array,
-            "time_array" : msg.time_array,
-            "time_array_intervals" : msg.time_array_intervals,
-            "info": msg.info
-            }
-            self.total_people += msg.num_servers
-            msg_type = msg.type
-            if msg_type not in self.data_by_type:
-                self.data_by_type[msg_type] = []
+            # if self.start == -1 or msg.start < self.start:
+            #     self.start = msg.start
+        
+        if msg.type == "coda":
+            if self.process_is_started == False:
+                self.queue_states[msg.node_name] = msg.ready
+                # Verifica se tutti i campi 'ready' sono True
+                if all(self.queue_states.values()):
+                    self.process_is_started = True
+                    self.start_process() 
+        
+            if msg.statistic == True:
+                data = {
+                "node_name": msg.node_name,
+                "utiliz_tot": round(msg.utiliz_tot,2),
+                "utiliz_array": [round(number, 2) for number in msg.utiliz_array],
+                "utiliz_array_tot" : [round(number, 2) for number in msg.utiliz_array_tot],
+                "num_servers": msg.num_servers,
+                "server_time": round(msg.server_time,2),
+                "queue_length": msg.queue_array,
+                "time_array" : msg.time_array,
+                "time_array_intervals" : msg.time_array_intervals,
+                "info": msg.info
+                }
+                self.total_people += msg.num_servers
+                msg_type = msg.type
+                if msg_type not in self.data_by_type:
+                    self.data_by_type[msg_type] = []
 
-            self.data_by_type[msg_type].append(data)
+                self.data_by_type[msg_type].append(data)
  
 
+    def start_process(self):
+        info_msg =loginfo()
+        info_msg.type = "end_node"
+        info_msg.node_name = self.node_name
+        info_msg.start_esecution = True
+        info_msg.stop_esecution = False
+        self.pub_info.publish(info_msg)
+        print("-- strat sended --")
+        self.start = rospy.Time.now()
+         
+    
     def print_result(self):
         info_msg =loginfo()
-            
         info_msg.type = "end_node"
         info_msg.node_name = self.node_name
         info_msg.stop_esecution = True
@@ -176,6 +200,7 @@ class EndNode:
                 passing_percentage = (passing_count / total_passing_events) * 100
                 print(f"\t\tNode {node_id}:\t\t{passing_percentage:.2f}%")
             print("\n")  
+            
     def print_data_by_type(self,plot):
         for msg_type, data_list in self.data_by_type.items():
             #print(f"Type {msg_type}:\n")

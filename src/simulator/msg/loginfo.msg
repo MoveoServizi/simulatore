@@ -12,8 +12,11 @@ time[] time_array
 time[] time_array_intervals
 int32 queue_left
 string info
+bool ready
 
 int32 events_left
+time start
 
+bool start_esecution
 bool stop_esecution
 bool statistic

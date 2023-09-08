@@ -24,6 +24,7 @@ class GeneratorNode:
         self.group_size = group_size
         self.pause_time = pause_time
         self.pause = False
+        self.execution = False
         if pause_time != 0:
             self.pause = True
 
@@ -38,14 +39,19 @@ class GeneratorNode:
         info_msg.node_name = node_name
         info_msg.events_left = num_messages
         self.pub_info.publish(info_msg)
+        print(self.node_name, "-- pronto")
+        
+
 
     def generate_messages(self):
+
+        print(self.node_name, " start sending messages...")
         
-        rospy.loginfo(f"{self.node_name}: Generating {self.num_messages} messages...")
+        #rospy.loginfo(f"{self.node_name}: Generating {self.num_messages} messages...")
         i = 0
         count = 0
         while not rospy.is_shutdown():
-            if i < self.num_messages:
+            if i < self.num_messages and self.execution:
                 event_msg = event()
                 event_msg.ID = self.event_id
                 event_msg.generator_id = self.node_name
@@ -83,17 +89,30 @@ class GeneratorNode:
         return date_string
     
     def process_log_info(self,msg):
+        
+        print("da generatore", msg.type, "RECIEVED")
         if msg.type == "end_node":
+            print(msg.type, "RECIEVED", msg.start_esecution, msg.stop_esecution)
+            if msg.start_esecution == True:
+                self.execution = True
+                self.generate_messages()
+        
             if msg.stop_esecution == True:
+                print(self.node_name, " stop and kill")
+                self.execution = False
                 info_msg =loginfo()
                 info_msg.type = "generator"
                 info_msg.node_name = self.node_name
                 info_msg.events_left = self.num_messages - self.event_id
                 info_msg.statistic = True
                 self.pub_info.publish(info_msg)
-                rospy.signal_shutdown('Chiusura generatore') 
+                rospy.signal_shutdown('Chiusura generatore')
+        if msg.type == "coda":
+            if msg.statistic == True:
+                self.execution = False
+                print("stop per coda!!")
     
-    
+
 
 if __name__ == '__main__':
     rospy.init_node(rospy.get_param("~node_name", "generator"))
@@ -114,4 +133,4 @@ if __name__ == '__main__':
     
 
     generator = GeneratorNode(node_name, next_element, gen_freq, num_messages, event_type, node_id,attribute1,value1,attribute2,value2,speed,pause_time, group_size)
-    generator.generate_messages()
+    rospy.spin()

@@ -27,6 +27,7 @@ class Coda():
         self.node_id = node_id
         self.speed = speed
         self.uncertanity = uncertanity
+        self.event_complete  = 0
 
         # Valori dinamici
         self.queue_length = 0
@@ -57,8 +58,14 @@ class Coda():
         info_msg.ID_node = node_id
         info_msg.type = "coda"
         info_msg.node_name = node_name
+        info_msg.ready = False
         self.pub_info.publish(info_msg)
 
+        #lauch computation of utilization
+        self.occupancy_monitor_thread = threading.Thread(target=self.monitor_occupancy)
+        self.occupancy_monitor_thread.start()
+        
+        print(self.name, "-  avviamento servers")
         # Launch servers
         server_threads = []
         for server_number in range(1, num_servers + 1):
@@ -66,11 +73,16 @@ class Coda():
             server_threads.append(server_thread_instance)
             server_thread_instance.start()
 
-        #lauch computation of utilization
-        self.occupancy_monitor_thread = threading.Thread(target=self.monitor_occupancy)
-        self.occupancy_monitor_thread.start()
+        print(self.name, "-  pronta")
+        info_msg =loginfo()
+        info_msg.ID_node = node_id
+        info_msg.type = "coda"
+        info_msg.node_name = node_name
+        info_msg.ready = True
+        self.pub_info.publish(info_msg)
 
     def process_log_info(self,msg):
+        
         if msg.type == "end_node":
             if msg.stop_esecution == True:
                 info_msg =loginfo()
@@ -146,11 +158,11 @@ class Coda():
                 
                 
                 time.sleep(dt)
-                
+                self.event_complete += 1
                 self.pub.publish(current_event)
                 with self.occupancy_lock:
                     self.server_occupancy[server_number - 1] = False
-                print(self.name, " server ", server_number, ": completed event ", current_event.ID, "  queue ", self.queue_length)
+                print(self.name, " server ", server_number, ": completed event ", current_event.ID, "  queue ", self.queue_length, "event commplete ", self.event_complete)
             
     def monitor_occupancy(self):
         cicle_max = max(1,round(self.time_interval/self.server_time/2))
