@@ -119,7 +119,8 @@ class EndNode:
                 "queue_length": msg.queue_array,
                 "time_array" : msg.time_array,
                 "time_array_intervals" : msg.time_array_intervals,
-                "info": msg.info
+                "info": msg.info,
+                "event_completed": msg.queue_left
                 }
                 self.total_people += msg.num_servers
                 msg_type = msg.type
@@ -148,13 +149,21 @@ class EndNode:
         self.pub_info.publish(info_msg)
         time.sleep(5)
         # Specifica il percorso della cartella
-        folder_path = "/home/ubuntu/Desktop/simulatore/src/simulator/statistic/" + self.file_name
+        script_directory = os.path.dirname(os.path.abspath(__file__)) # Ottieni il percorso assoluto della cartella del tuo script
+        script_directory = script_directory[:-4]
+        print(script_directory)
+        folder_path = os.path.join(script_directory, "statistic", self.file_name) # Costruisci il percorso completo del file desiderato
+        
+        
+        
+        
+      #  folder_path = "/home/ubuntu/Desktop/simulatore/src/simulator/statistic/" + self.file_name
         # Crea la cartella se non esiste già
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
         # Specifica il percorso completo del file
         file_path = os.path.join(folder_path, "last_statistic.txt")
-        # Crea e scrivi nel file
+        print("SALVATAGGIO IN: ",file_path)
         with open(file_path, 'w') as file:
             # Reindirizza l'output su 'file'
             sys.stdout = file
@@ -212,6 +221,7 @@ class EndNode:
                 print(f"\t\tutilizzazione totale:\t\t{data['utiliz_tot']}")
                 #print(f"\tutilizzazione:\t\t{data['utiliz_array']}")
                 #print(f"\tlunghezza coda:\t\t{data['queue_length']}")
+                print(f"\t\teventi processati:\t\t{data['event_completed']}")
                 print(f"\t\tinfo:\t\t{data['info']}")
                 print("\n")
                 
@@ -221,8 +231,13 @@ class EndNode:
     def plot_temporal_data(self,values1, values2,util_ar_tot,time_array,time_array_intervals, title):
         time_steps = [(time.to_sec() - self.start.to_sec())*self.speed for time in time_array]
         time_steps_intervals = [(time.to_sec() - self.start.to_sec())*self.speed for time in time_array_intervals]
-        output_file1 ="/home/ubuntu/Desktop/simulatore/src/simulator/statistic/"
-        output_file = output_file1 + file_name + "/" + title + ".png"
+        script_directory = os.path.dirname(os.path.abspath(__file__)) # Ottieni il percorso assoluto della cartella del tuo script
+        script_directory = script_directory[:-4]
+        print(script_directory)
+        folder_path = os.path.join(script_directory, "statistic", self.file_name) # Costruisci il percorso completo del file desiderato
+        
+        
+        output_file = folder_path +"/" + title + ".png"
         # Creazione della griglia con 1 riga e 2 colonne per i subplot
         plt.figure(figsize=(10, 5))  # Imposta le dimensioni della figura
         plt.subplot(1, 3, 1)  # Primo subplot

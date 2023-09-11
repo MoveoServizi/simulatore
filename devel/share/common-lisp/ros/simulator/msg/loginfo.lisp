@@ -72,11 +72,26 @@
     :initarg :info
     :type cl:string
     :initform "")
+   (ready
+    :reader ready
+    :initarg :ready
+    :type cl:boolean
+    :initform cl:nil)
    (events_left
     :reader events_left
     :initarg :events_left
     :type cl:integer
     :initform 0)
+   (start
+    :reader start
+    :initarg :start
+    :type cl:real
+    :initform 0)
+   (start_esecution
+    :reader start_esecution
+    :initarg :start_esecution
+    :type cl:boolean
+    :initform cl:nil)
    (stop_esecution
     :reader stop_esecution
     :initarg :stop_esecution
@@ -162,10 +177,25 @@
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader simulator-msg:info-val is deprecated.  Use simulator-msg:info instead.")
   (info m))
 
+(cl:ensure-generic-function 'ready-val :lambda-list '(m))
+(cl:defmethod ready-val ((m <loginfo>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader simulator-msg:ready-val is deprecated.  Use simulator-msg:ready instead.")
+  (ready m))
+
 (cl:ensure-generic-function 'events_left-val :lambda-list '(m))
 (cl:defmethod events_left-val ((m <loginfo>))
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader simulator-msg:events_left-val is deprecated.  Use simulator-msg:events_left instead.")
   (events_left m))
+
+(cl:ensure-generic-function 'start-val :lambda-list '(m))
+(cl:defmethod start-val ((m <loginfo>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader simulator-msg:start-val is deprecated.  Use simulator-msg:start instead.")
+  (start m))
+
+(cl:ensure-generic-function 'start_esecution-val :lambda-list '(m))
+(cl:defmethod start_esecution-val ((m <loginfo>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader simulator-msg:start_esecution-val is deprecated.  Use simulator-msg:start_esecution instead.")
+  (start_esecution m))
 
 (cl:ensure-generic-function 'stop_esecution-val :lambda-list '(m))
 (cl:defmethod stop_esecution-val ((m <loginfo>))
@@ -288,12 +318,24 @@
     (cl:write-byte (cl:ldb (cl:byte 8 16) __ros_str_len) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 24) __ros_str_len) ostream))
   (cl:map cl:nil #'(cl:lambda (c) (cl:write-byte (cl:char-code c) ostream)) (cl:slot-value msg 'info))
+  (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:if (cl:slot-value msg 'ready) 1 0)) ostream)
   (cl:let* ((signed (cl:slot-value msg 'events_left)) (unsigned (cl:if (cl:< signed 0) (cl:+ signed 4294967296) signed)))
     (cl:write-byte (cl:ldb (cl:byte 8 0) unsigned) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) unsigned) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 16) unsigned) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 24) unsigned) ostream)
     )
+  (cl:let ((__sec (cl:floor (cl:slot-value msg 'start)))
+        (__nsec (cl:round (cl:* 1e9 (cl:- (cl:slot-value msg 'start) (cl:floor (cl:slot-value msg 'start)))))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __sec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __sec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __sec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __sec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 0) __nsec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) __nsec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) __nsec) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) __nsec) ostream))
+  (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:if (cl:slot-value msg 'start_esecution) 1 0)) ostream)
   (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:if (cl:slot-value msg 'stop_esecution) 1 0)) ostream)
   (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:if (cl:slot-value msg 'statistic) 1 0)) ostream)
 )
@@ -431,12 +473,24 @@
       (cl:setf (cl:slot-value msg 'info) (cl:make-string __ros_str_len))
       (cl:dotimes (__ros_str_idx __ros_str_len msg)
         (cl:setf (cl:char (cl:slot-value msg 'info) __ros_str_idx) (cl:code-char (cl:read-byte istream)))))
+    (cl:setf (cl:slot-value msg 'ready) (cl:not (cl:zerop (cl:read-byte istream))))
     (cl:let ((unsigned 0))
       (cl:setf (cl:ldb (cl:byte 8 0) unsigned) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 8) unsigned) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 16) unsigned) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 24) unsigned) (cl:read-byte istream))
       (cl:setf (cl:slot-value msg 'events_left) (cl:if (cl:< unsigned 2147483648) unsigned (cl:- unsigned 4294967296))))
+    (cl:let ((__sec 0) (__nsec 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) __sec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __sec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __sec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __sec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 0) __nsec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) __nsec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) __nsec) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) __nsec) (cl:read-byte istream))
+      (cl:setf (cl:slot-value msg 'start) (cl:+ (cl:coerce __sec 'cl:double-float) (cl:/ __nsec 1e9))))
+    (cl:setf (cl:slot-value msg 'start_esecution) (cl:not (cl:zerop (cl:read-byte istream))))
     (cl:setf (cl:slot-value msg 'stop_esecution) (cl:not (cl:zerop (cl:read-byte istream))))
     (cl:setf (cl:slot-value msg 'statistic) (cl:not (cl:zerop (cl:read-byte istream))))
   msg
@@ -449,16 +503,16 @@
   "simulator/loginfo")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<loginfo>)))
   "Returns md5sum for a message object of type '<loginfo>"
-  "7b5bd36ae2b220f7dc505e09323dabcc")
+  "4ebc7be155feb30e31dcd3a39c711d0c")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'loginfo)))
   "Returns md5sum for a message object of type 'loginfo"
-  "7b5bd36ae2b220f7dc505e09323dabcc")
+  "4ebc7be155feb30e31dcd3a39c711d0c")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<loginfo>)))
   "Returns full string definition for message of type '<loginfo>"
-  (cl:format cl:nil "int32 ID_node~%string type~%string node_name~%~%float32 server_time~%float32 num_servers~%float32 utiliz_tot~%float32[] utiliz_array~%float32[] utiliz_array_tot~%float32[] queue_array~%time[] time_array~%time[] time_array_intervals~%int32 queue_left~%string info~%~%int32 events_left~%~%bool stop_esecution~%bool statistic~%~%"))
+  (cl:format cl:nil "int32 ID_node~%string type~%string node_name~%~%float32 server_time~%float32 num_servers~%float32 utiliz_tot~%float32[] utiliz_array~%float32[] utiliz_array_tot~%float32[] queue_array~%time[] time_array~%time[] time_array_intervals~%int32 queue_left~%string info~%bool ready~%~%int32 events_left~%time start~%~%bool start_esecution~%bool stop_esecution~%bool statistic~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'loginfo)))
   "Returns full string definition for message of type 'loginfo"
-  (cl:format cl:nil "int32 ID_node~%string type~%string node_name~%~%float32 server_time~%float32 num_servers~%float32 utiliz_tot~%float32[] utiliz_array~%float32[] utiliz_array_tot~%float32[] queue_array~%time[] time_array~%time[] time_array_intervals~%int32 queue_left~%string info~%~%int32 events_left~%~%bool stop_esecution~%bool statistic~%~%"))
+  (cl:format cl:nil "int32 ID_node~%string type~%string node_name~%~%float32 server_time~%float32 num_servers~%float32 utiliz_tot~%float32[] utiliz_array~%float32[] utiliz_array_tot~%float32[] queue_array~%time[] time_array~%time[] time_array_intervals~%int32 queue_left~%string info~%bool ready~%~%int32 events_left~%time start~%~%bool start_esecution~%bool stop_esecution~%bool statistic~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <loginfo>))
   (cl:+ 0
      4
@@ -474,7 +528,10 @@
      4 (cl:reduce #'cl:+ (cl:slot-value msg 'time_array_intervals) :key #'(cl:lambda (ele) (cl:declare (cl:ignorable ele)) (cl:+ 8)))
      4
      4 (cl:length (cl:slot-value msg 'info))
+     1
      4
+     8
+     1
      1
      1
 ))
@@ -494,7 +551,10 @@
     (cl:cons ':time_array_intervals (time_array_intervals msg))
     (cl:cons ':queue_left (queue_left msg))
     (cl:cons ':info (info msg))
+    (cl:cons ':ready (ready msg))
     (cl:cons ':events_left (events_left msg))
+    (cl:cons ':start (start msg))
+    (cl:cons ':start_esecution (start_esecution msg))
     (cl:cons ':stop_esecution (stop_esecution msg))
     (cl:cons ':statistic (statistic msg))
 ))

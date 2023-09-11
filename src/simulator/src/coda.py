@@ -28,6 +28,7 @@ class Coda():
         self.speed = speed
         self.uncertanity = uncertanity
         self.event_complete  = 0
+        self.running = True
 
         # Valori dinamici
         self.queue_length = 0
@@ -36,7 +37,7 @@ class Coda():
         self.first_arrival_time = None
         self.last_arrival_time = None
         self.total_arrival_events = 0
-        self.time_interval = self.server_time * 10
+        self.time_interval = self.server_time * 5
         self.utilization_intervals = []
         self.queue_length_intervals = []
         self.time_array = []
@@ -53,7 +54,7 @@ class Coda():
         self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=50)
         self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
 
-        time.sleep(1)
+        time.sleep(2)
         info_msg =loginfo()
         info_msg.ID_node = node_id
         info_msg.type = "coda"
@@ -99,7 +100,9 @@ class Coda():
                 info_msg.time_array_intervals = self.time_array_intervals
                 info_msg.queue_array = self.queue_length_intervals
                 info_msg.statistic = True
+                info_msg.queue_left = self.event_complete
                 self.pub_info.publish(info_msg)
+                self.running =  False
                 rospy.signal_shutdown('Chiusura della coda')
 
 
@@ -141,7 +144,7 @@ class Coda():
         print(self.name, " - server ", server_number, " avviato")
         
 
-        while not rospy.is_shutdown():
+        while self.running:
             if self.queue_length > 0:
                 current_event = self.queue_list[0]
                 self.queue_list.pop(0)
@@ -212,8 +215,10 @@ if __name__ == '__main__':
     speed = rospy.get_param("~speed", 1)
     uncertanity = rospy.get_param("~uncertanity", "False")
     # Create an instance of the Coda class with parameters from the launch file
-    coda1 = Coda(node_name, next_element, num_servers,server_time,node_id, speed,uncertanity)
-
+    coda = Coda(node_name, next_element, num_servers,server_time,node_id, speed,uncertanity)
+    
+    
+    
    
     # Spin ROS node
     rospy.spin()

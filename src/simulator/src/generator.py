@@ -32,7 +32,7 @@ class GeneratorNode:
         self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=50)
         self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
         
-        time.sleep(1)
+        time.sleep(2)
         info_msg =loginfo()
         info_msg.ID_node = node_id
         info_msg.type = "generator"
@@ -90,7 +90,7 @@ class GeneratorNode:
     
     def process_log_info(self,msg):
         
-        print("da generatore", msg.type, "RECIEVED")
+        print("da generatore RECIEVED ", msg.node_name)
         if msg.type == "end_node":
             print(msg.type, "RECIEVED", msg.start_esecution, msg.stop_esecution)
             if msg.start_esecution == True:

@@ -1,4 +1,4 @@
-prefix=/home/ubuntu/Desktop/simulatore/install
+prefix=/home/ubuntu/Desktop/simulator/simulatore/install
 
 Name: simulator
 Description: Description of simulator

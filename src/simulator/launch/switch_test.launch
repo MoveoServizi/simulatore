@@ -1,6 +1,6 @@
 <!-- Create the launch file for ROS -->
 <launch>
-	<arg name="speed" default="8.0"/>
+	<arg name="speed" default="1.0"/>
 	<arg name="file_name" default="switch_test"/>
 	<node name="gen" pkg="simulator" type="generator.py" output="screen">
 		<param name="node_name" value="gen"/>
@@ -52,5 +52,4 @@
 	</node>
 
 </launch>
-
 

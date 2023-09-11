@@ -1,0 +1,45 @@
+################  STATISTIC ############
+
+Tempo simulazione:		 20.36  sec
+Moltiplicatore velocità:		 8.0
+Tempo processo:		 162.91  sec
+Personale usato:		 4.0
+Events recived:
+	Generator gen:		20   messages
+
+Route of events:
+	Message type:		evento_semplice
+		Total count:		20
+		Avg process time:		30.03 seconds
+		Avg arrival time:		3.74 seconds
+		Node gen:		100.00%
+		Node coda:		100.00%
+		Node coda3:		65.00%
+		Node coda2:		35.00%
+
+
+Analisi code:
+	nome nodo:	coda
+		numero operatori:		1.0 
+		tempo esecuzione:		1.0 
+		utilizzazione totale:		0.27
+		eventi processati:		20
+		info:		test info
+
+
+	nome nodo:	coda3
+		numero operatori:		1.0 
+		tempo esecuzione:		4.0 
+		utilizzazione totale:		0.54
+		eventi processati:		13
+		info:		test info
+
+
+	nome nodo:	coda2
+		numero operatori:		2.0 
+		tempo esecuzione:		3.0 
+		utilizzazione totale:		0.31
+		eventi processati:		7
+		info:		test info
+
+

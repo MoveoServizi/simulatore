@@ -450,12 +450,16 @@ class Interfaccia(customtkinter.CTk):
         print("saving the script ...")
         # Mostra un popup per inserire il nome del file
         file_name = "test"
+        script_directory = os.path.dirname(os.path.abspath(__file__)) # Ottieni il percorso assoluto della cartella del tuo script
+        folder_path = os.path.join(script_directory, "src/simulator/launch") # Costruisci il percorso completo del file desiderato
+        
         if popup:
             file_name = tkinter.simpledialog.askstring("Salva File", "Inserisci il nome del file:", initialvalue="")
             if file_name:
-                file_path = "src/simulator/launch/" + file_name + ".launch"  # Aggiunge l'estensione .launch al nome del file        
+                file = file_name + ".launch"  # Aggiunge l'estensione .launch al nome del file        
+                file_path = os.path.join(folder_path, file)
         else:
-            file_path = "src/simulator/launch/zz_last_file.launch"  # Scegli il percorso e il nome del file di destinazione
+            file_path = os.path.join(folder_path, "zz_last_file.launch")
         launch_text = self.textbox.get("1.0", "end")  # Ottieni il testo completo dal textbox      
         
         if popup:
@@ -582,8 +586,9 @@ class Interfaccia(customtkinter.CTk):
     ## statistic
     def show_statistic(self):
         self.find_file_name()
-        folder_path = "/home/ubuntu/Desktop/simulatore/src/simulator/statistic/" + self.file_name
-        file_path = folder_path +  "/last_statistic.txt"
+        script_directory = os.path.dirname(os.path.abspath(__file__)) # Ottieni il percorso assoluto della cartella del tuo script
+        folder_path = os.path.join(script_directory, "src/simulator/statistic", self.file_name) # Costruisci il percorso completo del file desiderato
+        file_path = os.path.join(folder_path, "last_statistic.txt")
         self.textbox_statistic.delete("0.0", "end")
         try:
             # Apri il file e leggi il contenuto

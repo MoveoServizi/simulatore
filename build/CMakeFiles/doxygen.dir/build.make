@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ubuntu/Desktop/simulatore/src
+CMAKE_SOURCE_DIR = /home/ubuntu/Desktop/simulator/simulatore/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ubuntu/Desktop/simulatore/build
+CMAKE_BINARY_DIR = /home/ubuntu/Desktop/simulator/simulatore/build
 
 # Utility rule file for doxygen.
 
@@ -67,6 +67,6 @@ CMakeFiles/doxygen.dir/clean:
 .PHONY : CMakeFiles/doxygen.dir/clean
 
 CMakeFiles/doxygen.dir/depend:
-	cd /home/ubuntu/Desktop/simulatore/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ubuntu/Desktop/simulatore/src /home/ubuntu/Desktop/simulatore/src /home/ubuntu/Desktop/simulatore/build /home/ubuntu/Desktop/simulatore/build /home/ubuntu/Desktop/simulatore/build/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/ubuntu/Desktop/simulator/simulatore/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ubuntu/Desktop/simulator/simulatore/src /home/ubuntu/Desktop/simulator/simulatore/src /home/ubuntu/Desktop/simulator/simulatore/build /home/ubuntu/Desktop/simulator/simulatore/build /home/ubuntu/Desktop/simulator/simulatore/build/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/doxygen.dir/depend
 

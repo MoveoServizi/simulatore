@@ -25,8 +25,14 @@
           QUEUE_LEFT
           INFO-VAL
           INFO
+          READY-VAL
+          READY
           EVENTS_LEFT-VAL
           EVENTS_LEFT
+          START-VAL
+          START
+          START_ESECUTION-VAL
+          START_ESECUTION
           STOP_ESECUTION-VAL
           STOP_ESECUTION
           STATISTIC-VAL

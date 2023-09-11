@@ -1,8 +1,8 @@
-# Install script for directory: /home/ubuntu/Desktop/simulatore/src
+# Install script for directory: /home/ubuntu/Desktop/simulator/simulatore/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/Desktop/simulatore/install")
+  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/Desktop/simulator/simulatore/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -49,89 +49,89 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/ubuntu/Desktop/simulatore/install/_setup_util.py")
+   "/home/ubuntu/Desktop/simulator/simulatore/install/_setup_util.py")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/ubuntu/Desktop/simulatore/install" TYPE PROGRAM FILES "/home/ubuntu/Desktop/simulatore/build/catkin_generated/installspace/_setup_util.py")
+file(INSTALL DESTINATION "/home/ubuntu/Desktop/simulator/simulatore/install" TYPE PROGRAM FILES "/home/ubuntu/Desktop/simulator/simulatore/build/catkin_generated/installspace/_setup_util.py")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/ubuntu/Desktop/simulatore/install/env.sh")
+   "/home/ubuntu/Desktop/simulator/simulatore/install/env.sh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/ubuntu/Desktop/simulatore/install" TYPE PROGRAM FILES "/home/ubuntu/Desktop/simulatore/build/catkin_generated/installspace/env.sh")
+file(INSTALL DESTINATION "/home/ubuntu/Desktop/simulator/simulatore/install" TYPE PROGRAM FILES "/home/ubuntu/Desktop/simulator/simulatore/build/catkin_generated/installspace/env.sh")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/ubuntu/Desktop/simulatore/install/setup.bash;/home/ubuntu/Desktop/simulatore/install/local_setup.bash")
+   "/home/ubuntu/Desktop/simulator/simulatore/install/setup.bash;/home/ubuntu/Desktop/simulator/simulatore/install/local_setup.bash")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/ubuntu/Desktop/simulatore/install" TYPE FILE FILES
-    "/home/ubuntu/Desktop/simulatore/build/catkin_generated/installspace/setup.bash"
-    "/home/ubuntu/Desktop/simulatore/build/catkin_generated/installspace/local_setup.bash"
+file(INSTALL DESTINATION "/home/ubuntu/Desktop/simulator/simulatore/install" TYPE FILE FILES
+    "/home/ubuntu/Desktop/simulator/simulatore/build/catkin_generated/installspace/setup.bash"
+    "/home/ubuntu/Desktop/simulator/simulatore/build/catkin_generated/installspace/local_setup.bash"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/ubuntu/Desktop/simulatore/install/setup.sh;/home/ubuntu/Desktop/simulatore/install/local_setup.sh")
+   "/home/ubuntu/Desktop/simulator/simulatore/install/setup.sh;/home/ubuntu/Desktop/simulator/simulatore/install/local_setup.sh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/ubuntu/Desktop/simulatore/install" TYPE FILE FILES
-    "/home/ubuntu/Desktop/simulatore/build/catkin_generated/installspace/setup.sh"
-    "/home/ubuntu/Desktop/simulatore/build/catkin_generated/installspace/local_setup.sh"
+file(INSTALL DESTINATION "/home/ubuntu/Desktop/simulator/simulatore/install" TYPE FILE FILES
+    "/home/ubuntu/Desktop/simulator/simulatore/build/catkin_generated/installspace/setup.sh"
+    "/home/ubuntu/Desktop/simulator/simulatore/build/catkin_generated/installspace/local_setup.sh"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/ubuntu/Desktop/simulatore/install/setup.zsh;/home/ubuntu/Desktop/simulatore/install/local_setup.zsh")
+   "/home/ubuntu/Desktop/simulator/simulatore/install/setup.zsh;/home/ubuntu/Desktop/simulator/simulatore/install/local_setup.zsh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/ubuntu/Desktop/simulatore/install" TYPE FILE FILES
-    "/home/ubuntu/Desktop/simulatore/build/catkin_generated/installspace/setup.zsh"
-    "/home/ubuntu/Desktop/simulatore/build/catkin_generated/installspace/local_setup.zsh"
+file(INSTALL DESTINATION "/home/ubuntu/Desktop/simulator/simulatore/install" TYPE FILE FILES
+    "/home/ubuntu/Desktop/simulator/simulatore/build/catkin_generated/installspace/setup.zsh"
+    "/home/ubuntu/Desktop/simulator/simulatore/build/catkin_generated/installspace/local_setup.zsh"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/ubuntu/Desktop/simulatore/install/.rosinstall")
+   "/home/ubuntu/Desktop/simulator/simulatore/install/.rosinstall")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/ubuntu/Desktop/simulatore/install" TYPE FILE FILES "/home/ubuntu/Desktop/simulatore/build/catkin_generated/installspace/.rosinstall")
+file(INSTALL DESTINATION "/home/ubuntu/Desktop/simulator/simulatore/install" TYPE FILE FILES "/home/ubuntu/Desktop/simulator/simulatore/build/catkin_generated/installspace/.rosinstall")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/ubuntu/Desktop/simulatore/build/gtest/cmake_install.cmake")
-  include("/home/ubuntu/Desktop/simulatore/build/simulator/cmake_install.cmake")
+  include("/home/ubuntu/Desktop/simulator/simulatore/build/gtest/cmake_install.cmake")
+  include("/home/ubuntu/Desktop/simulator/simulatore/build/simulator/cmake_install.cmake")
 
 endif()
 
@@ -143,5 +143,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/ubuntu/Desktop/simulatore/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/ubuntu/Desktop/simulator/simulatore/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

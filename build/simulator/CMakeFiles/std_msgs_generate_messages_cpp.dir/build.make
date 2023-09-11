@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ubuntu/Desktop/simulatore/src
+CMAKE_SOURCE_DIR = /home/ubuntu/Desktop/simulator/simulatore/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ubuntu/Desktop/simulatore/build
+CMAKE_BINARY_DIR = /home/ubuntu/Desktop/simulator/simulatore/build
 
 # Utility rule file for std_msgs_generate_messages_cpp.
 
@@ -63,10 +63,10 @@ simulator/CMakeFiles/std_msgs_generate_messages_cpp.dir/build: std_msgs_generate
 .PHONY : simulator/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
 
 simulator/CMakeFiles/std_msgs_generate_messages_cpp.dir/clean:
-	cd /home/ubuntu/Desktop/simulatore/build/simulator && $(CMAKE_COMMAND) -P CMakeFiles/std_msgs_generate_messages_cpp.dir/cmake_clean.cmake
+	cd /home/ubuntu/Desktop/simulator/simulatore/build/simulator && $(CMAKE_COMMAND) -P CMakeFiles/std_msgs_generate_messages_cpp.dir/cmake_clean.cmake
 .PHONY : simulator/CMakeFiles/std_msgs_generate_messages_cpp.dir/clean
 
 simulator/CMakeFiles/std_msgs_generate_messages_cpp.dir/depend:
-	cd /home/ubuntu/Desktop/simulatore/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ubuntu/Desktop/simulatore/src /home/ubuntu/Desktop/simulatore/src/simulator /home/ubuntu/Desktop/simulatore/build /home/ubuntu/Desktop/simulatore/build/simulator /home/ubuntu/Desktop/simulatore/build/simulator/CMakeFiles/std_msgs_generate_messages_cpp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/ubuntu/Desktop/simulator/simulatore/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ubuntu/Desktop/simulator/simulatore/src /home/ubuntu/Desktop/simulator/simulatore/src/simulator /home/ubuntu/Desktop/simulator/simulatore/build /home/ubuntu/Desktop/simulator/simulatore/build/simulator /home/ubuntu/Desktop/simulator/simulatore/build/simulator/CMakeFiles/std_msgs_generate_messages_cpp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : simulator/CMakeFiles/std_msgs_generate_messages_cpp.dir/depend
 

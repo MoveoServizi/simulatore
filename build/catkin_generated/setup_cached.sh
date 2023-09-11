@@ -7,10 +7,7 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/ubuntu/Desktop/simulatore/devel:$CMAKE_PREFIX_PATH"
-export LD_LIBRARY_PATH="/home/ubuntu/Desktop/simulatore/devel/lib:$LD_LIBRARY_PATH"
-export PKG_CONFIG_PATH="/home/ubuntu/Desktop/simulatore/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
-export PWD='/home/ubuntu/Desktop/simulatore/build'
-export PYTHONPATH="/home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages:$PYTHONPATH"
-export ROSLISP_PACKAGE_DIRECTORIES='/home/ubuntu/Desktop/simulatore/devel/share/common-lisp'
-export ROS_PACKAGE_PATH="/home/ubuntu/Desktop/simulatore/src:$ROS_PACKAGE_PATH"
+export CMAKE_PREFIX_PATH="/home/ubuntu/Desktop/simulator/simulatore/devel:$CMAKE_PREFIX_PATH"
+export PWD='/home/ubuntu/Desktop/simulator/simulatore/build'
+export ROSLISP_PACKAGE_DIRECTORIES='/home/ubuntu/Desktop/simulator/simulatore/devel/share/common-lisp'
+export ROS_PACKAGE_PATH="/home/ubuntu/Desktop/simulator/simulatore/src:$ROS_PACKAGE_PATH"

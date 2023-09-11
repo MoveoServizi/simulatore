@@ -37,7 +37,10 @@ struct loginfo_
     , time_array_intervals()
     , queue_left(0)
     , info()
+    , ready(false)
     , events_left(0)
+    , start()
+    , start_esecution(false)
     , stop_esecution(false)
     , statistic(false)  {
     }
@@ -55,7 +58,10 @@ struct loginfo_
     , time_array_intervals(_alloc)
     , queue_left(0)
     , info(_alloc)
+    , ready(false)
     , events_left(0)
+    , start()
+    , start_esecution(false)
     , stop_esecution(false)
     , statistic(false)  {
   (void)_alloc;
@@ -102,8 +108,17 @@ struct loginfo_
    typedef std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> _info_type;
   _info_type info;
 
+   typedef uint8_t _ready_type;
+  _ready_type ready;
+
    typedef int32_t _events_left_type;
   _events_left_type events_left;
+
+   typedef ros::Time _start_type;
+  _start_type start;
+
+   typedef uint8_t _start_esecution_type;
+  _start_esecution_type start_esecution;
 
    typedef uint8_t _stop_esecution_type;
   _stop_esecution_type stop_esecution;
@@ -153,7 +168,10 @@ bool operator==(const ::simulator::loginfo_<ContainerAllocator1> & lhs, const ::
     lhs.time_array_intervals == rhs.time_array_intervals &&
     lhs.queue_left == rhs.queue_left &&
     lhs.info == rhs.info &&
+    lhs.ready == rhs.ready &&
     lhs.events_left == rhs.events_left &&
+    lhs.start == rhs.start &&
+    lhs.start_esecution == rhs.start_esecution &&
     lhs.stop_esecution == rhs.stop_esecution &&
     lhs.statistic == rhs.statistic;
 }
@@ -212,12 +230,12 @@ struct MD5Sum< ::simulator::loginfo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "7b5bd36ae2b220f7dc505e09323dabcc";
+    return "4ebc7be155feb30e31dcd3a39c711d0c";
   }
 
   static const char* value(const ::simulator::loginfo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x7b5bd36ae2b220f7ULL;
-  static const uint64_t static_value2 = 0xdc505e09323dabccULL;
+  static const uint64_t static_value1 = 0x4ebc7be155feb30eULL;
+  static const uint64_t static_value2 = 0x31dcd3a39c711d0cULL;
 };
 
 template<class ContainerAllocator>
@@ -250,9 +268,12 @@ struct Definition< ::simulator::loginfo_<ContainerAllocator> >
 "time[] time_array_intervals\n"
 "int32 queue_left\n"
 "string info\n"
+"bool ready\n"
 "\n"
 "int32 events_left\n"
+"time start\n"
 "\n"
+"bool start_esecution\n"
 "bool stop_esecution\n"
 "bool statistic\n"
 ;
@@ -286,7 +307,10 @@ namespace serialization
       stream.next(m.time_array_intervals);
       stream.next(m.queue_left);
       stream.next(m.info);
+      stream.next(m.ready);
       stream.next(m.events_left);
+      stream.next(m.start);
+      stream.next(m.start_esecution);
       stream.next(m.stop_esecution);
       stream.next(m.statistic);
     }
@@ -353,8 +377,14 @@ struct Printer< ::simulator::loginfo_<ContainerAllocator> >
     Printer<int32_t>::stream(s, indent + "  ", v.queue_left);
     s << indent << "info: ";
     Printer<std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>>::stream(s, indent + "  ", v.info);
+    s << indent << "ready: ";
+    Printer<uint8_t>::stream(s, indent + "  ", v.ready);
     s << indent << "events_left: ";
     Printer<int32_t>::stream(s, indent + "  ", v.events_left);
+    s << indent << "start: ";
+    Printer<ros::Time>::stream(s, indent + "  ", v.start);
+    s << indent << "start_esecution: ";
+    Printer<uint8_t>::stream(s, indent + "  ", v.start_esecution);
     s << indent << "stop_esecution: ";
     Printer<uint8_t>::stream(s, indent + "  ", v.stop_esecution);
     s << indent << "statistic: ";

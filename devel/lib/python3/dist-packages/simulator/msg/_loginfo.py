@@ -9,7 +9,7 @@ import struct
 import genpy
 
 class loginfo(genpy.Message):
-  _md5sum = "7b5bd36ae2b220f7dc505e09323dabcc"
+  _md5sum = "4ebc7be155feb30e31dcd3a39c711d0c"
   _type = "simulator/loginfo"
   _has_header = False  # flag to mark the presence of a Header object
   _full_text = """int32 ID_node
@@ -26,13 +26,16 @@ time[] time_array
 time[] time_array_intervals
 int32 queue_left
 string info
+bool ready
 
 int32 events_left
+time start
 
+bool start_esecution
 bool stop_esecution
 bool statistic"""
-  __slots__ = ['ID_node','type','node_name','server_time','num_servers','utiliz_tot','utiliz_array','utiliz_array_tot','queue_array','time_array','time_array_intervals','queue_left','info','events_left','stop_esecution','statistic']
-  _slot_types = ['int32','string','string','float32','float32','float32','float32[]','float32[]','float32[]','time[]','time[]','int32','string','int32','bool','bool']
+  __slots__ = ['ID_node','type','node_name','server_time','num_servers','utiliz_tot','utiliz_array','utiliz_array_tot','queue_array','time_array','time_array_intervals','queue_left','info','ready','events_left','start','start_esecution','stop_esecution','statistic']
+  _slot_types = ['int32','string','string','float32','float32','float32','float32[]','float32[]','float32[]','time[]','time[]','int32','string','bool','int32','time','bool','bool','bool']
 
   def __init__(self, *args, **kwds):
     """
@@ -42,7 +45,7 @@ bool statistic"""
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       ID_node,type,node_name,server_time,num_servers,utiliz_tot,utiliz_array,utiliz_array_tot,queue_array,time_array,time_array_intervals,queue_left,info,events_left,stop_esecution,statistic
+       ID_node,type,node_name,server_time,num_servers,utiliz_tot,utiliz_array,utiliz_array_tot,queue_array,time_array,time_array_intervals,queue_left,info,ready,events_left,start,start_esecution,stop_esecution,statistic
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -77,8 +80,14 @@ bool statistic"""
         self.queue_left = 0
       if self.info is None:
         self.info = ''
+      if self.ready is None:
+        self.ready = False
       if self.events_left is None:
         self.events_left = 0
+      if self.start is None:
+        self.start = genpy.Time()
+      if self.start_esecution is None:
+        self.start_esecution = False
       if self.stop_esecution is None:
         self.stop_esecution = False
       if self.statistic is None:
@@ -97,7 +106,10 @@ bool statistic"""
       self.time_array_intervals = []
       self.queue_left = 0
       self.info = ''
+      self.ready = False
       self.events_left = 0
+      self.start = genpy.Time()
+      self.start_esecution = False
       self.stop_esecution = False
       self.statistic = False
 
@@ -160,7 +172,7 @@ bool statistic"""
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
       _x = self
-      buff.write(_get_struct_i2B().pack(_x.events_left, _x.stop_esecution, _x.statistic))
+      buff.write(_get_struct_Bi2I3B().pack(_x.ready, _x.events_left, _x.start.secs, _x.start.nsecs, _x.start_esecution, _x.stop_esecution, _x.statistic))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -176,6 +188,8 @@ bool statistic"""
         self.time_array = None
       if self.time_array_intervals is None:
         self.time_array_intervals = None
+      if self.start is None:
+        self.start = genpy.Time()
       end = 0
       start = end
       end += 4
@@ -262,10 +276,13 @@ bool statistic"""
         self.info = str[start:end]
       _x = self
       start = end
-      end += 6
-      (_x.events_left, _x.stop_esecution, _x.statistic,) = _get_struct_i2B().unpack(str[start:end])
+      end += 16
+      (_x.ready, _x.events_left, _x.start.secs, _x.start.nsecs, _x.start_esecution, _x.stop_esecution, _x.statistic,) = _get_struct_Bi2I3B().unpack(str[start:end])
+      self.ready = bool(self.ready)
+      self.start_esecution = bool(self.start_esecution)
       self.stop_esecution = bool(self.stop_esecution)
       self.statistic = bool(self.statistic)
+      self.start.canon()
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -325,7 +342,7 @@ bool statistic"""
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
       _x = self
-      buff.write(_get_struct_i2B().pack(_x.events_left, _x.stop_esecution, _x.statistic))
+      buff.write(_get_struct_Bi2I3B().pack(_x.ready, _x.events_left, _x.start.secs, _x.start.nsecs, _x.start_esecution, _x.stop_esecution, _x.statistic))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -342,6 +359,8 @@ bool statistic"""
         self.time_array = None
       if self.time_array_intervals is None:
         self.time_array_intervals = None
+      if self.start is None:
+        self.start = genpy.Time()
       end = 0
       start = end
       end += 4
@@ -428,10 +447,13 @@ bool statistic"""
         self.info = str[start:end]
       _x = self
       start = end
-      end += 6
-      (_x.events_left, _x.stop_esecution, _x.statistic,) = _get_struct_i2B().unpack(str[start:end])
+      end += 16
+      (_x.ready, _x.events_left, _x.start.secs, _x.start.nsecs, _x.start_esecution, _x.stop_esecution, _x.statistic,) = _get_struct_Bi2I3B().unpack(str[start:end])
+      self.ready = bool(self.ready)
+      self.start_esecution = bool(self.start_esecution)
       self.stop_esecution = bool(self.stop_esecution)
       self.statistic = bool(self.statistic)
+      self.start.canon()
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -452,15 +474,15 @@ def _get_struct_3f():
     if _struct_3f is None:
         _struct_3f = struct.Struct("<3f")
     return _struct_3f
+_struct_Bi2I3B = None
+def _get_struct_Bi2I3B():
+    global _struct_Bi2I3B
+    if _struct_Bi2I3B is None:
+        _struct_Bi2I3B = struct.Struct("<Bi2I3B")
+    return _struct_Bi2I3B
 _struct_i = None
 def _get_struct_i():
     global _struct_i
     if _struct_i is None:
         _struct_i = struct.Struct("<i")
     return _struct_i
-_struct_i2B = None
-def _get_struct_i2B():
-    global _struct_i2B
-    if _struct_i2B is None:
-        _struct_i2B = struct.Struct("<i2B")
-    return _struct_i2B

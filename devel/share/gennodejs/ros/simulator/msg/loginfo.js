@@ -31,7 +31,10 @@ class loginfo {
       this.time_array_intervals = null;
       this.queue_left = null;
       this.info = null;
+      this.ready = null;
       this.events_left = null;
+      this.start = null;
+      this.start_esecution = null;
       this.stop_esecution = null;
       this.statistic = null;
     }
@@ -114,11 +117,29 @@ class loginfo {
       else {
         this.info = '';
       }
+      if (initObj.hasOwnProperty('ready')) {
+        this.ready = initObj.ready
+      }
+      else {
+        this.ready = false;
+      }
       if (initObj.hasOwnProperty('events_left')) {
         this.events_left = initObj.events_left
       }
       else {
         this.events_left = 0;
+      }
+      if (initObj.hasOwnProperty('start')) {
+        this.start = initObj.start
+      }
+      else {
+        this.start = {secs: 0, nsecs: 0};
+      }
+      if (initObj.hasOwnProperty('start_esecution')) {
+        this.start_esecution = initObj.start_esecution
+      }
+      else {
+        this.start_esecution = false;
       }
       if (initObj.hasOwnProperty('stop_esecution')) {
         this.stop_esecution = initObj.stop_esecution
@@ -163,8 +184,14 @@ class loginfo {
     bufferOffset = _serializer.int32(obj.queue_left, buffer, bufferOffset);
     // Serialize message field [info]
     bufferOffset = _serializer.string(obj.info, buffer, bufferOffset);
+    // Serialize message field [ready]
+    bufferOffset = _serializer.bool(obj.ready, buffer, bufferOffset);
     // Serialize message field [events_left]
     bufferOffset = _serializer.int32(obj.events_left, buffer, bufferOffset);
+    // Serialize message field [start]
+    bufferOffset = _serializer.time(obj.start, buffer, bufferOffset);
+    // Serialize message field [start_esecution]
+    bufferOffset = _serializer.bool(obj.start_esecution, buffer, bufferOffset);
     // Serialize message field [stop_esecution]
     bufferOffset = _serializer.bool(obj.stop_esecution, buffer, bufferOffset);
     // Serialize message field [statistic]
@@ -202,8 +229,14 @@ class loginfo {
     data.queue_left = _deserializer.int32(buffer, bufferOffset);
     // Deserialize message field [info]
     data.info = _deserializer.string(buffer, bufferOffset);
+    // Deserialize message field [ready]
+    data.ready = _deserializer.bool(buffer, bufferOffset);
     // Deserialize message field [events_left]
     data.events_left = _deserializer.int32(buffer, bufferOffset);
+    // Deserialize message field [start]
+    data.start = _deserializer.time(buffer, bufferOffset);
+    // Deserialize message field [start_esecution]
+    data.start_esecution = _deserializer.bool(buffer, bufferOffset);
     // Deserialize message field [stop_esecution]
     data.stop_esecution = _deserializer.bool(buffer, bufferOffset);
     // Deserialize message field [statistic]
@@ -221,7 +254,7 @@ class loginfo {
     length += 8 * object.time_array.length;
     length += 8 * object.time_array_intervals.length;
     length += _getByteLength(object.info);
-    return length + 58;
+    return length + 68;
   }
 
   static datatype() {
@@ -231,7 +264,7 @@ class loginfo {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '7b5bd36ae2b220f7dc505e09323dabcc';
+    return '4ebc7be155feb30e31dcd3a39c711d0c';
   }
 
   static messageDefinition() {
@@ -251,9 +284,12 @@ class loginfo {
     time[] time_array_intervals
     int32 queue_left
     string info
+    bool ready
     
     int32 events_left
+    time start
     
+    bool start_esecution
     bool stop_esecution
     bool statistic
     `;
@@ -356,11 +392,32 @@ class loginfo {
       resolved.info = ''
     }
 
+    if (msg.ready !== undefined) {
+      resolved.ready = msg.ready;
+    }
+    else {
+      resolved.ready = false
+    }
+
     if (msg.events_left !== undefined) {
       resolved.events_left = msg.events_left;
     }
     else {
       resolved.events_left = 0
+    }
+
+    if (msg.start !== undefined) {
+      resolved.start = msg.start;
+    }
+    else {
+      resolved.start = {secs: 0, nsecs: 0}
+    }
+
+    if (msg.start_esecution !== undefined) {
+      resolved.start_esecution = msg.start_esecution;
+    }
+    else {
+      resolved.start_esecution = false
     }
 
     if (msg.stop_esecution !== undefined) {
