@@ -11,6 +11,7 @@ float32[] queue_array
 time[] time_array
 time[] time_array_intervals
 int32 queue_left
+int32 event_processed
 string info
 bool ready
 

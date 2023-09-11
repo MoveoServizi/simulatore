@@ -36,6 +36,7 @@ struct loginfo_
     , time_array()
     , time_array_intervals()
     , queue_left(0)
+    , event_processed(0)
     , info()
     , ready(false)
     , events_left(0)
@@ -57,6 +58,7 @@ struct loginfo_
     , time_array(_alloc)
     , time_array_intervals(_alloc)
     , queue_left(0)
+    , event_processed(0)
     , info(_alloc)
     , ready(false)
     , events_left(0)
@@ -104,6 +106,9 @@ struct loginfo_
 
    typedef int32_t _queue_left_type;
   _queue_left_type queue_left;
+
+   typedef int32_t _event_processed_type;
+  _event_processed_type event_processed;
 
    typedef std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>> _info_type;
   _info_type info;
@@ -167,6 +172,7 @@ bool operator==(const ::simulator::loginfo_<ContainerAllocator1> & lhs, const ::
     lhs.time_array == rhs.time_array &&
     lhs.time_array_intervals == rhs.time_array_intervals &&
     lhs.queue_left == rhs.queue_left &&
+    lhs.event_processed == rhs.event_processed &&
     lhs.info == rhs.info &&
     lhs.ready == rhs.ready &&
     lhs.events_left == rhs.events_left &&
@@ -230,12 +236,12 @@ struct MD5Sum< ::simulator::loginfo_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "4ebc7be155feb30e31dcd3a39c711d0c";
+    return "55d87199e7f17ce94759f154f0e8ee23";
   }
 
   static const char* value(const ::simulator::loginfo_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x4ebc7be155feb30eULL;
-  static const uint64_t static_value2 = 0x31dcd3a39c711d0cULL;
+  static const uint64_t static_value1 = 0x55d87199e7f17ce9ULL;
+  static const uint64_t static_value2 = 0x4759f154f0e8ee23ULL;
 };
 
 template<class ContainerAllocator>
@@ -267,6 +273,7 @@ struct Definition< ::simulator::loginfo_<ContainerAllocator> >
 "time[] time_array\n"
 "time[] time_array_intervals\n"
 "int32 queue_left\n"
+"int32 event_processed\n"
 "string info\n"
 "bool ready\n"
 "\n"
@@ -306,6 +313,7 @@ namespace serialization
       stream.next(m.time_array);
       stream.next(m.time_array_intervals);
       stream.next(m.queue_left);
+      stream.next(m.event_processed);
       stream.next(m.info);
       stream.next(m.ready);
       stream.next(m.events_left);
@@ -375,6 +383,8 @@ struct Printer< ::simulator::loginfo_<ContainerAllocator> >
     }
     s << indent << "queue_left: ";
     Printer<int32_t>::stream(s, indent + "  ", v.queue_left);
+    s << indent << "event_processed: ";
+    Printer<int32_t>::stream(s, indent + "  ", v.event_processed);
     s << indent << "info: ";
     Printer<std::basic_string<char, std::char_traits<char>, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<char>>>::stream(s, indent + "  ", v.info);
     s << indent << "ready: ";

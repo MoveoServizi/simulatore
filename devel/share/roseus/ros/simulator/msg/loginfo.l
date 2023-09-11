@@ -14,7 +14,7 @@
 
 (defclass simulator::loginfo
   :super ros::object
-  :slots (_ID_node _type _node_name _server_time _num_servers _utiliz_tot _utiliz_array _utiliz_array_tot _queue_array _time_array _time_array_intervals _queue_left _info _ready _events_left _start _start_esecution _stop_esecution _statistic ))
+  :slots (_ID_node _type _node_name _server_time _num_servers _utiliz_tot _utiliz_array _utiliz_array_tot _queue_array _time_array _time_array_intervals _queue_left _event_processed _info _ready _events_left _start _start_esecution _stop_esecution _statistic ))
 
 (defmethod simulator::loginfo
   (:init
@@ -31,6 +31,7 @@
     ((:time_array __time_array) (let (r) (dotimes (i 0) (push (instance ros::time :init) r)) r))
     ((:time_array_intervals __time_array_intervals) (let (r) (dotimes (i 0) (push (instance ros::time :init) r)) r))
     ((:queue_left __queue_left) 0)
+    ((:event_processed __event_processed) 0)
     ((:info __info) "")
     ((:ready __ready) nil)
     ((:events_left __events_left) 0)
@@ -52,6 +53,7 @@
    (setq _time_array __time_array)
    (setq _time_array_intervals __time_array_intervals)
    (setq _queue_left (round __queue_left))
+   (setq _event_processed (round __event_processed))
    (setq _info (string __info))
    (setq _ready __ready)
    (setq _events_left (round __events_left))
@@ -96,6 +98,9 @@
   (:queue_left
    (&optional __queue_left)
    (if __queue_left (setq _queue_left __queue_left)) _queue_left)
+  (:event_processed
+   (&optional __event_processed)
+   (if __event_processed (setq _event_processed __event_processed)) _event_processed)
   (:info
    (&optional __info)
    (if __info (setq _info __info)) _info)
@@ -143,6 +148,8 @@
     ;; time[] _time_array_intervals
     (* 8    (length _time_array_intervals)) 4
     ;; int32 _queue_left
+    4
+    ;; int32 _event_processed
     4
     ;; string _info
     4 (length _info)
@@ -202,6 +209,8 @@
        )
      ;; int32 _queue_left
        (write-long _queue_left s)
+     ;; int32 _event_processed
+       (write-long _event_processed s)
      ;; string _info
        (write-long (length _info) s) (princ _info s)
      ;; bool _ready
@@ -269,6 +278,8 @@
      ))
    ;; int32 _queue_left
      (setq _queue_left (sys::peek buf ptr- :integer)) (incf ptr- 4)
+   ;; int32 _event_processed
+     (setq _event_processed (sys::peek buf ptr- :integer)) (incf ptr- 4)
    ;; string _info
      (let (n) (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4) (setq _info (subseq buf ptr- (+ ptr- n))) (incf ptr- n))
    ;; bool _ready
@@ -287,7 +298,7 @@
    self)
   )
 
-(setf (get simulator::loginfo :md5sum-) "4ebc7be155feb30e31dcd3a39c711d0c")
+(setf (get simulator::loginfo :md5sum-) "55d87199e7f17ce94759f154f0e8ee23")
 (setf (get simulator::loginfo :datatype-) "simulator/loginfo")
 (setf (get simulator::loginfo :definition-)
       "int32 ID_node
@@ -303,6 +314,7 @@ float32[] queue_array
 time[] time_array
 time[] time_array_intervals
 int32 queue_left
+int32 event_processed
 string info
 bool ready
 
@@ -316,6 +328,6 @@ bool statistic
 
 
 
-(provide :simulator/loginfo "4ebc7be155feb30e31dcd3a39c711d0c")
+(provide :simulator/loginfo "55d87199e7f17ce94759f154f0e8ee23")
 
 

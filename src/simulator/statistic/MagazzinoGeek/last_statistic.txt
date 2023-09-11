@@ -1,74 +1,90 @@
 ################  STATISTIC ############
 
-Tempo simulazione:		 18.98  sec
-Moltiplicatore velocità:		 30.0
-Tempo processo:		 569.5  sec
-Personale usato:		 65.0
+Tempo simulazione:		 13.05  sec
+Moltiplicatore velocità:		 20.0
+Tempo processo:		 261.07  sec
+Personale usato:		 11.0
 Events recived:
-	Generator GenCorrieri:		9   messages
-	Generator GenMulticollo:		6   messages
+	Generator GenCorrieri:		74   messages
+	Generator GenMulticollo:		122   messages
+total events created:		 230
 
 Route of events:
 	Message type:		Corriere
-		Total count:		9
-		Avg process time:		3 minutes, 2.52 seconds
-		Avg arrival time:		56.74 seconds
+		Total count:		74
+		Avg process time:		24.97 seconds
+		Avg arrival time:		2.47 seconds
 		Node GenCorrieri:		100.00%
-		Node Standard:		55.56%
-		Node Geek1:		11.11%
-		Node Corriere:		44.44%
-		Node Geek2:		33.33%
+		Node Geek1:		51.35%
+		Node Corriere:		98.65%
+		Node Geek2:		47.30%
+		Node Standard_compl:		21.62%
+		Node Standard:		1.35%
 
 
 	Message type:		Multicollo
-		Total count:		6
-		Avg process time:		6 minutes, 39.67 seconds
-		Avg arrival time:		40.07 seconds
+		Total count:		122
+		Avg process time:		24.74 seconds
+		Avg arrival time:		1.65 seconds
 		Node GenMulticollo:		100.00%
-		Node Geek2:		100.00%
+		Node Geek1:		53.28%
 		Node Multicollo:		100.00%
+		Node Geek2:		46.72%
+		Node Standard_compl:		15.57%
 
 
 Analisi code:
+	nome nodo:	Geek2
+		numero operatori:		1.0 
+		tempo esecuzione:		0.3 
+		utilizzazione totale:		0.15
+		eventi processati:		104
+		coda restante:		4
+		info:		test info
+
+
 	nome nodo:	Standard
 		numero operatori:		1.0 
 		tempo esecuzione:		15.0 
-		utilizzazione totale:		0.15
-		info:		test info
-
-
-	nome nodo:	Multicollo
-		numero operatori:		2.0 
-		tempo esecuzione:		1.0 
-		utilizzazione totale:		0.11
-		info:		test info
-
-
-	nome nodo:	Corriere
-		numero operatori:		3.0 
-		tempo esecuzione:		2.0 
-		utilizzazione totale:		0.08
-		info:		test info
-
-
-	nome nodo:	Geek1
-		numero operatori:		28.0 
-		tempo esecuzione:		15.0 
-		utilizzazione totale:		0.05
-		info:		test info
-
-
-	nome nodo:	Geek2
-		numero operatori:		28.0 
-		tempo esecuzione:		15.0 
-		utilizzazione totale:		0.23
+		utilizzazione totale:		142993.33
+		eventi processati:		1
+		coda restante:		0
 		info:		test info
 
 
 	nome nodo:	Standard_compl
 		numero operatori:		3.0 
 		tempo esecuzione:		10.0 
-		utilizzazione totale:		120.57
+		utilizzazione totale:		0.79
+		eventi processati:		42
+		coda restante:		10
+		info:		test info
+
+
+	nome nodo:	Multicollo
+		numero operatori:		2.0 
+		tempo esecuzione:		1.0 
+		utilizzazione totale:		0.31
+		eventi processati:		123
+		coda restante:		8
+		info:		test info
+
+
+	nome nodo:	Geek1
+		numero operatori:		1.0 
+		tempo esecuzione:		0.3 
+		utilizzazione totale:		0.18
+		eventi processati:		118
+		coda restante:		0
+		info:		test info
+
+
+	nome nodo:	Corriere
+		numero operatori:		3.0 
+		tempo esecuzione:		2.0 
+		utilizzazione totale:		0.25
+		eventi processati:		72
+		coda restante:		0
 		info:		test info
 
 

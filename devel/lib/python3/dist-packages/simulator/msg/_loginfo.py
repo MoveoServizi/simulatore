@@ -9,7 +9,7 @@ import struct
 import genpy
 
 class loginfo(genpy.Message):
-  _md5sum = "4ebc7be155feb30e31dcd3a39c711d0c"
+  _md5sum = "55d87199e7f17ce94759f154f0e8ee23"
   _type = "simulator/loginfo"
   _has_header = False  # flag to mark the presence of a Header object
   _full_text = """int32 ID_node
@@ -25,6 +25,7 @@ float32[] queue_array
 time[] time_array
 time[] time_array_intervals
 int32 queue_left
+int32 event_processed
 string info
 bool ready
 
@@ -34,8 +35,8 @@ time start
 bool start_esecution
 bool stop_esecution
 bool statistic"""
-  __slots__ = ['ID_node','type','node_name','server_time','num_servers','utiliz_tot','utiliz_array','utiliz_array_tot','queue_array','time_array','time_array_intervals','queue_left','info','ready','events_left','start','start_esecution','stop_esecution','statistic']
-  _slot_types = ['int32','string','string','float32','float32','float32','float32[]','float32[]','float32[]','time[]','time[]','int32','string','bool','int32','time','bool','bool','bool']
+  __slots__ = ['ID_node','type','node_name','server_time','num_servers','utiliz_tot','utiliz_array','utiliz_array_tot','queue_array','time_array','time_array_intervals','queue_left','event_processed','info','ready','events_left','start','start_esecution','stop_esecution','statistic']
+  _slot_types = ['int32','string','string','float32','float32','float32','float32[]','float32[]','float32[]','time[]','time[]','int32','int32','string','bool','int32','time','bool','bool','bool']
 
   def __init__(self, *args, **kwds):
     """
@@ -45,7 +46,7 @@ bool statistic"""
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       ID_node,type,node_name,server_time,num_servers,utiliz_tot,utiliz_array,utiliz_array_tot,queue_array,time_array,time_array_intervals,queue_left,info,ready,events_left,start,start_esecution,stop_esecution,statistic
+       ID_node,type,node_name,server_time,num_servers,utiliz_tot,utiliz_array,utiliz_array_tot,queue_array,time_array,time_array_intervals,queue_left,event_processed,info,ready,events_left,start,start_esecution,stop_esecution,statistic
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -78,6 +79,8 @@ bool statistic"""
         self.time_array_intervals = []
       if self.queue_left is None:
         self.queue_left = 0
+      if self.event_processed is None:
+        self.event_processed = 0
       if self.info is None:
         self.info = ''
       if self.ready is None:
@@ -105,6 +108,7 @@ bool statistic"""
       self.time_array = []
       self.time_array_intervals = []
       self.queue_left = 0
+      self.event_processed = 0
       self.info = ''
       self.ready = False
       self.events_left = 0
@@ -163,8 +167,8 @@ bool statistic"""
       for val1 in self.time_array_intervals:
         _x = val1
         buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-      _x = self.queue_left
-      buff.write(_get_struct_i().pack(_x))
+      _x = self
+      buff.write(_get_struct_2i().pack(_x.queue_left, _x.event_processed))
       _x = self.info
       length = len(_x)
       if python3 or type(_x) == unicode:
@@ -262,9 +266,10 @@ bool statistic"""
         end += 8
         (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
         self.time_array_intervals.append(val1)
+      _x = self
       start = end
-      end += 4
-      (self.queue_left,) = _get_struct_i().unpack(str[start:end])
+      end += 8
+      (_x.queue_left, _x.event_processed,) = _get_struct_2i().unpack(str[start:end])
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
@@ -333,8 +338,8 @@ bool statistic"""
       for val1 in self.time_array_intervals:
         _x = val1
         buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-      _x = self.queue_left
-      buff.write(_get_struct_i().pack(_x))
+      _x = self
+      buff.write(_get_struct_2i().pack(_x.queue_left, _x.event_processed))
       _x = self.info
       length = len(_x)
       if python3 or type(_x) == unicode:
@@ -433,9 +438,10 @@ bool statistic"""
         end += 8
         (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
         self.time_array_intervals.append(val1)
+      _x = self
       start = end
-      end += 4
-      (self.queue_left,) = _get_struct_i().unpack(str[start:end])
+      end += 8
+      (_x.queue_left, _x.event_processed,) = _get_struct_2i().unpack(str[start:end])
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
@@ -468,6 +474,12 @@ def _get_struct_2I():
     if _struct_2I is None:
         _struct_2I = struct.Struct("<2I")
     return _struct_2I
+_struct_2i = None
+def _get_struct_2i():
+    global _struct_2i
+    if _struct_2i is None:
+        _struct_2i = struct.Struct("<2i")
+    return _struct_2i
 _struct_3f = None
 def _get_struct_3f():
     global _struct_3f

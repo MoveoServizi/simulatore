@@ -23,6 +23,8 @@
           TIME_ARRAY_INTERVALS
           QUEUE_LEFT-VAL
           QUEUE_LEFT
+          EVENT_PROCESSED-VAL
+          EVENT_PROCESSED
           INFO-VAL
           INFO
           READY-VAL

@@ -30,6 +30,7 @@ class loginfo {
       this.time_array = null;
       this.time_array_intervals = null;
       this.queue_left = null;
+      this.event_processed = null;
       this.info = null;
       this.ready = null;
       this.events_left = null;
@@ -111,6 +112,12 @@ class loginfo {
       else {
         this.queue_left = 0;
       }
+      if (initObj.hasOwnProperty('event_processed')) {
+        this.event_processed = initObj.event_processed
+      }
+      else {
+        this.event_processed = 0;
+      }
       if (initObj.hasOwnProperty('info')) {
         this.info = initObj.info
       }
@@ -182,6 +189,8 @@ class loginfo {
     bufferOffset = _arraySerializer.time(obj.time_array_intervals, buffer, bufferOffset, null);
     // Serialize message field [queue_left]
     bufferOffset = _serializer.int32(obj.queue_left, buffer, bufferOffset);
+    // Serialize message field [event_processed]
+    bufferOffset = _serializer.int32(obj.event_processed, buffer, bufferOffset);
     // Serialize message field [info]
     bufferOffset = _serializer.string(obj.info, buffer, bufferOffset);
     // Serialize message field [ready]
@@ -227,6 +236,8 @@ class loginfo {
     data.time_array_intervals = _arrayDeserializer.time(buffer, bufferOffset, null)
     // Deserialize message field [queue_left]
     data.queue_left = _deserializer.int32(buffer, bufferOffset);
+    // Deserialize message field [event_processed]
+    data.event_processed = _deserializer.int32(buffer, bufferOffset);
     // Deserialize message field [info]
     data.info = _deserializer.string(buffer, bufferOffset);
     // Deserialize message field [ready]
@@ -254,7 +265,7 @@ class loginfo {
     length += 8 * object.time_array.length;
     length += 8 * object.time_array_intervals.length;
     length += _getByteLength(object.info);
-    return length + 68;
+    return length + 72;
   }
 
   static datatype() {
@@ -264,7 +275,7 @@ class loginfo {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '4ebc7be155feb30e31dcd3a39c711d0c';
+    return '55d87199e7f17ce94759f154f0e8ee23';
   }
 
   static messageDefinition() {
@@ -283,6 +294,7 @@ class loginfo {
     time[] time_array
     time[] time_array_intervals
     int32 queue_left
+    int32 event_processed
     string info
     bool ready
     
@@ -383,6 +395,13 @@ class loginfo {
     }
     else {
       resolved.queue_left = 0
+    }
+
+    if (msg.event_processed !== undefined) {
+      resolved.event_processed = msg.event_processed;
+    }
+    else {
+      resolved.event_processed = 0
     }
 
     if (msg.info !== undefined) {

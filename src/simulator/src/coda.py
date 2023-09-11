@@ -29,6 +29,7 @@ class Coda():
         self.uncertanity = uncertanity
         self.event_complete  = 0
         self.running = True
+        self.record_stat = False
 
         # Valori dinamici
         self.queue_length = 0
@@ -62,9 +63,7 @@ class Coda():
         info_msg.ready = False
         self.pub_info.publish(info_msg)
 
-        #lauch computation of utilization
-        self.occupancy_monitor_thread = threading.Thread(target=self.monitor_occupancy)
-        self.occupancy_monitor_thread.start()
+        
         
         print(self.name, "-  avviamento servers")
         # Launch servers
@@ -73,7 +72,12 @@ class Coda():
             server_thread_instance = threading.Thread(target=self.server, args=(server_number,))
             server_threads.append(server_thread_instance)
             server_thread_instance.start()
-
+        
+        #lauch computation of utilization
+        self.occupancy_monitor_thread = threading.Thread(target=self.monitor_occupancy)
+        self.occupancy_monitor_thread.start()
+        
+        time.sleep(5)
         print(self.name, "-  pronta")
         info_msg =loginfo()
         info_msg.ID_node = node_id
@@ -100,10 +104,13 @@ class Coda():
                 info_msg.time_array_intervals = self.time_array_intervals
                 info_msg.queue_array = self.queue_length_intervals
                 info_msg.statistic = True
-                info_msg.queue_left = self.event_complete
+                info_msg.queue_left = self.queue_length
+                info_msg.event_processed = self.event_complete
                 self.pub_info.publish(info_msg)
                 self.running =  False
                 rospy.signal_shutdown('Chiusura della coda')
+            if msg.start_esecution:
+                self.record_stat = True
 
 
     def queue(self, msg):
@@ -172,30 +179,31 @@ class Coda():
         cicle = 0
 
         while not rospy.is_shutdown():
-            # Dormi per mezzo self.server_time prima di registrare lo stato di occupazione
-            time.sleep(self.server_time / 2)
-            
-            with self.occupancy_lock:
-                if cicle == 0:
-                    server_occupied_counts = [0] * num_servers
+            if self.record_stat:
+                # Dormi per mezzo self.server_time prima di registrare lo stato di occupazione
+                time.sleep(self.server_time / 2)
+                
+                with self.occupancy_lock:
+                    if cicle == 0:
+                        server_occupied_counts = [0] * num_servers
 
-                # Calcola l'utilizzazione in base allo stato di occupazione dei server
-                for server_number in range(num_servers):
-                    if self.server_occupancy[server_number]:
-                        server_occupied_counts[server_number] += 1
-            
-            self.utilization_array.append(min(self.get_general_utilization(),1))
-            self.queue_length_intervals.append(self.queue_length)
-            self.time_array.append(rospy.Time.now())
-            cicle += 1
-            # Calcola l'utilizzazione nei vari intervalli di tempo
-            if cicle == cicle_max:
-                utilization = sum(server_occupied_counts) / (num_servers * cicle_max)
-                util =round(utilization,2)
-                self.utilization_intervals.append(util)
-                #self.queue_length_intervals.append(self.queue_length)
-                self.time_array_intervals.append(rospy.Time.now())
-                cicle = 0
+                    # Calcola l'utilizzazione in base allo stato di occupazione dei server
+                    for server_number in range(num_servers):
+                        if self.server_occupancy[server_number]:
+                            server_occupied_counts[server_number] += 1
+                
+                self.utilization_array.append(min(self.get_general_utilization(),1))
+                self.queue_length_intervals.append(self.queue_length)
+                self.time_array.append(rospy.Time.now())
+                cicle += 1
+                # Calcola l'utilizzazione nei vari intervalli di tempo
+                if cicle == cicle_max:
+                    utilization = sum(server_occupied_counts) / (num_servers * cicle_max)
+                    util =round(utilization,2)
+                    self.utilization_intervals.append(util)
+                    #self.queue_length_intervals.append(self.queue_length)
+                    self.time_array_intervals.append(rospy.Time.now())
+                    cicle = 0
                 
 
                 

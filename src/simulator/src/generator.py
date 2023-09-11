@@ -31,6 +31,7 @@ class GeneratorNode:
         self.pub = rospy.Publisher(self.next_element, event, queue_size=50)
         self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=50)
         self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
+        self.log_stop_sub = rospy.Subscriber("/log_stop", loginfo, self.process_log_info)
         
         time.sleep(2)
         info_msg =loginfo()
@@ -38,6 +39,7 @@ class GeneratorNode:
         info_msg.type = "generator"
         info_msg.node_name = node_name
         info_msg.events_left = num_messages
+        info_msg.statistic = False
         self.pub_info.publish(info_msg)
         print(self.node_name, "-- pronto")
         
@@ -92,7 +94,6 @@ class GeneratorNode:
         
         print("da generatore RECIEVED ", msg.node_name)
         if msg.type == "end_node":
-            print(msg.type, "RECIEVED", msg.start_esecution, msg.stop_esecution)
             if msg.start_esecution == True:
                 self.execution = True
                 self.generate_messages()
@@ -103,14 +104,14 @@ class GeneratorNode:
                 info_msg =loginfo()
                 info_msg.type = "generator"
                 info_msg.node_name = self.node_name
-                info_msg.events_left = self.num_messages - self.event_id
+                info_msg.events_left = (self.event_id -1)
                 info_msg.statistic = True
                 self.pub_info.publish(info_msg)
                 rospy.signal_shutdown('Chiusura generatore')
-        if msg.type == "coda":
-            if msg.statistic == True:
-                self.execution = False
-                print("stop per coda!!")
+        # if msg.type == "coda":
+        #     if msg.statistic == True:
+        #         self.execution = False
+        #         print("stop per coda!!")
     
 
 

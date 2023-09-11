@@ -33,16 +33,20 @@ class EndNode:
         
         self.event_sub = rospy.Subscriber(self.node_name, event, self.process_event)
         self.pub_info = rospy.Publisher("/log_info", loginfo, queue_size=50)
+        self.pub_stop = rospy.Publisher("/log_stop", loginfo, queue_size=2)
         self.log_info_sub = rospy.Subscriber("/log_info", loginfo, self.process_log_info)
         self.type_stats = {}
         self.data_by_type = {}
         self.queue_states = {}
         self.total_people = 0
         self.process_is_started = False
-        time.sleep(3)
+        self.total_events_created = 0
+        self.finish = False
+        
 
     
     def process_event(self, msg):
+        
         self.arrived_msgs += 1
         generator_id = msg.generator_id
         event_id = msg.ID
@@ -84,20 +88,28 @@ class EndNode:
         if self.modality == "events":
             if self.arrived_msgs == self.num_expected_messages:
                 self.total_seconds = rospy.Time.now().to_sec() - self.start.to_sec()
+                self.start_process(False)
+                time.sleep(2)
                 self.print_result()
         elif self.modality == "time":
             self.total_seconds = rospy.Time.now().to_sec() - self.start.to_sec()
             if self.total_seconds*self.speed > self.stop_time or self.arrived_msgs == self.num_expected_messages: 
-                print("TIME IS OVER!!!")
-                self.print_result()
+                if self.finish == False:
+                    print("TIME IS OVER!!!")
+                    self.start_process(False)
+                    self.finish = True
+                    time.sleep(2)
+                    self.print_result()
             
     
     
     def process_log_info(self, msg):
         rospy.loginfo(f"Received log info from node {msg.node_name}")
         if msg.type == "generator":
-            self.num_expected_messages += msg.events_left  # Assuming value1 stores the number of messages
-            # if self.start == -1 or msg.start < self.start:
+            if msg.statistic == False:
+                self.num_expected_messages += msg.events_left  # Assuming value1 stores the number of messages
+            elif msg.statistic == True:
+                self.total_events_created += msg.events_left
             #     self.start = msg.start
         
         if msg.type == "coda":
@@ -106,7 +118,8 @@ class EndNode:
                 # Verifica se tutti i campi 'ready' sono True
                 if all(self.queue_states.values()):
                     self.process_is_started = True
-                    self.start_process() 
+                    self.start_process(True) 
+                    
         
             if msg.statistic == True:
                 data = {
@@ -120,7 +133,8 @@ class EndNode:
                 "time_array" : msg.time_array,
                 "time_array_intervals" : msg.time_array_intervals,
                 "info": msg.info,
-                "event_completed": msg.queue_left
+                "event_completed": msg.event_processed,
+                "queue_left": msg.queue_left
                 }
                 self.total_people += msg.num_servers
                 msg_type = msg.type
@@ -130,28 +144,26 @@ class EndNode:
                 self.data_by_type[msg_type].append(data)
  
 
-    def start_process(self):
+    def start_process(self,start):
         info_msg =loginfo()
         info_msg.type = "end_node"
         info_msg.node_name = self.node_name
-        info_msg.start_esecution = True
-        info_msg.stop_esecution = False
+        info_msg.start_esecution = start
+        info_msg.stop_esecution = not(start)
         self.pub_info.publish(info_msg)
-        print("-- strat sended --")
-        self.start = rospy.Time.now()
+        if start:
+            print("-- start sended --")
+            self.start = rospy.Time.now()
+        else :
+            print("-- end sended --")
+            self.pub_stop.publish(info_msg)
          
     
     def print_result(self):
-        info_msg =loginfo()
-        info_msg.type = "end_node"
-        info_msg.node_name = self.node_name
-        info_msg.stop_esecution = True
-        self.pub_info.publish(info_msg)
-        time.sleep(5)
+        
         # Specifica il percorso della cartella
         script_directory = os.path.dirname(os.path.abspath(__file__)) # Ottieni il percorso assoluto della cartella del tuo script
         script_directory = script_directory[:-4]
-        print(script_directory)
         folder_path = os.path.join(script_directory, "statistic", self.file_name) # Costruisci il percorso completo del file desiderato
         
         
@@ -163,7 +175,6 @@ class EndNode:
             os.makedirs(folder_path)
         # Specifica il percorso completo del file
         file_path = os.path.join(folder_path, "last_statistic.txt")
-        print("SALVATAGGIO IN: ",file_path)
         with open(file_path, 'w') as file:
             # Reindirizza l'output su 'file'
             sys.stdout = file
@@ -186,6 +197,7 @@ class EndNode:
         for generator_id in self.get_unique_generator_ids():
             count = sum([1 for gid, _ in self.received_messages if gid == generator_id])
             print(f"\tGenerator {generator_id}:\t\t{count}   messages")
+        print("total events created:\t\t", self.total_events_created )
 
             
         print("\nRoute of events:")
@@ -219,9 +231,8 @@ class EndNode:
                 print(f"\t\tnumero operatori:\t\t{data['num_servers']} ")
                 print(f"\t\ttempo esecuzione:\t\t{data['server_time']} ")
                 print(f"\t\tutilizzazione totale:\t\t{data['utiliz_tot']}")
-                #print(f"\tutilizzazione:\t\t{data['utiliz_array']}")
-                #print(f"\tlunghezza coda:\t\t{data['queue_length']}")
                 print(f"\t\teventi processati:\t\t{data['event_completed']}")
+                print(f"\t\tcoda restante:\t\t{data['queue_left']}")
                 print(f"\t\tinfo:\t\t{data['info']}")
                 print("\n")
                 
@@ -233,7 +244,6 @@ class EndNode:
         time_steps_intervals = [(time.to_sec() - self.start.to_sec())*self.speed for time in time_array_intervals]
         script_directory = os.path.dirname(os.path.abspath(__file__)) # Ottieni il percorso assoluto della cartella del tuo script
         script_directory = script_directory[:-4]
-        print(script_directory)
         folder_path = os.path.join(script_directory, "statistic", self.file_name) # Costruisci il percorso completo del file desiderato
         
         
@@ -266,6 +276,7 @@ class EndNode:
         plt.suptitle(title)  # Titolo dell'intera figura
         plt.tight_layout()   # Ottimizza la disposizione dei subplot
         plt.savefig(output_file)
+        time.sleep(1)
         try:
             subprocess.Popen(['xdg-open', output_file])  # Sostituisci 'xdg-open' con il visualizzatore di immagini del tuo sistema
         except FileNotFoundError:

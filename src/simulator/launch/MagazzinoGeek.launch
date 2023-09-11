@@ -1,6 +1,6 @@
 <!-- Create the launch file for ROS -->
 <launch>
-	<arg name="speed" default="10.0"/>
+	<arg name="speed" default="15.0"/>
 	<arg name="file_name" default="MagazzinoGeek"/>
 	<node name="GenCorrieri" pkg="simulator" type="generator.py" output="screen">
 		<param name="node_id" value="1"/>
@@ -9,7 +9,7 @@
 		<param name="gen_freq" value="5"/>
 		<param name="speed" value="$(arg speed)"/>
 		<param name="num_messages" value="300"/>
-		<param name="pause_time" value="40"/>
+		<param name="pause_time" value="20"/>
 		<param name="group_size" value="20"/>
 		<param name="event_type" value="Corriere"/>
 		<param name="split_attribute1" value="totalStandard"/>
@@ -25,7 +25,7 @@
 		<param name="gen_freq" value="5"/>
 		<param name="speed" value="$(arg speed)"/>
 		<param name="num_messages" value="300"/>
-		<param name="pause_time" value="40"/>
+		<param name="pause_time" value="10"/>
 		<param name="group_size" value="30"/>
 		<param name="event_type" value="Multicollo"/>
 		<param name="split_attribute1" value="totalStandard"/>
@@ -141,5 +141,6 @@
 	</node>
 
 </launch>
+
 
 
