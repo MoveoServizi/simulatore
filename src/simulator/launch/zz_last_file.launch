@@ -1,11 +1,11 @@
 <!-- Create the launch file for ROS -->
 <launch>
-	<arg name="speed" default="1.0"/>
-	<arg name="file_name" default="codaSemplice"/>
-	<node name="generatore" pkg="simulator" type="generator.py" output="screen">
-		<param name="node_name" value="generatore"/>
+	<arg name="speed" default="5.0"/>
+	<arg name="file_name" default="test"/>
+	<node name="generator" pkg="simulator" type="generator.py" output="screen">
+		<param name="node_name" value="generator"/>
 		<param name="next_element" value="coda"/>
-		<param name="gen_freq" value="5"/>
+		<param name="gen_freq" value="0.5"/>
 		<param name="speed" value="$(arg speed)"/>
 		<param name="num_messages" value="500"/>
 	</node>
@@ -13,16 +13,16 @@
 	<node name="coda" pkg="simulator" type="coda.py" output="screen">
 		<param name="node_name" value="coda"/>
 		<param name="next_element" value="end"/>
-		<param name="num_servers" value="1"/>
-		<param name="server_time" value="1"/>
+		<param name="num_servers" value="50"/>
+		<param name="server_time" value="90"/>
 		<param name="speed" value="$(arg speed)"/>
+		<param name="uncertanity" value="False"/>
 	</node>
-
 
 	<node name="end" pkg="simulator" type="end_node.py" output="screen">
 		<param name="node_name" value="end"/>
 		<param name="modality" value="time"/>
-		<param name="stop_time" value="50"/>
+		<param name="stop_time" value="1080"/>
 		<param name="speed" value="$(arg speed)"/>
 		<param name="file_name" value="$(arg file_name)"/>
 	</node>

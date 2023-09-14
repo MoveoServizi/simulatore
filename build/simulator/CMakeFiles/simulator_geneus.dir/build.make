@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ubuntu/Desktop/simulator/simulatore/src
+CMAKE_SOURCE_DIR = /home/ubuntu/Desktop/simulatore/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ubuntu/Desktop/simulator/simulatore/build
+CMAKE_BINARY_DIR = /home/ubuntu/Desktop/simulatore/build
 
 # Utility rule file for simulator_geneus.
 
@@ -63,10 +63,10 @@ simulator/CMakeFiles/simulator_geneus.dir/build: simulator_geneus
 .PHONY : simulator/CMakeFiles/simulator_geneus.dir/build
 
 simulator/CMakeFiles/simulator_geneus.dir/clean:
-	cd /home/ubuntu/Desktop/simulator/simulatore/build/simulator && $(CMAKE_COMMAND) -P CMakeFiles/simulator_geneus.dir/cmake_clean.cmake
+	cd /home/ubuntu/Desktop/simulatore/build/simulator && $(CMAKE_COMMAND) -P CMakeFiles/simulator_geneus.dir/cmake_clean.cmake
 .PHONY : simulator/CMakeFiles/simulator_geneus.dir/clean
 
 simulator/CMakeFiles/simulator_geneus.dir/depend:
-	cd /home/ubuntu/Desktop/simulator/simulatore/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ubuntu/Desktop/simulator/simulatore/src /home/ubuntu/Desktop/simulator/simulatore/src/simulator /home/ubuntu/Desktop/simulator/simulatore/build /home/ubuntu/Desktop/simulator/simulatore/build/simulator /home/ubuntu/Desktop/simulator/simulatore/build/simulator/CMakeFiles/simulator_geneus.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/ubuntu/Desktop/simulatore/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ubuntu/Desktop/simulatore/src /home/ubuntu/Desktop/simulatore/src/simulator /home/ubuntu/Desktop/simulatore/build /home/ubuntu/Desktop/simulatore/build/simulator /home/ubuntu/Desktop/simulatore/build/simulator/CMakeFiles/simulator_geneus.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : simulator/CMakeFiles/simulator_geneus.dir/depend
 

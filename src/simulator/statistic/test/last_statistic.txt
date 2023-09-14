@@ -1,26 +1,29 @@
 ################  STATISTIC ############
 
-Tempo simulazione:		 10.02  sec
-Moltiplicatore velocità:		 1.0
-Tempo processo:		 10.02  sec
-Personale usato:		 1.0
+Tempo simulazione:		 216.21  sec
+Moltiplicatore velocità:		 5.0
+Tempo processo:		 1081.06  sec
+Personale usato:		 50.0
 Events recived:
-	Generator generatore:		10   messages
+	Generator generator:		491   messages
+total events created:		 500
 
 Route of events:
 	Message type:		evento_semplice
-		Total count:		10
-		Avg process time:		4.59 seconds
-		Avg arrival time:		0.18 seconds
-		Node generatore:		100.00%
+		Total count:		491
+		Avg process time:		1 minutes, 30.06 seconds
+		Avg arrival time:		2.02 seconds
+		Node generator:		100.00%
 		Node coda:		100.00%
 
 
 Analisi code:
 	nome nodo:	coda
-		numero operatori:		1.0 
-		tempo esecuzione:		1.0 
-		utilizzazione totale:		4.96
+		numero operatori:		50.0 
+		tempo esecuzione:		90.0 
+		utilizzazione totale:		0.89
+		eventi processati:		491
+		coda restante:		0
 		info:		test info
 
 

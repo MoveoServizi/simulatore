@@ -7,7 +7,7 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/ubuntu/Desktop/simulator/simulatore/devel:$CMAKE_PREFIX_PATH"
-export PWD='/home/ubuntu/Desktop/simulator/simulatore/build'
-export ROSLISP_PACKAGE_DIRECTORIES='/home/ubuntu/Desktop/simulator/simulatore/devel/share/common-lisp'
-export ROS_PACKAGE_PATH="/home/ubuntu/Desktop/simulator/simulatore/src:$ROS_PACKAGE_PATH"
+export CMAKE_PREFIX_PATH="/home/ubuntu/Desktop/simulatore/devel:$CMAKE_PREFIX_PATH"
+export PWD='/home/ubuntu/Desktop/simulatore/build'
+export ROSLISP_PACKAGE_DIRECTORIES='/home/ubuntu/Desktop/simulatore/devel/share/common-lisp'
+export ROS_PACKAGE_PATH="/home/ubuntu/Desktop/simulatore/src:$ROS_PACKAGE_PATH"

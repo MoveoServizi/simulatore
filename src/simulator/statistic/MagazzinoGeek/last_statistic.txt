@@ -1,63 +1,45 @@
 ################  STATISTIC ############
 
-Tempo simulazione:		 13.05  sec
-Moltiplicatore velocità:		 20.0
-Tempo processo:		 261.07  sec
-Personale usato:		 11.0
+Tempo simulazione:		 40.09  sec
+Moltiplicatore velocità:		 25.0
+Tempo processo:		 1002.31  sec
+Personale usato:		 65.0
 Events recived:
-	Generator GenCorrieri:		74   messages
-	Generator GenMulticollo:		122   messages
-total events created:		 230
+	Generator GenMulticollo:		300   messages
+	Generator GenCorrieri:		300   messages
+total events created:		 600
 
 Route of events:
-	Message type:		Corriere
-		Total count:		74
-		Avg process time:		24.97 seconds
-		Avg arrival time:		2.47 seconds
-		Node GenCorrieri:		100.00%
-		Node Geek1:		51.35%
-		Node Corriere:		98.65%
-		Node Geek2:		47.30%
-		Node Standard_compl:		21.62%
-		Node Standard:		1.35%
-
-
 	Message type:		Multicollo
-		Total count:		122
-		Avg process time:		24.74 seconds
-		Avg arrival time:		1.65 seconds
+		Total count:		300
+		Avg process time:		30.63 seconds
+		Avg arrival time:		1.25 seconds
 		Node GenMulticollo:		100.00%
-		Node Geek1:		53.28%
+		Node Geek1:		53.00%
 		Node Multicollo:		100.00%
-		Node Geek2:		46.72%
-		Node Standard_compl:		15.57%
+		Node Geek2:		47.00%
+		Node Standard_compl:		14.67%
+
+
+	Message type:		Corriere
+		Total count:		300
+		Avg process time:		49.26 seconds
+		Avg arrival time:		2.97 seconds
+		Node GenCorrieri:		100.00%
+		Node Geek1:		48.33%
+		Node Corriere:		96.00%
+		Node Geek2:		47.67%
+		Node Standard:		4.00%
+		Node Standard_compl:		27.33%
 
 
 Analisi code:
 	nome nodo:	Geek2
-		numero operatori:		1.0 
-		tempo esecuzione:		0.3 
-		utilizzazione totale:		0.15
-		eventi processati:		104
-		coda restante:		4
-		info:		test info
-
-
-	nome nodo:	Standard
-		numero operatori:		1.0 
+		numero operatori:		28.0 
 		tempo esecuzione:		15.0 
-		utilizzazione totale:		142993.33
-		eventi processati:		1
+		utilizzazione totale:		0.17
+		eventi processati:		284
 		coda restante:		0
-		info:		test info
-
-
-	nome nodo:	Standard_compl
-		numero operatori:		3.0 
-		tempo esecuzione:		10.0 
-		utilizzazione totale:		0.79
-		eventi processati:		42
-		coda restante:		10
 		info:		test info
 
 
@@ -65,16 +47,7 @@ Analisi code:
 		numero operatori:		2.0 
 		tempo esecuzione:		1.0 
 		utilizzazione totale:		0.31
-		eventi processati:		123
-		coda restante:		8
-		info:		test info
-
-
-	nome nodo:	Geek1
-		numero operatori:		1.0 
-		tempo esecuzione:		0.3 
-		utilizzazione totale:		0.18
-		eventi processati:		118
+		eventi processati:		300
 		coda restante:		0
 		info:		test info
 
@@ -82,8 +55,35 @@ Analisi code:
 	nome nodo:	Corriere
 		numero operatori:		3.0 
 		tempo esecuzione:		2.0 
-		utilizzazione totale:		0.25
-		eventi processati:		72
+		utilizzazione totale:		0.2
+		eventi processati:		288
+		coda restante:		0
+		info:		test info
+
+
+	nome nodo:	Geek1
+		numero operatori:		28.0 
+		tempo esecuzione:		15.0 
+		utilizzazione totale:		0.18
+		eventi processati:		304
+		coda restante:		0
+		info:		test info
+
+
+	nome nodo:	Standard_compl
+		numero operatori:		3.0 
+		tempo esecuzione:		10.0 
+		utilizzazione totale:		0.48
+		eventi processati:		126
+		coda restante:		0
+		info:		test info
+
+
+	nome nodo:	Standard
+		numero operatori:		1.0 
+		tempo esecuzione:		15.0 
+		utilizzazione totale:		0.21
+		eventi processati:		12
 		coda restante:		0
 		info:		test info
 

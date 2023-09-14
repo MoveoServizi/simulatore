@@ -66,15 +66,12 @@ class Coda():
         
         
         print(self.name, "-  avviamento servers")
-        # # Launch servers
-        # server_threads = []
-        # for server_number in range(1, num_servers + 1):
-        #     server_thread_instance = threading.Thread(target=self.server, args=(server_number,))
-        #     server_threads.append(server_thread_instance)
-        #     server_thread_instance.start()
-        # Inizializza il thread principale che lancerà i server
-        self.server_thread = threading.Thread(target=self.server_list)
-        self.server_thread.start()
+        # Launch servers
+        server_threads = []
+        for server_number in range(1, num_servers + 1):
+            server_thread_instance = threading.Thread(target=self.server, args=(server_number,))
+            server_threads.append(server_thread_instance)
+            server_thread_instance.start()
         
         #lauch computation of utilization
         self.occupancy_monitor_thread = threading.Thread(target=self.monitor_occupancy)
@@ -155,7 +152,17 @@ class Coda():
         
 
         while self.running:
-            if self.queue_length > 0:
+            #controlla lista eventi attivi
+            #per ogni evento controlla se è scaduto il tempo, nel caso invialo con le funzioni
+            self.event_complete += 1
+            self.pub.publish(current_event)
+            with self.occupancy_lock:
+                    self.server_occupancy[server_number - 1] = False
+            print(self.name, " server ", server_number, ": completed event ", current_event.ID, "  queue ", self.queue_length, "event commplete ", self.event_complete)
+            
+            #poi libera un posto nella lista
+            
+            if self.queue_length > 0 # e se c'è posto nella lista :
                 current_event = self.queue_list[0]
                 self.queue_list.pop(0)
                 self.queue_length -= 1
@@ -169,14 +176,10 @@ class Coda():
                 else:
                     dt = self.server_time
                 
+                #aggiungi evento alla lista aggiungendo il suo dt
+                # pensabo tipo a time.now +dt
                 
-                time.sleep(dt)
-                self.event_complete += 1
-                self.pub.publish(current_event)
-                with self.occupancy_lock:
-                    self.server_occupancy[server_number - 1] = False
-                print(self.name, " server ", server_number, ": completed event ", current_event.ID, "  queue ", self.queue_length, "event commplete ", self.event_complete)
-            
+                
     def monitor_occupancy(self):
         cicle_max = max(1,round(self.time_interval/self.server_time/2))
         cicle = 0
@@ -208,58 +211,8 @@ class Coda():
                     self.time_array_intervals.append(rospy.Time.now())
                     cicle = 0
                 
-    def server_list(self):
-        print(self.name, " - servers ", self.number_of_server, " avviati")
-        
-        active_servers = [None] * self.number_of_server  # Inizializza la lista dei server attivi
 
-        while self.running:
-            # Controlla se ci sono eventi in attesa
-            if self.queue_length > 0:
-                # Trova un server disponibile
-                available_server = None
-                for i in range(self.number_of_server):
-                    if active_servers[i] is None:
-                        available_server = i
-                        break
-
-                if available_server is not None:
-                    current_event = self.queue_list[0]
-                    self.queue_list.pop(0)
-                    self.queue_length -= 1
-                    with self.occupancy_lock:
-                        active_servers[available_server] = current_event  # Assegna l'evento al server
-                        self.server_occupancy[available_server] = True
-                    
-                    # Calcola il tempo di elaborazione dell'evento
-                    if self.uncertanity:
-                        # Pattern: Exponential distribution
-                        mu = 1/self.server_time
-                        dt = -1/mu * np.log(1 - np.random.rand())
-                    else:
-                        dt = self.server_time
-                    
-                    # Calcola il tempo in cui l'elaborazione sarà completata
-                    finish_time = rospy.Time.now() + rospy.Duration.from_sec(dt)
-                    
-                    # Aggiungi il server attivo con l'evento e il tempo di completamento
-                    active_servers[available_server] = (current_event, finish_time)
-                    print(self.name, " server ", available_server+1, ": started event ", current_event.ID, "  queue ", self.queue_length)
-            
-            # Controlla i server attivi
-            for i in range(self.number_of_server):
-                if active_servers[i] is not None:
-                    current_event, finish_time = active_servers[i]
-                    if rospy.Time.now() >= finish_time:
-                        # L'elaborazione dell'evento è completata
-                        self.event_complete += 1
-                        self.pub.publish(current_event)
-                        with self.occupancy_lock:
-                            self.server_occupancy[i] = False
-                        active_servers[i] = None
-                        print(self.name, " server ", i+1, ": completed event ", current_event.ID, "  queue ", self.queue_length, "event completed ", self.event_complete)
-
-                    
+                
 
 
 if __name__ == '__main__':

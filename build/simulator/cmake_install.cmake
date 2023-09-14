@@ -1,8 +1,8 @@
-# Install script for directory: /home/ubuntu/Desktop/simulator/simulatore/src/simulator
+# Install script for directory: /home/ubuntu/Desktop/simulatore/src/simulator
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/Desktop/simulator/simulatore/install")
+  set(CMAKE_INSTALL_PREFIX "/home/ubuntu/Desktop/simulatore/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -39,55 +39,55 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/simulator/msg" TYPE FILE FILES
-    "/home/ubuntu/Desktop/simulator/simulatore/src/simulator/msg/event.msg"
-    "/home/ubuntu/Desktop/simulator/simulatore/src/simulator/msg/loginfo.msg"
+    "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg"
+    "/home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/simulator/cmake" TYPE FILE FILES "/home/ubuntu/Desktop/simulator/simulatore/build/simulator/catkin_generated/installspace/simulator-msg-paths.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/simulator/cmake" TYPE FILE FILES "/home/ubuntu/Desktop/simulatore/build/simulator/catkin_generated/installspace/simulator-msg-paths.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/ubuntu/Desktop/simulator/simulatore/devel/include/simulator")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/ubuntu/Desktop/simulatore/devel/include/simulator")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/ubuntu/Desktop/simulator/simulatore/devel/share/roseus/ros/simulator")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/ubuntu/Desktop/simulator/simulatore/devel/share/common-lisp/ros/simulator")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/ubuntu/Desktop/simulatore/devel/share/common-lisp/ros/simulator")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/ubuntu/Desktop/simulator/simulatore/devel/share/gennodejs/ros/simulator")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/ubuntu/Desktop/simulator/simulatore/devel/lib/python3/dist-packages/simulator")
+  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/ubuntu/Desktop/simulator/simulatore/devel/lib/python3/dist-packages/simulator")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/Desktop/simulator/simulatore/build/simulator/catkin_generated/installspace/simulator.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/ubuntu/Desktop/simulatore/build/simulator/catkin_generated/installspace/simulator.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/simulator/cmake" TYPE FILE FILES "/home/ubuntu/Desktop/simulator/simulatore/build/simulator/catkin_generated/installspace/simulator-msg-extras.cmake")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/simulator/cmake" TYPE FILE FILES "/home/ubuntu/Desktop/simulatore/build/simulator/catkin_generated/installspace/simulator-msg-extras.cmake")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/simulator/cmake" TYPE FILE FILES
-    "/home/ubuntu/Desktop/simulator/simulatore/build/simulator/catkin_generated/installspace/simulatorConfig.cmake"
-    "/home/ubuntu/Desktop/simulator/simulatore/build/simulator/catkin_generated/installspace/simulatorConfig-version.cmake"
+    "/home/ubuntu/Desktop/simulatore/build/simulator/catkin_generated/installspace/simulatorConfig.cmake"
+    "/home/ubuntu/Desktop/simulatore/build/simulator/catkin_generated/installspace/simulatorConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/simulator" TYPE FILE FILES "/home/ubuntu/Desktop/simulator/simulatore/src/simulator/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/simulator" TYPE FILE FILES "/home/ubuntu/Desktop/simulatore/src/simulator/package.xml")
 endif()
 
