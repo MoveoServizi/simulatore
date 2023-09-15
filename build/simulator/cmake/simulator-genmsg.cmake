@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.cmake.em
 
-message(STATUS "simulator: 2 messages, 0 services")
+message(STATUS "simulator: 3 messages, 0 services")
 
 set(MSG_I_FLAGS "-Isimulator:/home/ubuntu/Desktop/simulatore/src/simulator/msg;-Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg")
 
@@ -27,6 +27,11 @@ add_custom_target(_simulator_generate_messages_check_deps_${_filename}
   COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "simulator" "/home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg" ""
 )
 
+get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg" NAME_WE)
+add_custom_target(_simulator_generate_messages_check_deps_${_filename}
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "simulator" "/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg" "simulator/event"
+)
+
 #
 #  langs = gencpp;geneus;genlisp;gennodejs;genpy
 #
@@ -43,6 +48,12 @@ _generate_msg_cpp(simulator
   "/home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg"
   "${MSG_I_FLAGS}"
   ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/simulator
+)
+_generate_msg_cpp(simulator
+  "/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg"
+  "${MSG_I_FLAGS}"
+  "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/simulator
 )
 
@@ -63,6 +74,8 @@ add_dependencies(simulator_generate_messages simulator_generate_messages_cpp)
 get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg" NAME_WE)
 add_dependencies(simulator_generate_messages_cpp _simulator_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg" NAME_WE)
+add_dependencies(simulator_generate_messages_cpp _simulator_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg" NAME_WE)
 add_dependencies(simulator_generate_messages_cpp _simulator_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -86,6 +99,12 @@ _generate_msg_eus(simulator
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/simulator
 )
+_generate_msg_eus(simulator
+  "/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg"
+  "${MSG_I_FLAGS}"
+  "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg"
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/simulator
+)
 
 ### Generating Services
 
@@ -104,6 +123,8 @@ add_dependencies(simulator_generate_messages simulator_generate_messages_eus)
 get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg" NAME_WE)
 add_dependencies(simulator_generate_messages_eus _simulator_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg" NAME_WE)
+add_dependencies(simulator_generate_messages_eus _simulator_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg" NAME_WE)
 add_dependencies(simulator_generate_messages_eus _simulator_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -127,6 +148,12 @@ _generate_msg_lisp(simulator
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/simulator
 )
+_generate_msg_lisp(simulator
+  "/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg"
+  "${MSG_I_FLAGS}"
+  "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/simulator
+)
 
 ### Generating Services
 
@@ -145,6 +172,8 @@ add_dependencies(simulator_generate_messages simulator_generate_messages_lisp)
 get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg" NAME_WE)
 add_dependencies(simulator_generate_messages_lisp _simulator_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg" NAME_WE)
+add_dependencies(simulator_generate_messages_lisp _simulator_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg" NAME_WE)
 add_dependencies(simulator_generate_messages_lisp _simulator_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -168,6 +197,12 @@ _generate_msg_nodejs(simulator
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/simulator
 )
+_generate_msg_nodejs(simulator
+  "/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg"
+  "${MSG_I_FLAGS}"
+  "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/simulator
+)
 
 ### Generating Services
 
@@ -186,6 +221,8 @@ add_dependencies(simulator_generate_messages simulator_generate_messages_nodejs)
 get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg" NAME_WE)
 add_dependencies(simulator_generate_messages_nodejs _simulator_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg" NAME_WE)
+add_dependencies(simulator_generate_messages_nodejs _simulator_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg" NAME_WE)
 add_dependencies(simulator_generate_messages_nodejs _simulator_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -209,6 +246,12 @@ _generate_msg_py(simulator
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/simulator
 )
+_generate_msg_py(simulator
+  "/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg"
+  "${MSG_I_FLAGS}"
+  "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/simulator
+)
 
 ### Generating Services
 
@@ -227,6 +270,8 @@ add_dependencies(simulator_generate_messages simulator_generate_messages_py)
 get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg" NAME_WE)
 add_dependencies(simulator_generate_messages_py _simulator_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg" NAME_WE)
+add_dependencies(simulator_generate_messages_py _simulator_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg" NAME_WE)
 add_dependencies(simulator_generate_messages_py _simulator_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility

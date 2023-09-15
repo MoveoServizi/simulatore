@@ -41,6 +41,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/simulator/msg" TYPE FILE FILES
     "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg"
     "/home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg"
+    "/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg"
     )
 endif()
 

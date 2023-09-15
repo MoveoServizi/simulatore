@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg;/home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg"
+messages_str = "/home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg;/home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg;/home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg"
 services_str = ""
 pkg_name = "simulator"
 dependencies_str = "std_msgs"

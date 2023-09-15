@@ -55,6 +55,7 @@ include simulator/CMakeFiles/simulator_generate_messages_eus.dir/progress.make
 
 simulator/CMakeFiles/simulator_generate_messages_eus: /home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/msg/event.l
 simulator/CMakeFiles/simulator_generate_messages_eus: /home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/msg/loginfo.l
+simulator/CMakeFiles/simulator_generate_messages_eus: /home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/msg/cluster.l
 simulator/CMakeFiles/simulator_generate_messages_eus: /home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/manifest.l
 
 
@@ -68,13 +69,20 @@ simulator/CMakeFiles/simulator_generate_messages_eus: /home/ubuntu/Desktop/simul
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/Desktop/simulatore/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating EusLisp code from simulator/loginfo.msg"
 	cd /home/ubuntu/Desktop/simulatore/build/simulator && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg -Isimulator:/home/ubuntu/Desktop/simulatore/src/simulator/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p simulator -o /home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/msg
 
+/home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/msg/cluster.l: /opt/ros/noetic/lib/geneus/gen_eus.py
+/home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/msg/cluster.l: /home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg
+/home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/msg/cluster.l: /home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/Desktop/simulatore/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating EusLisp code from simulator/cluster.msg"
+	cd /home/ubuntu/Desktop/simulatore/build/simulator && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg -Isimulator:/home/ubuntu/Desktop/simulatore/src/simulator/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p simulator -o /home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/msg
+
 /home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/manifest.l: /opt/ros/noetic/lib/geneus/gen_eus.py
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/Desktop/simulatore/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating EusLisp manifest code for simulator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/Desktop/simulatore/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating EusLisp manifest code for simulator"
 	cd /home/ubuntu/Desktop/simulatore/build/simulator && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py -m -o /home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator simulator std_msgs
 
 simulator_generate_messages_eus: simulator/CMakeFiles/simulator_generate_messages_eus
 simulator_generate_messages_eus: /home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/msg/event.l
 simulator_generate_messages_eus: /home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/msg/loginfo.l
+simulator_generate_messages_eus: /home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/msg/cluster.l
 simulator_generate_messages_eus: /home/ubuntu/Desktop/simulatore/devel/share/roseus/ros/simulator/manifest.l
 simulator_generate_messages_eus: simulator/CMakeFiles/simulator_generate_messages_eus.dir/build.make
 

@@ -274,15 +274,16 @@ struct Definition< ::simulator::event_<ContainerAllocator> >
 "float32 split2\n"
 "string split_attribute3\n"
 "float32 split3\n"
-"\n"
 "string attribute2\n"
 "float32 value2\n"
 "string attribute3\n"
 "float32 value3\n"
-"\n"
-"\n"
 "bool last_event\n"
 "bool first_event\n"
+"\n"
+"\n"
+"\n"
+"\n"
 ;
   }
 

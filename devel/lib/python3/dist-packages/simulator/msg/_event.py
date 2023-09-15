@@ -26,15 +26,16 @@ string split_attribute2
 float32 split2
 string split_attribute3
 float32 split3
-
 string attribute2
 float32 value2
 string attribute3
 float32 value3
-
-
 bool last_event
 bool first_event
+
+
+
+
 """
   __slots__ = ['generator_id','ID','type','generation_date','gen_time','completed_date','compl_time','route','split_attribute1','split1','split_attribute2','split2','split_attribute3','split3','attribute2','value2','attribute3','value3','last_event','first_event']
   _slot_types = ['string','int32','string','time','string','time','string','string[]','string','float32','string','float32','string','float32','string','float32','string','float32','bool','bool']

@@ -502,10 +502,10 @@
   "5783b9c2f01c2af0c22209cf660c120e")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<event>)))
   "Returns full string definition for message of type '<event>"
-  (cl:format cl:nil "string generator_id~%int32 ID~%string type~%time generation_date~%string gen_time~%time completed_date~%string compl_time~%string[] route~%string split_attribute1~%float32 split1~%string split_attribute2~%float32 split2~%string split_attribute3~%float32 split3~%~%string attribute2~%float32 value2~%string attribute3~%float32 value3~%~%~%bool last_event~%bool first_event~%~%~%"))
+  (cl:format cl:nil "string generator_id~%int32 ID~%string type~%time generation_date~%string gen_time~%time completed_date~%string compl_time~%string[] route~%string split_attribute1~%float32 split1~%string split_attribute2~%float32 split2~%string split_attribute3~%float32 split3~%string attribute2~%float32 value2~%string attribute3~%float32 value3~%bool last_event~%bool first_event~%~%~%~%~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'event)))
   "Returns full string definition for message of type 'event"
-  (cl:format cl:nil "string generator_id~%int32 ID~%string type~%time generation_date~%string gen_time~%time completed_date~%string compl_time~%string[] route~%string split_attribute1~%float32 split1~%string split_attribute2~%float32 split2~%string split_attribute3~%float32 split3~%~%string attribute2~%float32 value2~%string attribute3~%float32 value3~%~%~%bool last_event~%bool first_event~%~%~%"))
+  (cl:format cl:nil "string generator_id~%int32 ID~%string type~%time generation_date~%string gen_time~%time completed_date~%string compl_time~%string[] route~%string split_attribute1~%float32 split1~%string split_attribute2~%float32 split2~%string split_attribute3~%float32 split3~%string attribute2~%float32 value2~%string attribute3~%float32 value3~%bool last_event~%bool first_event~%~%~%~%~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <event>))
   (cl:+ 0
      4 (cl:length (cl:slot-value msg 'generator_id))

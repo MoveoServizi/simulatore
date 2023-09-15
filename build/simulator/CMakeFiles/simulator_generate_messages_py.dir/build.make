@@ -55,6 +55,7 @@ include simulator/CMakeFiles/simulator_generate_messages_py.dir/progress.make
 
 simulator/CMakeFiles/simulator_generate_messages_py: /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/_event.py
 simulator/CMakeFiles/simulator_generate_messages_py: /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/_loginfo.py
+simulator/CMakeFiles/simulator_generate_messages_py: /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/_cluster.py
 simulator/CMakeFiles/simulator_generate_messages_py: /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/__init__.py
 
 
@@ -68,15 +69,23 @@ simulator/CMakeFiles/simulator_generate_messages_py: /home/ubuntu/Desktop/simula
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/Desktop/simulatore/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Python from MSG simulator/loginfo"
 	cd /home/ubuntu/Desktop/simulatore/build/simulator && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg -Isimulator:/home/ubuntu/Desktop/simulatore/src/simulator/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p simulator -o /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg
 
+/home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/_cluster.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
+/home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/_cluster.py: /home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg
+/home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/_cluster.py: /home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/Desktop/simulatore/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Python from MSG simulator/cluster"
+	cd /home/ubuntu/Desktop/simulatore/build/simulator && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg -Isimulator:/home/ubuntu/Desktop/simulatore/src/simulator/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p simulator -o /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg
+
 /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/__init__.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
 /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/__init__.py: /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/_event.py
 /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/__init__.py: /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/_loginfo.py
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/Desktop/simulatore/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Python msg __init__.py for simulator"
+/home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/__init__.py: /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/_cluster.py
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/Desktop/simulatore/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating Python msg __init__.py for simulator"
 	cd /home/ubuntu/Desktop/simulatore/build/simulator && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py -o /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg --initpy
 
 simulator_generate_messages_py: simulator/CMakeFiles/simulator_generate_messages_py
 simulator_generate_messages_py: /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/_event.py
 simulator_generate_messages_py: /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/_loginfo.py
+simulator_generate_messages_py: /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/_cluster.py
 simulator_generate_messages_py: /home/ubuntu/Desktop/simulatore/devel/lib/python3/dist-packages/simulator/msg/__init__.py
 simulator_generate_messages_py: simulator/CMakeFiles/simulator_generate_messages_py.dir/build.make
 

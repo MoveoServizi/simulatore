@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "/home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg/cluster.js"
   "/home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg/event.js"
   "/home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg/loginfo.js"
   "CMakeFiles/simulator_generate_messages_nodejs"

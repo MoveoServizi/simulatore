@@ -55,6 +55,7 @@ include simulator/CMakeFiles/simulator_generate_messages_nodejs.dir/progress.mak
 
 simulator/CMakeFiles/simulator_generate_messages_nodejs: /home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg/event.js
 simulator/CMakeFiles/simulator_generate_messages_nodejs: /home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg/loginfo.js
+simulator/CMakeFiles/simulator_generate_messages_nodejs: /home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg/cluster.js
 
 
 /home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg/event.js: /opt/ros/noetic/lib/gennodejs/gen_nodejs.py
@@ -67,9 +68,16 @@ simulator/CMakeFiles/simulator_generate_messages_nodejs: /home/ubuntu/Desktop/si
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/Desktop/simulatore/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Javascript code from simulator/loginfo.msg"
 	cd /home/ubuntu/Desktop/simulatore/build/simulator && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg -Isimulator:/home/ubuntu/Desktop/simulatore/src/simulator/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p simulator -o /home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg
 
+/home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg/cluster.js: /opt/ros/noetic/lib/gennodejs/gen_nodejs.py
+/home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg/cluster.js: /home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg
+/home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg/cluster.js: /home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/Desktop/simulatore/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Javascript code from simulator/cluster.msg"
+	cd /home/ubuntu/Desktop/simulatore/build/simulator && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg -Isimulator:/home/ubuntu/Desktop/simulatore/src/simulator/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p simulator -o /home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg
+
 simulator_generate_messages_nodejs: simulator/CMakeFiles/simulator_generate_messages_nodejs
 simulator_generate_messages_nodejs: /home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg/event.js
 simulator_generate_messages_nodejs: /home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg/loginfo.js
+simulator_generate_messages_nodejs: /home/ubuntu/Desktop/simulatore/devel/share/gennodejs/ros/simulator/msg/cluster.js
 simulator_generate_messages_nodejs: simulator/CMakeFiles/simulator_generate_messages_nodejs.dir/build.make
 
 .PHONY : simulator_generate_messages_nodejs

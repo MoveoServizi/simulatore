@@ -12,12 +12,13 @@ string split_attribute2
 float32 split2
 string split_attribute3
 float32 split3
-
 string attribute2
 float32 value2
 string attribute3
 float32 value3
-
-
 bool last_event
 bool first_event
+
+
+
+

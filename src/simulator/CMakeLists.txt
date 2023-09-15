@@ -51,6 +51,7 @@ add_message_files(
    FILES
    event.msg
    loginfo.msg
+   cluster.msg
 #   Message1.msg
 #   Message2.msg
  )

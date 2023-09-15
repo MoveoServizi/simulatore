@@ -20,7 +20,8 @@ class Interfaccia(customtkinter.CTk):
             "generator": "CornflowerBlue",
             "coda": "IndianRed",
             "switch2": "DarkSeaGreen",
-            "end_node": "DarkKhaki" 
+            "end_node": "DarkKhaki",
+            "cluster_node": "Magenta"
             # Aggiungi altri tipi di nodo e colori qui
         }
         self.file_name = "no_name"
@@ -63,10 +64,11 @@ class Interfaccia(customtkinter.CTk):
         tabview.add("coda")  # add tab at the end
         tabview.add("switch")  # add tab at the end
         tabview.add("end")  # add tab at the end
+        tabview.add("cluster")  # add tab at the end
         tabview.set("generatore")  # set currently visible tab
 
-        ## generatore
-        self.t_node_name1 = customtkinter.CTkLabel(tabview.tab("generatore"), text="Nome : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        ## generatorechmod +x
+        self.t_node_name1 = customtkinter.CTkLabel(tabview.tab("generatore"), text="Nome* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_node_name1.grid(row=1, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.node_name1 = customtkinter.CTkEntry(tabview.tab("generatore"))
         self.node_name1.grid(row=1, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")      
@@ -74,15 +76,15 @@ class Interfaccia(customtkinter.CTk):
         self.t_node_ID1.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.node_ID1 = customtkinter.CTkEntry(tabview.tab("generatore"))
         self.node_ID1.grid(row=2, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we") 
-        self.t_next1 = customtkinter.CTkLabel(tabview.tab("generatore"), text="next : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_next1 = customtkinter.CTkLabel(tabview.tab("generatore"), text="next* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_next1.grid(row=3, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.next1 = customtkinter.CTkEntry(tabview.tab("generatore"))
         self.next1.grid(row=3, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
-        self.t_num_events = customtkinter.CTkLabel(tabview.tab("generatore"), text="numero eventi : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_num_events = customtkinter.CTkLabel(tabview.tab("generatore"), text="numero eventi* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_num_events.grid(row=4, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.num_events = customtkinter.CTkEntry(tabview.tab("generatore"))
         self.num_events.grid(row=4, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
-        self.t_frequenza = customtkinter.CTkLabel(tabview.tab("generatore"), text="frequenza : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_frequenza = customtkinter.CTkLabel(tabview.tab("generatore"), text="frequenza* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_frequenza.grid(row=5, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.frequenza = customtkinter.CTkEntry(tabview.tab("generatore"))
         self.frequenza.grid(row=5, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
@@ -121,7 +123,7 @@ class Interfaccia(customtkinter.CTk):
         button1.grid(row=14, column=1, padx=(15,5), pady=(20,10),sticky="w")
         
         ## coda
-        self.t_node_name2 = customtkinter.CTkLabel(tabview.tab("coda"), text="Nome : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_node_name2 = customtkinter.CTkLabel(tabview.tab("coda"), text="Nome* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_node_name2.grid(row=1, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.node_name2 = customtkinter.CTkEntry(tabview.tab("coda"))
         self.node_name2.grid(row=1, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
@@ -129,15 +131,15 @@ class Interfaccia(customtkinter.CTk):
         self.t_node_ID2.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.node_ID2 = customtkinter.CTkEntry(tabview.tab("coda"))
         self.node_ID2.grid(row=2, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
-        self.t_next2 = customtkinter.CTkLabel(tabview.tab("coda"), text="next : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_next2 = customtkinter.CTkLabel(tabview.tab("coda"), text="next* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_next2.grid(row=3, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.next2 = customtkinter.CTkEntry(tabview.tab("coda"))
         self.next2.grid(row=3, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
-        self.t_num_servers = customtkinter.CTkLabel(tabview.tab("coda"), text="numero server : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_num_servers = customtkinter.CTkLabel(tabview.tab("coda"), text="numero server* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_num_servers.grid(row=4, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.num_servers = customtkinter.CTkEntry(tabview.tab("coda"))
         self.num_servers.grid(row=4, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
-        self.t_server_time = customtkinter.CTkLabel(tabview.tab("coda"), text="tempo server : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_server_time = customtkinter.CTkLabel(tabview.tab("coda"), text="tempo server* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_server_time.grid(row=5, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.server_time = customtkinter.CTkEntry(tabview.tab("coda"))
         self.server_time.grid(row=5, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
@@ -152,7 +154,7 @@ class Interfaccia(customtkinter.CTk):
         button2.grid(row=10, column=1, padx=(15,5), pady=(20,10),sticky="w")
         
         ## switch
-        self.t_node_name3 = customtkinter.CTkLabel(tabview.tab("switch"), text="Nome : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_node_name3 = customtkinter.CTkLabel(tabview.tab("switch"), text="Nome* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_node_name3.grid(row=1, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.node_name3 = customtkinter.CTkEntry(tabview.tab("switch"))
         self.node_name3.grid(row=1, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
@@ -172,11 +174,11 @@ class Interfaccia(customtkinter.CTk):
         self.t_split_attribute.grid(row=5, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.split_attribute = customtkinter.CTkEntry(tabview.tab("switch"))
         self.split_attribute.grid(row=5, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
-        self.t_topic1 = customtkinter.CTkLabel(tabview.tab("switch"), text="Topic1 : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_topic1 = customtkinter.CTkLabel(tabview.tab("switch"), text="Topic1* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_topic1.grid(row=6, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.topic1 = customtkinter.CTkEntry(tabview.tab("switch"))
         self.topic1.grid(row=6, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
-        self.t_topic2 = customtkinter.CTkLabel(tabview.tab("switch"), text="Topic2 : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_topic2 = customtkinter.CTkLabel(tabview.tab("switch"), text="Topic2* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_topic2.grid(row=7, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.topic2 = customtkinter.CTkEntry(tabview.tab("switch"))
         self.topic2.grid(row=7, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
@@ -187,7 +189,7 @@ class Interfaccia(customtkinter.CTk):
         button_switch.grid(row=10, column=1, padx=(15,5), pady=(20,10),sticky="w")
 
         #end_node
-        self.t_node_name4 = customtkinter.CTkLabel(tabview.tab("end"), text="Nome : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_node_name4 = customtkinter.CTkLabel(tabview.tab("end"), text="Nome* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_node_name4.grid(row=1, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.node_name4 = customtkinter.CTkEntry(tabview.tab("end"))
         self.node_name4.grid(row=1, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
@@ -210,8 +212,36 @@ class Interfaccia(customtkinter.CTk):
         button_end = customtkinter.CTkButton(master=tabview.tab("end"), text="Add", command=self.add_end)
         button_end.grid(row=10, column=1, padx=(15,5), pady=(20,10),sticky="w")
 
-
-
+        #cluster
+        self.t_node_name5 = customtkinter.CTkLabel(tabview.tab("cluster"), text="Nome* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_node_name5.grid(row=1, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.node_name5 = customtkinter.CTkEntry(tabview.tab("cluster"))
+        self.node_name5.grid(row=1, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.t_next_cl = customtkinter.CTkLabel(tabview.tab("cluster"), text="next* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_next_cl.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.next_cl = customtkinter.CTkEntry(tabview.tab("cluster"))
+        self.next_cl.grid(row=2, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.t_clust_modality = customtkinter.CTkLabel(tabview.tab("cluster"), text="Modalità : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_clust_modality.grid(row=3, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.clust_modality = customtkinter.CTkComboBox(tabview.tab("cluster"), values=["unisci", "dividi"])
+        self.clust_modality.grid(row=3, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.t_clust_max = customtkinter.CTkLabel(tabview.tab("cluster"), text="cluster max events : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_clust_max.grid(row=4, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.clust_max = customtkinter.CTkEntry(tabview.tab("cluster"))
+        self.clust_max.grid(row=4, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.t_clust_time = customtkinter.CTkLabel(tabview.tab("cluster"), text="tempo attesa: ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_clust_time.grid(row=5, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.clust_time = customtkinter.CTkEntry(tabview.tab("cluster"))
+        self.clust_time.grid(row=5, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.t_clust_next = customtkinter.CTkLabel(tabview.tab("cluster"), text="next cluster: ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_clust_next.grid(row=6, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.clust_next = customtkinter.CTkEntry(tabview.tab("cluster"))
+        self.clust_next.grid(row=6, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        
+        reset5 = customtkinter.CTkButton(master=tabview.tab("cluster"), text="Reset", command=self.reset_cluster_node)
+        reset5.grid(row=10, column=0, padx=(15,5), pady=(20,10),sticky="w")
+        button_cluster = customtkinter.CTkButton(master=tabview.tab("cluster"), text="Add", command=self.add_cluster)
+        button_cluster.grid(row=10, column=1, padx=(15,5), pady=(20,10),sticky="w")
                 
         ### file tab ##
         self.file_frame = customtkinter.CTkFrame(self,corner_radius=20)
@@ -436,6 +466,50 @@ class Interfaccia(customtkinter.CTk):
         self.node_ID4.delete(0,END)
         self.end_modality.set("events")
         self.stop_time.delete(0,END)
+    
+    
+    # Funzioni del pannello del cluster
+    def add_cluster(self):
+        self.cluster_data = {
+            "node_name": self.node_name5.get(),
+            "pkg": "simulator",
+            "type": "cluster.py",
+            "output": "screen",
+            "params": {
+                "node_name": self.node_name5.get(),
+                "next_element": self.next_cl.get(),
+                "modality": self.clust_modality.get(),
+                "cluster_events": self.clust_max.get(),
+                "cluster_time": self.clust_time.get(),
+                "next_cluster_topic" : self.clust_next.get(),
+                "speed": "$(arg speed)",
+            }
+        }
+        cluster_node_text = self.format_cluster_node()
+        self.textbox.insert("end", cluster_node_text)
+        # Aggiungi i nodi e le connessioni al grafo
+        self.G.add_node(self.node_name5.get())
+        self.colors[self.node_name5.get()] = self.NODE_TYPE_COLORS.get("cluster_node")
+        if self.next_cl.get() not in self.G:
+            self.colors[self.next_cl.get()] = "LightGray"
+        self.G.add_edge(self.node_name5.get(), self.next_cl.get())
+        self.visualizza_grafo()
+
+
+    def format_cluster_node(self):
+        formatted_node = f"""\t<node name="{self.cluster_data['node_name']}" pkg="{self.cluster_data['pkg']}" type="{self.cluster_data['type']}" output="{self.cluster_data['output']}">\n"""
+        for param, value in self.cluster_data['params'].items():
+            if value.strip():
+                formatted_node += f'\t\t<param name="{param}" value="{value}"/>\n'
+        formatted_node += "\t</node>\n\n"
+        return formatted_node
+
+    def reset_cluster_node(self):
+        self.node_name5.delete(0, END)
+        self.next2.delete(0, END)
+        self.clust_modality.set("compatta")
+        self.clust_max.delete(0, END)
+        self.clust_time.delete(0, END)
         
     ## file menagment   
     def run_file(self):

@@ -55,6 +55,7 @@ include simulator/CMakeFiles/simulator_generate_messages_cpp.dir/progress.make
 
 simulator/CMakeFiles/simulator_generate_messages_cpp: /home/ubuntu/Desktop/simulatore/devel/include/simulator/event.h
 simulator/CMakeFiles/simulator_generate_messages_cpp: /home/ubuntu/Desktop/simulatore/devel/include/simulator/loginfo.h
+simulator/CMakeFiles/simulator_generate_messages_cpp: /home/ubuntu/Desktop/simulatore/devel/include/simulator/cluster.h
 
 
 /home/ubuntu/Desktop/simulatore/devel/include/simulator/event.h: /opt/ros/noetic/lib/gencpp/gen_cpp.py
@@ -69,9 +70,17 @@ simulator/CMakeFiles/simulator_generate_messages_cpp: /home/ubuntu/Desktop/simul
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/Desktop/simulatore/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating C++ code from simulator/loginfo.msg"
 	cd /home/ubuntu/Desktop/simulatore/src/simulator && /home/ubuntu/Desktop/simulatore/build/catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/ubuntu/Desktop/simulatore/src/simulator/msg/loginfo.msg -Isimulator:/home/ubuntu/Desktop/simulatore/src/simulator/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p simulator -o /home/ubuntu/Desktop/simulatore/devel/include/simulator -e /opt/ros/noetic/share/gencpp/cmake/..
 
+/home/ubuntu/Desktop/simulatore/devel/include/simulator/cluster.h: /opt/ros/noetic/lib/gencpp/gen_cpp.py
+/home/ubuntu/Desktop/simulatore/devel/include/simulator/cluster.h: /home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg
+/home/ubuntu/Desktop/simulatore/devel/include/simulator/cluster.h: /home/ubuntu/Desktop/simulatore/src/simulator/msg/event.msg
+/home/ubuntu/Desktop/simulatore/devel/include/simulator/cluster.h: /opt/ros/noetic/share/gencpp/msg.h.template
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/Desktop/simulatore/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating C++ code from simulator/cluster.msg"
+	cd /home/ubuntu/Desktop/simulatore/src/simulator && /home/ubuntu/Desktop/simulatore/build/catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/ubuntu/Desktop/simulatore/src/simulator/msg/cluster.msg -Isimulator:/home/ubuntu/Desktop/simulatore/src/simulator/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p simulator -o /home/ubuntu/Desktop/simulatore/devel/include/simulator -e /opt/ros/noetic/share/gencpp/cmake/..
+
 simulator_generate_messages_cpp: simulator/CMakeFiles/simulator_generate_messages_cpp
 simulator_generate_messages_cpp: /home/ubuntu/Desktop/simulatore/devel/include/simulator/event.h
 simulator_generate_messages_cpp: /home/ubuntu/Desktop/simulatore/devel/include/simulator/loginfo.h
+simulator_generate_messages_cpp: /home/ubuntu/Desktop/simulatore/devel/include/simulator/cluster.h
 simulator_generate_messages_cpp: simulator/CMakeFiles/simulator_generate_messages_cpp.dir/build.make
 
 .PHONY : simulator_generate_messages_cpp

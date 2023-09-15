@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "/home/ubuntu/Desktop/simulatore/devel/share/common-lisp/ros/simulator/msg/cluster.lisp"
   "/home/ubuntu/Desktop/simulatore/devel/share/common-lisp/ros/simulator/msg/event.lisp"
   "/home/ubuntu/Desktop/simulatore/devel/share/common-lisp/ros/simulator/msg/loginfo.lisp"
   "CMakeFiles/simulator_generate_messages_lisp"
