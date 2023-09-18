@@ -10,6 +10,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+
 customtkinter.set_appearance_mode("Light")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.deactivate_automatic_dpi_awareness() 
 
@@ -37,8 +38,8 @@ class Interfaccia(customtkinter.CTk):
         image_data = Image.open(image_path)
         self.logo_image = customtkinter.CTkImage(image_data, size=(160, 90))
         
-        self.title("Moveo Servizi - Simulatore flussi")
-        self.geometry(f"{1420}x{1000}")
+        self.title("Moveo Servizi - SimPlan")
+        self.geometry(f"{1420}x{900}")
 
         # Configure grid layout (4x4)
         self.grid_columnconfigure(1, weight=1)
@@ -56,9 +57,13 @@ class Interfaccia(customtkinter.CTk):
         self.node_frame = customtkinter.CTkFrame(self,corner_radius=20)
         self.node_frame.grid(row=1, column=0, padx=(15,5), pady=(5, 15),rowspan=2, sticky="nsew")
         
+        self.textbox_err = customtkinter.CTkTextbox(self.node_frame , height=100, border_color = "DodgerBlue4", border_width=3)
+        self.textbox_err.grid(row=2, column=0,padx=(35,15), pady=(15, 15), sticky="nsew")
+        
         
         tabview = customtkinter.CTkTabview(master=self.node_frame)
-        tabview.pack(padx=20, pady=20)
+        tabview.grid(row=1, column=0,padx=20, pady=20)
+        # tabview.pack(padx=20, pady=20)
 
         tabview.add("generatore")  # add tab at the end
         tabview.add("coda")  # add tab at the end
@@ -72,22 +77,26 @@ class Interfaccia(customtkinter.CTk):
         self.t_node_name1.grid(row=1, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.node_name1 = customtkinter.CTkEntry(tabview.tab("generatore"))
         self.node_name1.grid(row=1, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")      
-        self.t_node_ID1 = customtkinter.CTkLabel(tabview.tab("generatore"), text="ID : ", font=customtkinter.CTkFont(size=12, weight="bold"))
-        self.t_node_ID1.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
-        self.node_ID1 = customtkinter.CTkEntry(tabview.tab("generatore"))
-        self.node_ID1.grid(row=2, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we") 
+        # self.t_node_ID1 = customtkinter.CTkLabel(tabview.tab("generatore"), text="ID : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        # self.t_node_ID1.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        # self.node_ID1 = customtkinter.CTkEntry(tabview.tab("generatore"))
+        # self.node_ID1.grid(row=2, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we") 
         self.t_next1 = customtkinter.CTkLabel(tabview.tab("generatore"), text="next* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
-        self.t_next1.grid(row=3, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.t_next1.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.next1 = customtkinter.CTkEntry(tabview.tab("generatore"))
-        self.next1.grid(row=3, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.next1.grid(row=2, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         self.t_num_events = customtkinter.CTkLabel(tabview.tab("generatore"), text="numero eventi* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
-        self.t_num_events.grid(row=4, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.t_num_events.grid(row=3, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.num_events = customtkinter.CTkEntry(tabview.tab("generatore"))
-        self.num_events.grid(row=4, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.num_events.grid(row=3, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         self.t_frequenza = customtkinter.CTkLabel(tabview.tab("generatore"), text="frequenza* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
-        self.t_frequenza.grid(row=5, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.t_frequenza.grid(row=4, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.frequenza = customtkinter.CTkEntry(tabview.tab("generatore"))
-        self.frequenza.grid(row=5, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.frequenza.grid(row=4, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        self.t_event_type = customtkinter.CTkLabel(tabview.tab("generatore"), text="event type* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        self.t_event_type.grid(row=5, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        self.event_type = customtkinter.CTkEntry(tabview.tab("generatore"))
+        self.event_type.grid(row=5, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         self.t_pause_time = customtkinter.CTkLabel(tabview.tab("generatore"), text="pause time : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_pause_time.grid(row=6, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.pause_time = customtkinter.CTkEntry(tabview.tab("generatore"))
@@ -96,10 +105,6 @@ class Interfaccia(customtkinter.CTk):
         self.t_group_size.grid(row=7, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.group_size = customtkinter.CTkEntry(tabview.tab("generatore"))
         self.group_size.grid(row=7, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
-        self.t_event_type = customtkinter.CTkLabel(tabview.tab("generatore"), text="event type : ", font=customtkinter.CTkFont(size=12, weight="bold"))
-        self.t_event_type.grid(row=8, column=0, padx=(15,5), pady=(5,2),sticky="w")
-        self.event_type = customtkinter.CTkEntry(tabview.tab("generatore"))
-        self.event_type.grid(row=8, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         self.t_attribute1 = customtkinter.CTkLabel(tabview.tab("generatore"), text="attribute1 : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_attribute1.grid(row=9, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.attribute1 = customtkinter.CTkEntry(tabview.tab("generatore"))
@@ -116,7 +121,7 @@ class Interfaccia(customtkinter.CTk):
         self.t_value2.grid(row=12, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.value2 = customtkinter.CTkEntry(tabview.tab("generatore"))
         self.value2.grid(row=12, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
-        
+
         reset1 = customtkinter.CTkButton(master=tabview.tab("generatore"), text="Reset", command=self.reset_generator)
         reset1.grid(row=14, column=0, padx=(15,5), pady=(20,10),sticky="w")
         button1 = customtkinter.CTkButton(master=tabview.tab("generatore"), text="Add", command=self.add_generator)
@@ -127,10 +132,10 @@ class Interfaccia(customtkinter.CTk):
         self.t_node_name2.grid(row=1, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.node_name2 = customtkinter.CTkEntry(tabview.tab("coda"))
         self.node_name2.grid(row=1, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
-        self.t_node_ID2 = customtkinter.CTkLabel(tabview.tab("coda"), text="ID : ", font=customtkinter.CTkFont(size=12, weight="bold"))
-        self.t_node_ID2.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
-        self.node_ID2 = customtkinter.CTkEntry(tabview.tab("coda"))
-        self.node_ID2.grid(row=2, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        # self.t_node_ID2 = customtkinter.CTkLabel(tabview.tab("coda"), text="ID : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        # self.t_node_ID2.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        # self.node_ID2 = customtkinter.CTkEntry(tabview.tab("coda"))
+        # self.node_ID2.grid(row=2, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         self.t_next2 = customtkinter.CTkLabel(tabview.tab("coda"), text="next* : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_next2.grid(row=3, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.next2 = customtkinter.CTkEntry(tabview.tab("coda"))
@@ -158,10 +163,10 @@ class Interfaccia(customtkinter.CTk):
         self.t_node_name3.grid(row=1, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.node_name3 = customtkinter.CTkEntry(tabview.tab("switch"))
         self.node_name3.grid(row=1, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
-        self.t_node_ID3 = customtkinter.CTkLabel(tabview.tab("switch"), text="ID : ", font=customtkinter.CTkFont(size=12, weight="bold"))
-        self.t_node_ID3.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
-        self.node_ID3 = customtkinter.CTkEntry(tabview.tab("switch"))
-        self.node_ID3.grid(row=2, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        # self.t_node_ID3 = customtkinter.CTkLabel(tabview.tab("switch"), text="ID : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        # self.t_node_ID3.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        # self.node_ID3 = customtkinter.CTkEntry(tabview.tab("switch"))
+        # self.node_ID3.grid(row=2, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         self.t_switch_modality = customtkinter.CTkLabel(tabview.tab("switch"), text="Modalità : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_switch_modality.grid(row=3, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.switch_modality = customtkinter.CTkComboBox(tabview.tab("switch"), values=["split", "type", "attribute", "split_attribute"])
@@ -193,10 +198,10 @@ class Interfaccia(customtkinter.CTk):
         self.t_node_name4.grid(row=1, column=0, padx=(15,5), pady=(5,2),sticky="w")
         self.node_name4 = customtkinter.CTkEntry(tabview.tab("end"))
         self.node_name4.grid(row=1, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
-        self.t_node_ID4 = customtkinter.CTkLabel(tabview.tab("end"), text="ID : ", font=customtkinter.CTkFont(size=12, weight="bold"))
-        self.t_node_ID4.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
-        self.node_ID4 = customtkinter.CTkEntry(tabview.tab("end"))
-        self.node_ID4.grid(row=2, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
+        # self.t_node_ID4 = customtkinter.CTkLabel(tabview.tab("end"), text="ID : ", font=customtkinter.CTkFont(size=12, weight="bold"))
+        # self.t_node_ID4.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w")
+        # self.node_ID4 = customtkinter.CTkEntry(tabview.tab("end"))
+        # self.node_ID4.grid(row=2, column=1, padx=(5,15),pady=(5,2),columnspan=2, sticky="we")
         
         self.t_end_modality = customtkinter.CTkLabel(tabview.tab("end"), text="Modalità : ", font=customtkinter.CTkFont(size=12, weight="bold"))
         self.t_end_modality.grid(row=3, column=0, padx=(15,5), pady=(5,2),sticky="w")
@@ -263,7 +268,7 @@ class Interfaccia(customtkinter.CTk):
         button_grafo.grid(row=2, column=0, padx=(15,5), pady=(5,2),sticky="w") 
         
         ## generazione launch file
-        self.textbox = customtkinter.CTkTextbox(self.tabview_main.tab("launch_file") , width=900,height=700, corner_radius=10)
+        self.textbox = customtkinter.CTkTextbox(self.tabview_main.tab("launch_file") , width=900,height=600, corner_radius=10)
         self.textbox.grid(row=0, column=0,padx=(35,15), pady=(15, 15), sticky="nsew", columnspan = 3)
         self.textbox.insert("0.0", "<!-- Create the launch file for ROS -->\n<launch>\n\t<arg name=\"speed\" default=\"1.0\"/>\n\t<arg name=\"file_name\" default=\"test\"/>\n")
         button_textbox = customtkinter.CTkButton(self.tabview_main.tab("launch_file"), text="Reset File", command=self.reset_file)
@@ -281,12 +286,11 @@ class Interfaccia(customtkinter.CTk):
         
         
         ## generazione launch file
-        self.textbox_statistic = customtkinter.CTkTextbox(self.tabview_main.tab("statistiche") , width=900,height=700, corner_radius=10)
+        self.textbox_statistic = customtkinter.CTkTextbox(self.tabview_main.tab("statistiche") , width=900,height=600, corner_radius=10)
         self.textbox_statistic.grid(row=0, column=0,padx=(35,15), pady=(15, 15), sticky="nsew", columnspan = 3)
         button_statistic = customtkinter.CTkButton(self.tabview_main.tab("statistiche"), text="show Satistic", command=self.show_statistic)
         button_statistic.grid(row=1, column=0, padx=(100,100), pady=(5,5),sticky="ew")
-    
-    
+      
     ## funzioni pannello generatore  
     def add_generator(self):
         self.generator_data = {
@@ -295,7 +299,7 @@ class Interfaccia(customtkinter.CTk):
             "type": "generator.py",
             "output": "screen",
             "params": {
-                "node_id": self.node_ID1.get(),
+                #"node_id": self.node_ID1.get(),
                 "node_name": self.node_name1.get(),
                 "next_element": self.next1.get(),
                 "gen_freq": self.frequenza.get(),
@@ -310,16 +314,23 @@ class Interfaccia(customtkinter.CTk):
                 "split2": self.value2.get(),
             }
         }
-        generator_node_text = self.format_generator_node()
-        self.textbox.insert("end", generator_node_text)
         
-        # Aggiungi i nodi e le connessioni al grafo
-        self.G.add_node(self.node_name1.get())
-        self.colors[self.node_name1.get()] = self.NODE_TYPE_COLORS.get("generator")
-        if self.next1.get() not in self.G:
-            self.colors[self.next1.get()] = "LightGray"
-        self.G.add_edge(self.node_name1.get(), self.next1.get())
-        self.visualizza_grafo()
+        params = self.generator_data["params"]
+        params_to_check = ["node_name", "next_element","num_messages","gen_freq","event_type"]
+        if self.generator_data["params"]["pause_time"].strip() != "":
+            params_to_check.append("group_size")
+        check = self.control_params( params, params_to_check)
+        if check:
+            generator_node_text = self.format_generator_node()
+            self.textbox.insert("end", generator_node_text)
+            
+            # Aggiungi i nodi e le connessioni al grafo
+            self.G.add_node(self.node_name1.get())
+            self.colors[self.node_name1.get()] = self.NODE_TYPE_COLORS.get("generator")
+            if self.next1.get() not in self.G:
+                self.colors[self.next1.get()] = "LightGray"
+            self.G.add_edge(self.node_name1.get(), self.next1.get())
+            self.visualizza_grafo()
         
     def format_generator_node(self):
         formatted_node = f"""\t<node name="{self.generator_data['node_name']}" pkg="{self.generator_data['pkg']}" type="{self.generator_data['type']}" output="{self.generator_data['output']}">\n"""
@@ -331,13 +342,18 @@ class Interfaccia(customtkinter.CTk):
     
     def reset_generator(self):
         self.node_name1.delete(0,END)
-        self.node_ID1.delete(0,END)
+        #self.node_ID1.delete(0,END)
         self.next1.delete(0,END)
         self.num_events.delete(0,END)
         self.frequenza.delete(0,END)
         self.event_type.delete(0,END)
         self.attribute1.delete(0,END)
         self.value1.delete(0,END)
+        self.attribute2.delete(0,END)
+        self.value2.delete(0,END)
+        self.pause_time.delete(0,END)
+        self.group_size.get(0,END)
+        
           
     ## funzioni pannello coda 
     def add_coda(self):
@@ -347,7 +363,7 @@ class Interfaccia(customtkinter.CTk):
             "type": "coda.py",
             "output": "screen",
             "params": {
-                "node_id": self.node_ID2.get(),
+                #"node_id": self.node_ID2.get(),
                 "node_name": self.node_name2.get(),
                 "next_element": self.next2.get(),
                 "num_servers": self.num_servers.get(),
@@ -356,15 +372,19 @@ class Interfaccia(customtkinter.CTk):
                 "uncertanity" : self.uncertanity.get()
             }
         }
-        coda_node_text = self.format_coda_node()
-        self.textbox.insert("end", coda_node_text)
-        # Aggiungi i nodi e le connessioni al grafo
-        self.G.add_node(self.node_name2.get())
-        self.colors[self.node_name2.get()] = self.NODE_TYPE_COLORS.get("coda")
-        if self.next2.get() not in self.G:
-            self.colors[self.next2.get()] = "LightGray"
-        self.G.add_edge(self.node_name2.get(), self.next2.get())
-        self.visualizza_grafo()
+        params = self.coda_data["params"]
+        params_to_check = ["node_name", "next_element","num_servers","server_time"]
+        check = self.control_params( params, params_to_check)
+        if check:
+            coda_node_text = self.format_coda_node()
+            self.textbox.insert("end", coda_node_text)
+            # Aggiungi i nodi e le connessioni al grafo
+            self.G.add_node(self.node_name2.get())
+            self.colors[self.node_name2.get()] = self.NODE_TYPE_COLORS.get("coda")
+            if self.next2.get() not in self.G:
+                self.colors[self.next2.get()] = "LightGray"
+            self.G.add_edge(self.node_name2.get(), self.next2.get())
+            self.visualizza_grafo()
     
     def format_coda_node(self):
         formatted_node = f"""\t<node name="{self.coda_data['node_name']}" pkg="{self.coda_data['pkg']}" type="{self.coda_data['type']}" output="{self.coda_data['output']}">\n"""
@@ -376,7 +396,7 @@ class Interfaccia(customtkinter.CTk):
       
     def reset_coda(self):
         self.node_name2.delete(0,END)
-        self.node_ID2.delete(0,END)
+        #self.node_ID2.delete(0,END)
         self.next2.delete(0,END)
         self.num_servers.delete(0,END)
         self.server_time.delete(0,END)  
@@ -389,7 +409,7 @@ class Interfaccia(customtkinter.CTk):
             "type": "switch2.py",
             "output": "screen",
             "params": {
-                "node_id": self.node_ID3.get(),
+                #"node_id": self.node_ID3.get(),
                 "node_name": self.node_name3.get(),
                 "modality": self.switch_modality.get(),
                 "split_attribute": self.split_attribute.get(),
@@ -399,18 +419,26 @@ class Interfaccia(customtkinter.CTk):
                 # Aggiungi altri campi...
             }
         }
-        switch_node_text = self.format_switch_node()
-        self.textbox.insert("end", switch_node_text)
-        # Aggiungi i nodi e le connessioni al grafo
-        self.G.add_node(self.node_name3.get())
-        self.colors[self.node_name3.get()] =  self.NODE_TYPE_COLORS.get("switch2")
-        if self.topic1.get() not in self.G:
-            self.colors[self.topic1.get()] = "LightGray"
-        if self.topic2.get() not in self.G:
-            self.colors[self.topic2.get()] = "LightGray"
-        self.G.add_edge(self.node_name3.get(), self.topic1.get())
-        self.G.add_edge(self.node_name3.get(), self.topic2.get())
-        self.visualizza_grafo()
+        params = self.switch_data["params"]
+        params_to_check = ["node_name", "topic1","topic2"]
+        if self.switch_data["params"]["modality"] == "type"or "attribute" or "split_attribute":
+            params_to_check.append("split_attribute")
+            if self.switch_data["params"]["modality"] == "attribute" or "split_attribute":
+                params_to_check.append("attribute_num")
+        check = self.control_params( params, params_to_check)
+        if check:
+            switch_node_text = self.format_switch_node()
+            self.textbox.insert("end", switch_node_text)
+            # Aggiungi i nodi e le connessioni al grafo
+            self.G.add_node(self.node_name3.get())
+            self.colors[self.node_name3.get()] =  self.NODE_TYPE_COLORS.get("switch2")
+            if self.topic1.get() not in self.G:
+                self.colors[self.topic1.get()] = "LightGray"
+            if self.topic2.get() not in self.G:
+                self.colors[self.topic2.get()] = "LightGray"
+            self.G.add_edge(self.node_name3.get(), self.topic1.get())
+            self.G.add_edge(self.node_name3.get(), self.topic2.get())
+            self.visualizza_grafo()
         
     def format_switch_node(self):
         formatted_node = f"""\t<node name="{self.switch_data['node_name']}" pkg="{self.switch_data['pkg']}" type="{self.switch_data['type']}" output="{self.switch_data['output']}">\n"""
@@ -421,7 +449,7 @@ class Interfaccia(customtkinter.CTk):
         return formatted_node
 
     def reset_switch(self):
-        self.node_ID3.delete(0,END)
+        #self.node_ID3.delete(0,END)
         self.node_name3.delete(0,END)
         self.switch_modality.set("split")
         self.attribute_num.delete(0,END)
@@ -437,7 +465,7 @@ class Interfaccia(customtkinter.CTk):
             "type": "end_node.py",
             "output": "screen",
             "params": {
-                "node_id": self.node_ID4.get(),
+                #"node_id": self.node_ID4.get(),
                 "node_name": self.node_name4.get(),
                 "modality": self.end_modality.get(),
                 "stop_time": self.stop_time.get(),
@@ -445,13 +473,19 @@ class Interfaccia(customtkinter.CTk):
                 "file_name":"$(arg file_name)"
             }
         }
-        end_node_text = self.format_end_node()
-        self.textbox.insert("end", end_node_text)
-        self.textbox.insert("end", "</launch>\n")
-        # Aggiungi i nodi e le connessioni al grafo
-        self.G.add_node(self.node_name4.get())
-        self.colors[self.node_name4.get()] =  self.NODE_TYPE_COLORS.get("end_node")
-        self.visualizza_grafo()
+        params = self.end_data["params"]
+        params_to_check = ["node_name"]
+        if self.end_data["params"]["modality"] == "time":
+            params_to_check.append("stop_time")
+        check = self.control_params( params, params_to_check)
+        if check:
+            end_node_text = self.format_end_node()
+            self.textbox.insert("end", end_node_text)
+            self.textbox.insert("end", "</launch>\n")
+            # Aggiungi i nodi e le connessioni al grafo
+            self.G.add_node(self.node_name4.get())
+            self.colors[self.node_name4.get()] =  self.NODE_TYPE_COLORS.get("end_node")
+            self.visualizza_grafo()
 
     def format_end_node(self):
         formatted_node = f"""\t<node name="{self.end_data['node_name']}" pkg="{self.end_data['pkg']}" type="{self.end_data['type']}" output="{self.end_data['output']}">\n"""
@@ -463,10 +497,9 @@ class Interfaccia(customtkinter.CTk):
 
     def reset_end_node(self):
         self.node_name4.delete(0,END)
-        self.node_ID4.delete(0,END)
+        #self.node_ID4.delete(0,END)
         self.end_modality.set("events")
         self.stop_time.delete(0,END)
-    
     
     # Funzioni del pannello del cluster
     def add_cluster(self):
@@ -475,6 +508,7 @@ class Interfaccia(customtkinter.CTk):
             "pkg": "simulator",
             "type": "cluster.py",
             "output": "screen",
+            "shape": "diamond",
             "params": {
                 "node_name": self.node_name5.get(),
                 "next_element": self.next_cl.get(),
@@ -484,17 +518,24 @@ class Interfaccia(customtkinter.CTk):
                 "next_cluster_topic" : self.clust_next.get(),
                 "speed": "$(arg speed)",
             }
+            
         }
-        cluster_node_text = self.format_cluster_node()
-        self.textbox.insert("end", cluster_node_text)
-        # Aggiungi i nodi e le connessioni al grafo
-        self.G.add_node(self.node_name5.get())
-        self.colors[self.node_name5.get()] = self.NODE_TYPE_COLORS.get("cluster_node")
-        if self.next_cl.get() not in self.G:
-            self.colors[self.next_cl.get()] = "LightGray"
-        self.G.add_edge(self.node_name5.get(), self.next_cl.get())
-        self.visualizza_grafo()
-
+        params = self.cluster_data["params"]
+        params_to_check = ["node_name","next_element"]
+        if self.cluster_data["params"]["modality"] == "unisci":
+            params_to_check.append("cluster_events")
+            params_to_check.append("next_cluster_topic")
+        check = self.control_params( params, params_to_check)
+        if check:
+            cluster_node_text = self.format_cluster_node()
+            self.textbox.insert("end", cluster_node_text)
+            # Aggiungi i nodi e le connessioni al grafo
+            self.G.add_node(self.node_name5.get())
+            self.colors[self.node_name5.get()] = self.NODE_TYPE_COLORS.get("cluster_node")
+            if self.next_cl.get() not in self.G:
+                self.colors[self.next_cl.get()] = "LightGray"
+            self.G.add_edge(self.node_name5.get(), self.next_cl.get())
+            self.visualizza_grafo()
 
     def format_cluster_node(self):
         formatted_node = f"""\t<node name="{self.cluster_data['node_name']}" pkg="{self.cluster_data['pkg']}" type="{self.cluster_data['type']}" output="{self.cluster_data['output']}">\n"""
@@ -510,6 +551,27 @@ class Interfaccia(customtkinter.CTk):
         self.clust_modality.set("compatta")
         self.clust_max.delete(0, END)
         self.clust_time.delete(0, END)
+        
+        
+    def control_params(self,params, params_to_check):
+        missing_params = []
+        for param in params_to_check:
+            if param not in params or not params[param]:
+                missing_params.append(param)
+                
+        self.textbox_err.delete(1.0,END) 
+        self.textbox_err.configure(border_color = "DodgerBlue4")
+        if missing_params:
+            missing_params_str = ",\n".join(missing_params)
+            message = f"Missing parameters: {missing_params_str}"
+            
+            self.textbox_err.configure(border_color = "red")
+            # Puoi gestire l'errore o visualizzare un messaggio all'utente a tua discrezione
+            # Ad esempio, puoi sollevare un'eccezione o stampare il messaggio di errore
+            self.textbox_err.insert(0.0,message)
+            return False
+        
+        return True     
         
     ## file menagment   
     def run_file(self):
