@@ -1,77 +1,130 @@
 <!-- Create the launch file for ROS -->
 <launch>
-	<arg name="speed" default="1.0"/>
-	<arg name="file_name" default="cluster_coda"/>
-	<node name="generatore" pkg="simulator" type="generator.py" output="screen">
-		<param name="node_name" value="generatore"/>
-		<param name="next_element" value="cluster1"/>
-		<param name="gen_freq" value="15"/>
+	<arg name="speed" default="10.0"/>
+	<arg name="file_name" default="MagazzinoGeek"/>
+	<node name="GenCorrieri" pkg="simulator" type="generator.py" output="screen">
+		<param name="node_id" value="1"/>
+		<param name="node_name" value="GenCorrieri"/>
+		<param name="next_element" value="switchSt"/>
+		<param name="gen_freq" value="5"/>
 		<param name="speed" value="$(arg speed)"/>
-		<param name="num_messages" value="100"/>
-		<param name="pause_time" value="2"/>
-		<param name="group_size" value="25"/>
-		<param name="event_type" value="test3"/>
+		<param name="num_messages" value="300"/>
+		<param name="pause_time" value="20"/>
+		<param name="group_size" value="20"/>
+		<param name="event_type" value="Corriere"/>
+		<param name="split_attribute1" value="totalStandard"/>
+		<param name="split1" value="0.05"/>
+		<param name="split_attribute2" value="Standard"/>
+		<param name="split2" value="0.3"/>
 	</node>
 
-	<node name="cluster1" pkg="simulator" type="cluster.py" output="screen">
-		<param name="node_name" value="cluster1"/>
-		<param name="next_element" value="coda"/>
-		<param name="modality" value="unisci"/>
-		<param name="cluster_events" value="20"/>
-		<param name="next_cluster_topic" value="cluster2"/>
+	<node name="GenMulticollo" pkg="simulator" type="generator.py" output="screen">
+		<param name="node_id" value="1"/>
+		<param name="node_name" value="GenMulticollo"/>
+		<param name="next_element" value="switchSt"/>
+		<param name="gen_freq" value="5"/>
 		<param name="speed" value="$(arg speed)"/>
+		<param name="num_messages" value="300"/>
+		<param name="pause_time" value="10"/>
+		<param name="group_size" value="30"/>
+		<param name="event_type" value="Multicollo"/>
+		<param name="split_attribute1" value="totalStandard"/>
+		<param name="split1" value="0"/>
+		<param name="split_attribute2" value="Standard"/>
+		<param name="split2" value="0.15"/>
 	</node>
 
-	<node name="cluster2" pkg="simulator" type="cluster.py" output="screen">
-		<param name="node_name" value="cluster2"/>
-		<param name="next_element" value="switch"/>
-		<param name="modality" value="dividi"/>
-		<param name="speed" value="$(arg speed)"/>
+	<node name="switchSt" pkg="simulator" type="switch2.py" output="screen">
+		<param name="node_id" value="3"/>
+		<param name="node_name" value="switchSt"/>
+		<param name="modality" value="split_attribute"/>
+		<param name="split_attribute" value="totalStandard"/>
+		<param name="topic1" value="Standard"/>
+		<param name="topic2" value="Geek"/>
+		<param name="attribute_num" value="1"/>
 	</node>
 
-	<node name="coda" pkg="simulator" type="coda.py" output="screen">
-		<param name="node_name" value="coda"/>
-		<param name="next_element" value="cluster2"/>
+
+	<node name="Standard" pkg="simulator" type="coda.py" output="screen">
+		<param name="node_id" value="6"/>
+		<param name="node_name" value="Standard"/>
+		<param name="next_element" value="end_node"/>
 		<param name="num_servers" value="1"/>
-		<param name="server_time" value="5"/>
+		<param name="server_time" value="15"/>
 		<param name="speed" value="$(arg speed)"/>
 		<param name="uncertanity" value="False"/>
 	</node>
 
-	<node name="switch" pkg="simulator" type="switch2.py" output="screen">
-		<param name="node_name" value="switch"/>
-		<param name="modality" value="split"/>
-		<param name="split_attribute" value="test3"/>
-		<param name="topic1" value="coda2"/>
-		<param name="topic2" value="coda3"/>
-		<param name="attribute_num" value="1"/>
+	<node name="Geek" pkg="simulator" type="coda.py" output="screen">
+		<param name="node_id" value="7"/>
+		<param name="node_name" value="Geek"/>
+		<param name="next_element" value="switchSt2"/>
+		<param name="num_servers" value="56"/>
+		<param name="server_time" value="15"/>
+		<param name="speed" value="$(arg speed)"/>
+		<param name="uncertanity" value="False"/>
 	</node>
 
-	<node name="coda2" pkg="simulator" type="coda.py" output="screen">
-		<param name="node_name" value="coda2"/>
-		<param name="next_element" value="end"/>
-		<param name="num_servers" value="1"/>
+
+	<node name="switchSt2" pkg="simulator" type="switch2.py" output="screen">
+		<param name="node_id" value="8"/>
+		<param name="node_name" value="switchSt2"/>
+		<param name="modality" value="split_attribute"/>
+		<param name="split_attribute" value="Standard"/>
+		<param name="topic1" value="Standard_compl"/>
+		<param name="topic2" value="switchCM"/>
+		<param name="attribute_num" value="2"/>
+	</node>
+
+	<node name="Standard_compl" pkg="simulator" type="coda.py" output="screen">
+		<param name="node_id" value="10"/>
+		<param name="node_name" value="Standard_compl"/>
+		<param name="next_element" value="switchCM"/>
+		<param name="num_servers" value="3"/>
+		<param name="server_time" value="10"/>
+		<param name="speed" value="$(arg speed)"/>
+		<param name="uncertanity" value="False"/>
+	</node>
+
+	<node name="switchCM" pkg="simulator" type="switch2.py" output="screen">
+		<param name="node_id" value="11"/>
+		<param name="node_name" value="switchCM"/>
+		<param name="modality" value="type"/>
+		<param name="split_attribute" value="Corriere"/>
+		<param name="topic1" value="Corriere"/>
+		<param name="topic2" value="Multicollo"/>
+	</node>
+
+	<node name="Corriere" pkg="simulator" type="coda.py" output="screen">
+		<param name="node_id" value="15"/>
+		<param name="node_name" value="Corriere"/>
+		<param name="next_element" value="end_node"/>
+		<param name="num_servers" value="3"/>
 		<param name="server_time" value="2"/>
 		<param name="speed" value="$(arg speed)"/>
 		<param name="uncertanity" value="False"/>
 	</node>
 
-	<node name="coda3" pkg="simulator" type="coda.py" output="screen">
-		<param name="node_name" value="coda3"/>
-		<param name="next_element" value="end"/>
-		<param name="num_servers" value="1"/>
+	<node name="Multicollo" pkg="simulator" type="coda.py" output="screen">
+		<param name="node_id" value="16"/>
+		<param name="node_name" value="Multicollo"/>
+		<param name="next_element" value="end_node"/>
+		<param name="num_servers" value="2"/>
 		<param name="server_time" value="1"/>
 		<param name="speed" value="$(arg speed)"/>
 		<param name="uncertanity" value="False"/>
 	</node>
 
-	<node name="end" pkg="simulator" type="end_node.py" output="screen">
-		<param name="node_name" value="end"/>
+	<node name="end_node" pkg="simulator" type="end_node.py" output="screen">
+		<param name="node_name" value="end_node"/>
 		<param name="modality" value="events"/>
+		<param name="stop_time" value="540"/>
 		<param name="speed" value="$(arg speed)"/>
 		<param name="file_name" value="$(arg file_name)"/>
 	</node>
 
 </launch>
+
+
 
 

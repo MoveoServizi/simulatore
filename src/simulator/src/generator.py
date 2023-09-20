@@ -52,35 +52,51 @@ class GeneratorNode:
         #rospy.loginfo(f"{self.node_name}: Generating {self.num_messages} messages...")
         i = 0
         count = 0
+        end = rospy.Time.now()
+        start = rospy.Time.now()
+        dt = (1 / self.gen_freq)/self.speed
+        event_msg = event()
+        event_msg.generator_id = self.node_name
+        event_msg.type = self.event_type
+        event_msg.route = [self.node_name]
+        #event_msg.last_event = False
+        event_msg.split_attribute1 = self.attribute1
+        event_msg.split1 = self.value1
+        event_msg.split_attribute2 = self.attribute2
+        event_msg.split2 = self.value2
+        error_count = 0
         while not rospy.is_shutdown():
+            
             if i < self.num_messages and self.execution:
-                event_msg = event()
+                inizio_timer = rospy.Time.now()
                 event_msg.ID = self.event_id
-                event_msg.generator_id = self.node_name
-                event_msg.type = self.event_type
-                event_msg.route = [self.node_name]
-                event_msg.last_event = False
                 event_msg.generation_date = rospy.Time.now()
-                event_msg.gen_time = self.stamp_date()
-                
-                event_msg.split_attribute1 = self.attribute1
-                event_msg.split1 = self.value1
-                event_msg.split_attribute2 = self.attribute2
-                event_msg.split2 = self.value2
-                if i == 0:
-                    event_msg.first_event = True
-                self.pub.publish(event_msg)
+                #event_msg.gen_time = self.stamp_date()
+                # if i == 0:
+                #     event_msg.first_event = True
                 self.event_id += 1
-                i += 1
-                
+                i += 1 
+                self.pub.publish(event_msg)
                 rospy.loginfo(f"{self.node_name}: Published event ID {event_msg.ID}")
-                time.sleep((1 / self.gen_freq)/self.speed)
+                tempo_trascorso = rospy.Time.now() - inizio_timer
+                tempo_di_attesa_rimanente = dt - tempo_trascorso.to_sec()
+                if tempo_di_attesa_rimanente > 0:
+                    time.sleep(tempo_di_attesa_rimanente)
+                else:
+                    error_count += 1
+                
+                if i == self.num_messages:
+                    end = rospy.Time.now()
+                    ct = (end-start).to_sec()/self.num_messages
+                    print("REAL COMPUTING TIME ",ct, "totale exed ", error_count)
+
                 if self.pause:
                     count += 1
                     if count == self.group_size:
                         count = 0
                         print("sliping time: ", self.pause_time/self.speed)
                         time.sleep(self.pause_time/self.speed)
+        
 
     def stamp_date(self):
         completed_date = rospy.Time.now().to_sec()  # Ottieni il timestamp in secondi

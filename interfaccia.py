@@ -421,7 +421,7 @@ class Interfaccia(customtkinter.CTk):
         }
         params = self.switch_data["params"]
         params_to_check = ["node_name", "topic1","topic2"]
-        if self.switch_data["params"]["modality"] == "type"or "attribute" or "split_attribute":
+        if self.switch_data["params"]["modality"] == "type" or "attribute" or "split_attribute":
             params_to_check.append("split_attribute")
             if self.switch_data["params"]["modality"] == "attribute" or "split_attribute":
                 params_to_check.append("attribute_num")
